@@ -1,0 +1,59 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package assault.game.util.pathfinding;
+
+/**
+ *
+ * @author 088241930
+ */
+public class PathFindingGridPoint {
+
+	private final int x;
+	private final int y;
+	private double f;
+
+	public PathFindingGridPoint(int x, int y, double f) {
+		this(x, y);
+		setF(f);
+	}
+
+	public PathFindingGridPoint(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof PathFindingGridPoint) {
+			return equals((PathFindingGridPoint) o);
+		} else {
+			return false;
+		}
+	}
+
+	public boolean equals(PathFindingGridPoint pt) {
+		if (pt == null) {
+			return false;
+		} else {
+			return pt.x == x && pt.y == y;
+		}
+	}
+
+	public final double getF() {
+		return f;
+	}
+
+	public final void setF(double f) {
+		this.f = f;
+	}
+
+	public final int getX() {
+		return x;
+	}
+
+	public final int getY() {
+		return y;
+	}
+}
