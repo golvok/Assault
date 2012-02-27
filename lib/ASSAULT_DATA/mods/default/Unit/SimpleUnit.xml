@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AObject type="Unit">
+	<name>SimpleUnit</name>
+	<dims width="30" height="20"/>
+	<health max="10"/>
+	<speeds>
+		<ground val="100"/>
+	</speeds>
+	<createPoint x="31" y="21"/>
+	<mountPoints>
+		<p i="1" x="0" y="0"/>
+		<p i="2" x="30" y="20"/>
+	</mountPoints>
+	<img>
+		<base src="/images/SimpleUnit.png"/>
+	</img>
+	<miniIcon src="images/miniIcons/SimpleUnit_miniIcon.png"/>
+	<buttons>
+		<button>
+			<action type="Simple">
+				<command type="Move"/>
+			</action>
+		</button>
+		<button>
+			<action type="Simple">
+				<command type="Create">
+					<name>createSU2</name>
+					<hotKey>s</hotKey>
+					<iconSrc></iconSrc>
+					<unitType mod="default" name="SimpleUnit2"/>
+				</command>
+			</action>
+		</button>
+		<button>
+			<action type="Simple">
+				<command type="Shoot">
+					<name>Shoot SimpleWeapon</name>
+					<hotKey>h</hotKey>
+					<iconSrc></iconSrc>
+					<mountPoint val="1"/>
+				</command>
+			</action>
+		</button>
+	</buttons>
+	<weapons>
+		<weapon mod="default" name="SimpleWeapon" mountpoint="1"/>
+	</weapons>
+</AObject>
