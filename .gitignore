@@ -1,0 +1,7 @@
+build
+dist
+build.xml
+*.class
+*~
+nbproject/private
+.DS_STORE
