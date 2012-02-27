@@ -1,0 +1,6 @@
+#/bin/bash
+cd "$(dirname "$0")"
+cp -pRv lib/ASSAULT_DATA/ dist/lib/ASSAULT_DATA/
+mkdir dist/lib/lwjgl-2.8.3
+cp -pRv lib/lwjgl-2.8.3/native dist/lib/lwjgl-2.8.3/native
+
