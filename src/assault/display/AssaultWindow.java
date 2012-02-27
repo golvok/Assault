@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.Color;
 
 /**
- *
+ * The main window
  * @author matt
  */
 public class AssaultWindow extends AContainer {
