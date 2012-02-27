@@ -4,4 +4,4 @@ build.xml
 *.class
 *~
 nbproject/private
-.DS_STORE
+.DS_Store
