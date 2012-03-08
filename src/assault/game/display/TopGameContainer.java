@@ -64,5 +64,6 @@ public class TopGameContainer extends AContainer implements InputDistributor {
 		if (ke.isLControlDown() && ke.getButton() == 'q'){
 			getAW().enterMainMenu();
 		}
+		cdm.accept(ke);
 	}
 }

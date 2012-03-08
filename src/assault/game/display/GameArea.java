@@ -19,7 +19,9 @@ import assault.game.util.pathfinding.AStarPathFinder;
 import assault.game.util.pathfinding.PathFinder;
 import assault.game.util.pathfinding.PathFindingGridObject;
 import assault.game.util.terrain.TerrainGenerator;
-import assault.input.*;
+import assault.input.InputEventUtil;
+import assault.input.KeyboardEvent;
+import assault.input.MouseEvent;
 import assault.util.ThreadBlocker;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -322,7 +324,9 @@ public class GameArea extends InputRegistarContainer {
 	}
 
 	public AObject[] getSelection() {
-		return selected;
+		AObject[] temp = new AObject[selected.length];
+		System.arraycopy(selected, 0, temp, 0, selected.length);
+		return temp;
 	}
 
 	private AUnit[] getAUnitSelection() {
@@ -419,7 +423,7 @@ public class GameArea extends InputRegistarContainer {
 		} else if (cmd instanceof TargetCommand) {
 			AObject target = getNextAObjectTargeted();
 			if (target != null) {
-				((TargetCommand) cmd).executeOn(targets, (AObject) target);
+				((TargetCommand) cmd).executeOn(targets, target);
 			}
 		} else if (cmd instanceof MouseCommand) {
 			Point mouse = getnextMousePress();

@@ -242,7 +242,7 @@ public abstract class APaintable implements Disposable {
 				getParent().removeChild(this);
 			}
 			disposed = true;
-			System.out.println("AP_DISPOSE : "+this);
+			//System.out.println("AP_DISPOSE : "+this);
 		}
 	}
 
