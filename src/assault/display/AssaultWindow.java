@@ -14,6 +14,7 @@ import assault.game.gameObjects.AUnit;
 import assault.game.loading.ResourcePreloader;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.UnitResourceHolder;
+import assault.game.util.OSUtil;
 import assault.game.util.terrain.NormalTerrainGenerator;
 import assault.input.InputManager;
 import assault.util.ThreadBlocker;
@@ -56,8 +57,8 @@ public class AssaultWindow extends AContainer {
 	
 	public static void main(String[] argv) {
 		
-		System.setProperty("org.lwjgl.librarypath", System.getProperty("user.dir")+"/lib/lwjgl-2.8.3/native/macosx");
-		
+        System.out.println("lwjgl version -> "+OSUtil.lwjglVersion);
+        OSUtil.setLibrariesPath();
 		Thread.currentThread().setName("Assault Main Thread");
 		
 		AssaultWindow newThis = new AssaultWindow();
@@ -134,7 +135,7 @@ public class AssaultWindow extends AContainer {
 			}*/
 			Display.update();
 			//System.out.println(lastFps);
-			Display.sync(60);
+			//Display.sync(60);
 		}
 		System.out.println("game stopping");
 		dispose();

@@ -8,10 +8,10 @@ import assault.game.display.GameArea;
 import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.TerrainResource;
-import assault.game.util.*;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.YearDV;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import assault.game.util.GridManager;
+import assault.game.util.GridObject;
+import assault.game.util.TerrainGridCell;
+import assault.game.util.TerrainGridManager;
 
 /**
  *
@@ -43,6 +43,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 			for (int y = yInGrid; y < heightInGrid; y++) {
 				tgc = (TerrainGridCell<GridObject>) gm.getGridCellAtGrid(x, y);
 				tgc.setTerrainSquare(new TerrainSquare(g, x, y, terrainSrc.getGroundCovers()[0]));
+                g.add(tgc.getTerrainSquare(),false);
 				if (x % 10 == 0 && y % 10 == 0){
 					try {
 						TerrainObject to = new TerrainObject(g, gm.convGridToPixel(x), gm.convGridToPixel(y), terrainSrc.getTerrainObjects()[0], null);

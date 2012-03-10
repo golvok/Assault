@@ -32,7 +32,7 @@ public class Menu extends InputRegistarContainer implements InputRegistar{
 	}
 
 	public void addButton(Button b) {
-		System.out.println(b + " added");
+		//System.out.println(b + " added");
 		buttons.add(b);
 		addMouseEventReciever(b);
 		addChild(b);

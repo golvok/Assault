@@ -18,119 +18,117 @@ import org.lwjgl.util.Color;
  * @author matt
  */
 public abstract class Button extends APaintable implements MouseListener, KeyboardListener {
-	
-	private String name;
-	private char hotkey;
-	private BufferedImage icon;
-	private Runnable action;
-	private boolean enabled = true;
 
-	public Button(String name, int x, int y, int width, int height, char shortCut, BufferedImage icon, Runnable action) {
-		super(x, y, width, height);
-		this.name = name;
-		setAction(action);
-		setIcon(icon);
-		setHotkey(shortCut);
-	}
+    private String name;
+    private char hotkey;
+    private BufferedImage icon;
+    private Runnable action;
+    private boolean enabled = true;
 
-	@Override
-	public void drawSelf() {
-		drawRect(0, 0, getWidth(), getHeight());
-		drawTexture(0, 0, getWidth(), getHeight(), TextureMaker.getTexture(getIcon()));
-		if (!isEnabled()) {
-			setColour(new Color(153, 153, 153, 153));//a nice grey
-			fillRect(0, 0, getWidth(), getHeight());
-		}
-		//drawString(acmd.getName(), 0, 0);
-	}
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-		press();
-	}
+    public Button(String name, int x, int y, int width, int height, char shortCut, BufferedImage icon, Runnable action) {
+        super(x, y, width, height);
+        this.name = name;
+        setAction(action);
+        setIcon(icon);
+        setHotkey(shortCut);
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		release();
-	}
+    @Override
+    public void drawSelf() {
+        drawRect(0, 0, getWidth(), getHeight());
+        drawTexture(0, 0, getWidth(), getHeight(), TextureMaker.getTexture(getIcon()));
+        if (!isEnabled()) {
+            setColour(new Color(153, 153, 153, 153));//a nice grey
+            fillRect(0, 0, getWidth(), getHeight());
+        }
+        //drawString(acmd.getName(), 0, 0);
+    }
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
+    @Override
+    public void mousePressed(MouseEvent e) {
+        press();
+    }
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        release();
+    }
 
-	@Override
-	public void keyPressed(KeyboardEvent ke) {
-		if (ke.getButton() == getHotkey()){
-			press();
-			release();
-		}
-	}	
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
 
-	public AssaultWindow getAW() {
-		try {
-			return TopGameContainer.getTGC(this).getAW();
-		} catch (NullPointerException npe) {
-			return null;
-		}
-	}
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 
-	public Runnable getAction() {
-		return action;
-	}
+    @Override
+    public void keyPressed(KeyboardEvent ke) {
+        if (ke.getButton() == getHotkey()) {
+            press();
+            release();
+        }
+    }
 
-	public BufferedImage getIcon() {
-		return icon;
-	}
+    public AssaultWindow getAW() {
+        try {
+            return TopGameContainer.getTGC(this).getAW();
+        } catch (NullPointerException npe) {
+            return null;
+        }
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Runnable getAction() {
+        return action;
+    }
 
-	public char getHotkey() {
-		return hotkey;
-	}
+    public BufferedImage getIcon() {
+        return icon;
+    }
 
-	protected void setHotkey(char c) {
-		hotkey = c;
-	}
-	
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void press(){
-		
-	}
+    public char getHotkey() {
+        return hotkey;
+    }
 
-	public void release() {
-		if (isEnabled()) {
-			runAction();
-		}
-	}
+    protected void setHotkey(char c) {
+        hotkey = c;
+    }
 
-	public void setAction(Runnable action) {
-		this.action = action;
-	}
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	public void setEnabled(boolean bln) {
-		enabled = bln;
-	}
+    public void press() {
+    }
 
-	protected void runAction() {
-		new Thread(getAction()).start();
-	}
+    public void release() {
+        if (isEnabled()) {
+            runAction();
+        }
+    }
 
-	protected void setIcon(BufferedImage i) {
-		icon = i;
-	}
+    public void setAction(Runnable action) {
+        this.action = action;
+    }
 
-	@Override
-	public String toString() {
-		return super.toString()+" hotkey = "+getHotkey() + " enabled = "+isEnabled();
-	}
-	
+    public void setEnabled(boolean bln) {
+        enabled = bln;
+    }
+
+    protected void runAction() {
+        new Thread(getAction()).start();
+    }
+
+    protected void setIcon(BufferedImage i) {
+        icon = i;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " hotkey = " + getHotkey() + " enabled = " + isEnabled();
+    }
 }
