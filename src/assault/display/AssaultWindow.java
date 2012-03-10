@@ -249,24 +249,24 @@ public class AssaultWindow extends AContainer {
 
 		try {
 			//<editor-fold defaultstate="collapsed" desc="unit creation">
-			AUnit en2 = new AUnit(gameArea, 105, 300, rp.getModUnitByName("default", "SimpleUnit2"), p1);
+			AUnit en2 = new AUnit(gameArea, 115, 300, rp.getModUnitByName("default", "SimpleUnit2"), p1);
 			gameArea.add(en2);
 
-			AUnit b1 = new AUnit(gameArea, 505, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
+			AUnit b1 = new AUnit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
 			gameArea.add(b1);
 
-			AUnit e1 = new AUnit(gameArea, 105, 400, rp.getModUnitByName("default", "SimpleUnit2"), p2);
+			AUnit e1 = new AUnit(gameArea, 115, 400, rp.getModUnitByName("default", "SimpleUnit2"), p2);
 			gameArea.add(e1);
 
-			AUnit e2 = new AUnit(gameArea, 505, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
+			AUnit e2 = new AUnit(gameArea, 515, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
 			gameArea.add(e2);
 
-			AUnit e3 = new AUnit(gameArea, 605, 50, rp.getModUnitByName("default", "SimpleUnit"), p2);
+			AUnit e3 = new AUnit(gameArea, 615, 50, rp.getModUnitByName("default", "SimpleUnit"), p2);
 			gameArea.add(e3);
 
-			AUnit u1 = new AUnit(gameArea, 605, 100, rp.getModUnitByName("default", "SimpleUnit"), p1);
+			AUnit u1 = new AUnit(gameArea, 615, 100, rp.getModUnitByName("default", "SimpleUnit"), p1);
 			gameArea.add(u1);
-			AUnit u2 = new AUnit(gameArea, 705, 100, rp.getModUnitByName("default", "SimpleUnit2"), p1);
+			AUnit u2 = new AUnit(gameArea, 715, 100, rp.getModUnitByName("default", "SimpleUnit2"), p1);
 			gameArea.add(u2);
 			AUnit u3 = new AUnit(gameArea, 705, 180, rp.getModUnitByName("default", "SimpleUnit"), p1);
 			gameArea.add(u3);
@@ -279,12 +279,12 @@ public class AssaultWindow extends AContainer {
 
 			UnitResourceHolder su1 = rp.getModUnitByName("default", "SimpleUnit");
 			for (int i = 0; i <= 6; i++) {
-				gameArea.add(new AUnit(gameArea, (i * 58) + 100, 200, su1, p1));
+				gameArea.add(new AUnit(gameArea, (i * 100) + 50, 250, su1, p1));
 			}
 
 			UnitResourceHolder su2 = rp.getModUnitByName("default", "SimpleUnit2");
 			for (int i = 0; i <= 6; i++) {
-				gameArea.add(new AUnit(gameArea, (i * 65) + 100, 500, su2, p2));
+				gameArea.add(new AUnit(gameArea, (i * 100) + 50, 450, su2, p2));
 			}
 			//</editor-fold>
 		} catch (ResourceException ex) {

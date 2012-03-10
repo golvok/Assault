@@ -12,8 +12,12 @@ import assault.game.display.GameArea;
  */
 public abstract class TerrainGenerator {
 
-	public TerrainGenerator(int seed) {
+	public TerrainGenerator() {
 	}
-	
-	public abstract TerrainSquare getCordinate(GameArea g, int x, int y);
+
+	public boolean generateInto(GameArea g, int seed) {
+		return generateInto(g, 0, 0, g.getWidth(), g.getHeight(), seed);
+	}
+
+	public abstract boolean generateInto(GameArea g, int ga_x, int ga_y, int ga_width, int ga_height, int seed);
 }

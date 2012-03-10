@@ -27,6 +27,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import org.lwjgl.util.Color;
 
 /**
@@ -55,7 +56,7 @@ public class GameArea extends InputRegistarContainer {
 		super(5, 5, 790, 590, 32);//Horray! Magic numbers!
 		aWindow = aw;
 		terrainGenerator = tg;
-
+		System.out.println("Creating movement thread");
 		movementThread = new Thread(new Runnable() {
 
 			private AUnit[] aUnitArray = new AUnit[0];
@@ -86,18 +87,14 @@ public class GameArea extends InputRegistarContainer {
 			}
 		});
 
+		System.out.println("Crteating gridManager");
 		gManager = new TerrainGridManager(getWidth(), getHeight(), 10, terrainGenerator, this);
+		System.out.println("creating pathfinder");
 		//pF = new DijkstraPathFinder(getGM());
 		pF = new AStarPathFinder(getGM());
-
-		//generate terrain (oh god this is not scalable..)
-		//TODO make terrain generation scale
-		for (int i = 0; i < gManager.getGridWidth(); i++) {
-			for (int j = 0; j < gManager.getGridHeight(); j++) {
-				//add(gManager.getGridCellAtGrid(i, j).getTerrainSquare(), false);
-				add(gManager.getGridCellAtGrid(i, j).getTerrainSquare().getTerrainObjects(), true);
-			}
-		}
+		//generate terrain
+		System.out.println("generating terrain");
+		terrainGenerator.generateInto(this, new Random().nextInt());
 	}
 
 	@Override
@@ -190,7 +187,7 @@ public class GameArea extends InputRegistarContainer {
 
 	public void add(APaintable[] aps, boolean addToGM) {
 		for (int i = 0; i < aps.length; i++) {
-			this.add(aps[i]);
+			this.add(aps[i], addToGM);
 		}
 	}
 

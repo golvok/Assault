@@ -20,7 +20,7 @@ public class TerrainGridManager extends GridManager{
 
 	@Override
 	public GridCell<GridObject> generateGridCell(GameArea g, int x, int y) {
-		return new TerrainGridCell<GridObject>(4, terrainGenerator.getCordinate(g, x, y));
+		return new TerrainGridCell<GridObject>(4);
 	}
 
 	@Override
