@@ -39,7 +39,7 @@ public class GameArea extends InputRegistarContainer {
 	public final static Integer NORMAL_DEPTH = new Integer(2);
 	public final static Integer BULLET_DEPTH = new Integer(3);
 	public final static Integer STATUS_BOX_DEPTH = new Integer(4);
-	private List<AUnit> aUnits = Collections.synchronizedList(new ArrayList<AUnit>(32));
+	private final List<AUnit> aUnits = Collections.synchronizedList(new ArrayList<AUnit>(32));
 	private AObject[] selected = new AObject[1];
 	private int numSelected = 0;
 	private MoveCmd gaMover;
@@ -499,7 +499,7 @@ public class GameArea extends InputRegistarContainer {
 		//System.out.println("GM_ACCEPT "+me);
 		AObject ao = getAoAt(me.getX(), me.getY());
 		if (ao != null && ao instanceof Selectable) {
-			InputEventUtil.passMouseEventTo(ao,me);
+			InputEventUtil.passAndTranslateMouseEventTo(ao,me);
 		} else if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
 			notifyOfMousePress(me.getX(), me.getY(), me.getButton(), me.getModifiers());
 		}

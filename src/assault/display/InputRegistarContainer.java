@@ -66,7 +66,7 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 		for (Iterator<APaintable> it = mouseListeners.iterator(); it.hasNext();) {
 			APaintable ap = it.next();
 			if (ap != null && me.intersects(ap.getBounds())){
-				InputEventUtil.passMouseEventTo((MouseListener)ap, me);
+				InputEventUtil.passAndTranslateMouseEventTo(ap, me);
 			}
 		}
 	}

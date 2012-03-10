@@ -73,7 +73,6 @@ public class AssaultWindow extends AContainer {
 
 	private void initGL() {
 		System.out.println("init OpenGL");
-		//glShadeModel(GL_SMOOTH);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

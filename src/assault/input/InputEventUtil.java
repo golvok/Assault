@@ -21,7 +21,7 @@ public class InputEventUtil {
 		}
 	}
 
-	public static void passMouseEventTo(APaintable ap, MouseEvent me) {
+	public static void passAndTranslateMouseEventTo(APaintable ap, MouseEvent me) {
 		if (ap instanceof MouseListener) {
 			if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
 				((MouseListener) ap).mousePressed (me.translate(ap));

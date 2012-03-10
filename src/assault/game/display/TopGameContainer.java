@@ -48,20 +48,20 @@ public class TopGameContainer extends AContainer implements InputDistributor {
 	@Override
 	public void accept(MouseEvent me) {
 
-		MouseListener ml;
+		APaintable ap;
 		if (me.intersects(cdm.getBounds())) {
-			ml = cdm;
+			ap = cdm;
 		} else if (me.intersects(sDisplayMenu.getBounds())) {
-			ml = sDisplayMenu;
+			ap = sDisplayMenu;
 		} else {
-			ml = gameArea;
+			ap = gameArea;
 		}
-		InputEventUtil.passMouseEventTo(ml, me);
+		InputEventUtil.passAndTranslateMouseEventTo(ap, me);
 	}
 
 	@Override
 	public void accept(KeyboardEvent ke) {
-		if (ke.isLControlDown() && ke.getButton() == 'q'){
+		if (ke.isLAltDown() && ke.getButton() == 'q'){
 			getAW().enterMainMenu();
 		}
 		cdm.accept(ke);

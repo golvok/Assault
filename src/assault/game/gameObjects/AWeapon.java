@@ -93,7 +93,7 @@ public class AWeapon extends AControllable{
 	@Override
 	public  void drawSelf() {
 		super.drawSelf();
-		drawRect(-1, -1, getWidth()+1, getHeight()+1);
+		drawConatiningBox(this);
 	}
 
 	void refreshPosition() {

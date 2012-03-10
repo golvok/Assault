@@ -117,7 +117,7 @@ public class AUnit extends AControllable {
 	@Override
 	public void drawSelf() {
 		super.drawSelf();
-		drawRect(0, 0, getWidth(), getHeight());
+		drawConatiningBox(this);
 		//System.out.println("AU_PAINT");
 	}
 
@@ -183,7 +183,7 @@ public class AUnit extends AControllable {
 	 * @return 
 	 */
 	public Point getCreatePointRel() {
-		return new Point(createPoint.x + getX(), createPoint.y + getY());
+		return new Point(createPoint.x, createPoint.y);
 	}
 
 	/**

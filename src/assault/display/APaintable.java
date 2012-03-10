@@ -136,6 +136,14 @@ public abstract class APaintable implements Disposable {
 		//drawLine(x, y, x+w, y+h);
 	}
 
+	/**
+	 * the APaintable is <i>contained</i> in the box this function draws
+	 * @param ap
+	 */
+	public static void drawConatiningBox(APaintable ap) {
+		drawRect(0, 0, ap.getWidth() + 1, ap.getWidth() + 1);
+	}
+
 	public static void fillRect(int x, int y, int w, int h) {
 		//System.out.println("fillrect");
 		glBegin(GL_QUADS);
@@ -196,27 +204,28 @@ public abstract class APaintable implements Disposable {
 	}
 
 	/**
-	 * draws at (x,y) with dimensions (w,h), filling this rectangle
-	 * with the <i>whole image area</i> of the texture not the whole texture.
-	 * uses Texture.getTop() and getLeft()
+	 * draws at (x,y) with dimensions (w,h), filling this rectangle with the
+	 * <i>whole image area</i> of the texture not the whole texture. uses
+	 * Texture.getTop() and getLeft()
+	 *
 	 * @param x
 	 * @param y
 	 * @param w
 	 * @param h
-	 * @param tex 
+	 * @param tex
 	 */
 	public static void drawTexture(int x, int y, int w, int h, Texture tex) {
 		glBindTexture(GL_TEXTURE_2D, tex.getTexID());
 		setColour(ReadableColor.WHITE);
 		glBegin(GL_QUADS);
 		{
-			glTexCoord2f(0, 0);
-			glVertex2i(x, y);
 			glTexCoord2f(0, tex.getTop());
+			glVertex2i(x, y);
+			glTexCoord2f(0, 0);
 			glVertex2i(x, y + h + 1);
-			glTexCoord2f(tex.getLeft(), tex.getTop());
-			glVertex2i(x + w + 1, y + h + 1);
 			glTexCoord2f(tex.getLeft(), 0);
+			glVertex2i(x + w + 1, y + h + 1);
+			glTexCoord2f(tex.getLeft(), tex.getTop());
 			glVertex2i(x + w + 1, y);
 		}
 		glEnd();
@@ -232,9 +241,8 @@ public abstract class APaintable implements Disposable {
 		}
 		this.parent = parent;
 	}
-
 	private boolean disposed = false;
-	
+
 	@Override
 	public synchronized void dispose() {
 		if (!isDisposed()) {

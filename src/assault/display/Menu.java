@@ -57,7 +57,7 @@ public class Menu extends InputRegistarContainer implements InputRegistar{
 		for (Iterator<Button> it = getButtons().iterator(); it.hasNext();) {
 			Button button = it.next();
 			if (button.getBounds().contains(me.getX(), me.getY())) {
-				InputEventUtil.passMouseEventTo((APaintable)button, me);
+				InputEventUtil.passAndTranslateMouseEventTo((APaintable)button, me);
 				//System.out.println("mousematch : " + button);
 			}
 		}
