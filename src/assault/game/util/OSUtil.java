@@ -6,7 +6,7 @@ package assault.game.util;
 
 /**
  *
- * @author matt
+ * @author Matt
  */
 public class OSUtil {
 

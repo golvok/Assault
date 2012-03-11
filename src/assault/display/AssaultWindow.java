@@ -177,10 +177,22 @@ public class AssaultWindow extends AContainer {
 	private long getTime() {
 		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}
+    private static final int NUM_DELTAS = 100;
+    private int[] deltas = new int[NUM_DELTAS];
+    private int currentDelta = 0;
 
 	private void updateFps(int delta) {
-		if (delta != 0) {
-			lastFps = 1000d / ((double) delta);
+        deltas[currentDelta] = delta;
+        ++currentDelta;
+        if (currentDelta >= NUM_DELTAS){
+            currentDelta = 0;
+        }
+        int deltaTotal = 0;
+        for (int i = 0; i < NUM_DELTAS; i++) {
+            deltaTotal += deltas[i];
+        }
+		if (deltaTotal != 0) {
+			lastFps = 1000d / ((double) deltaTotal/NUM_DELTAS);
 		} else {
 			lastFps = -1;
 		}
