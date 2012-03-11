@@ -191,13 +191,13 @@ public abstract class APaintable implements Disposable {
 		setColour(ReadableColor.WHITE);
 		glBegin(GL_QUADS);
 		{
-			glTexCoord2f(0, 0);
-			glVertex2i(x, y);
 			glTexCoord2f(0, 1);
+			glVertex2i(x, y);
+			glTexCoord2f(0, 0);
 			glVertex2i(x, y + h);
-			glTexCoord2f(1, 1);
-			glVertex2i(x + w, y + h);
 			glTexCoord2f(1, 0);
+			glVertex2i(x + w, y + h);
+			glTexCoord2f(1, 1);
 			glVertex2i(x + w, y);
 		}
 		glEnd();
@@ -222,11 +222,11 @@ public abstract class APaintable implements Disposable {
 			glTexCoord2f(0, tex.getTop());
 			glVertex2i(x, y);
 			glTexCoord2f(0, 0);
-			glVertex2i(x, y + h + 1);
+			glVertex2i(x, y + h);
 			glTexCoord2f(tex.getLeft(), 0);
-			glVertex2i(x + w + 1, y + h + 1);
+			glVertex2i(x + w, y + h);
 			glTexCoord2f(tex.getLeft(), tex.getTop());
-			glVertex2i(x + w + 1, y);
+			glVertex2i(x + w, y);
 		}
 		glEnd();
 	}
