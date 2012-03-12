@@ -202,36 +202,30 @@ public class ModResourceHolder extends XmlResource {
 	}
 
 	public UnitResourceHolder getUnitByName(String unitName) {
-		for (int i = 0; i < units.length; i++) {
-			if (units[i] != null && units[i].getName() != null && units[i].getName().equals(unitName)) {
-				return units[i];
-			}
-		}
-		return null;
+		return findResourceByName(unitName, units);
 	}
 
 	public WeaponResourceHolder getWeaponByName(String weaponName) {
-		for (int i = 0; i < weapons.length; i++) {
-			if (weapons[i] != null && weaponName.equals(weapons[i].getName())) {
-				return weapons[i];
-			}
-		}
-		return null;
+		return findResourceByName(weaponName, weapons);
 	}
+
+    public TerrainObjectResourceHolder getTerrainObjectByName(String tObjectName) {
+		return findResourceByName(tObjectName, terrainObjects);
+	}
+
 	public TerrainResource getTerrainByName(String terrainName) {
-		for (int i = 0; i < weapons.length; i++) {
-			if (terrains[i] != null && terrainName.equals(terrains[i].getName())) {
-				return terrains[i];
-			}
-		}
-		return null;
-	}		
+		return findResourceByName(terrainName, terrains);
+    }
 	public boolean hasUnits() {
 		return hasUnits;
 	}
 
 	public UnitResourceHolder[] getUnits() {
 		return units;
+	}
+
+	TerrainObjectResourceHolder[] getTerrainObjects() {
+		return terrainObjects;
 	}
 
 	@Override
@@ -242,9 +236,5 @@ public class ModResourceHolder extends XmlResource {
 	@Override
 	public String createResourceName(File resourceFile) {
 		return getFileNameWithoutExtension(resourceFile);
-	}
-
-	TerrainObjectResourceHolder[] getTerrainObjects() {
-		return terrainObjects;
 	}
 }

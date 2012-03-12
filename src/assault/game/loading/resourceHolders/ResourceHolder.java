@@ -13,6 +13,15 @@ import java.io.File;
  */
 public abstract class ResourceHolder {
 
+    public static <O extends ResourceHolder> O findResourceByName(String name, O[] list) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != null && list[i].getName() != null && list[i].getName().equals(name)) {
+                return list[i];
+            }
+        }
+        return null;
+    }
+
 	private ResourcePreloader rp;
 	private File baseFile;
 	private String name;

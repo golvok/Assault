@@ -11,6 +11,7 @@ import assault.game.display.StatusDisplayMenu;
 import assault.game.display.TopGameContainer;
 import assault.game.gameObjects.AGroup;
 import assault.game.gameObjects.AUnit;
+import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.ResourcePreloader;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.UnitResourceHolder;
@@ -262,17 +263,11 @@ public class AssaultWindow extends AContainer {
 
 		try {
 			//<editor-fold defaultstate="collapsed" desc="unit creation">
-			AUnit en2 = new AUnit(gameArea, 115, 300, rp.getModUnitByName("default", "SimpleUnit2"), p1);
+			/*AUnit en2 = new AUnit(gameArea, 115, 300, rp.getModUnitByName("default", "SimpleUnit2"), p1);
 			gameArea.add(en2);
-
-			AUnit b1 = new AUnit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
-			gameArea.add(b1);
 
 			AUnit e1 = new AUnit(gameArea, 115, 400, rp.getModUnitByName("default", "SimpleUnit2"), p2);
 			gameArea.add(e1);
-
-			AUnit e2 = new AUnit(gameArea, 515, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
-			gameArea.add(e2);
 
 			AUnit e3 = new AUnit(gameArea, 615, 50, rp.getModUnitByName("default", "SimpleUnit"), p2);
 			gameArea.add(e3);
@@ -298,7 +293,17 @@ public class AssaultWindow extends AContainer {
 			UnitResourceHolder su2 = rp.getModUnitByName("default", "SimpleUnit2");
 			for (int i = 0; i <= 6; i++) {
 				gameArea.add(new AUnit(gameArea, (i * 100) + 50, 450, su2, p2));
-			}
+			}*/
+
+            AUnit b2 = new AUnit(gameArea, 515, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
+			gameArea.add(b2);
+
+			AUnit b1 = new AUnit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
+			gameArea.add(b1);
+
+            gameArea.add(new TerrainObject(gameArea, 50, 50, rp.getModTerrainObjectByName("default", "TallTObject"), p2));
+            gameArea.add(new TerrainObject(gameArea, 150, 50, rp.getModTerrainObjectByName("default", "LongTObject"), p2));
+
 			//</editor-fold>
 		} catch (ResourceException ex) {
 			rp.addError(ex);

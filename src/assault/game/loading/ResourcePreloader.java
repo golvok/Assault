@@ -5,11 +5,7 @@
 package assault.game.loading;
 
 import assault.display.APaintable;
-import assault.game.loading.resourceHolders.ModResourceHolder;
-import assault.game.loading.resourceHolders.ResourceException;
-import assault.game.loading.resourceHolders.TerrainResource;
-import assault.game.loading.resourceHolders.UnitResourceHolder;
-import assault.game.loading.resourceHolders.WeaponResourceHolder;
+import assault.game.loading.resourceHolders.*;
 import assault.util.Disposable;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,6 +131,15 @@ public class ResourcePreloader extends APaintable implements Disposable{
 			throw new ResourceException("getModWeaponByName: " + modName + "." + weaponName + " doesn't exist");
 		}
 	}
+
+    public TerrainObjectResourceHolder getModTerrainObjectByName(String modName, String terrainOName) throws ResourceException {
+		TerrainObjectResourceHolder terrain = getModByName(modName).getTerrainObjectByName(terrainOName);
+		if (terrain != null) {
+			return terrain;
+		} else {
+			throw new ResourceException("getModTerrainObjectByName: " + modName + "." + terrainOName + " doesn't exist");
+		}
+    }
 
 	public TerrainResource getModTerrainByName(String modName, String terrainName) throws ResourceException {
 		TerrainResource terrain = getModByName(modName).getTerrainByName(terrainName);
