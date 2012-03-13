@@ -84,7 +84,7 @@ public class AObject extends AContainer implements GridObject {
 	public synchronized void dispose() {
 		if (!isDisposed()) {
 			statDispBox.dispose();
-			getGA().getGM().remove(this);
+			getGA().remove(this);
 			//System.out.println("AO_DISPOSE");
 		}
 		super.dispose();

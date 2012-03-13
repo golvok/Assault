@@ -301,8 +301,12 @@ public class AssaultWindow extends AContainer {
 			AUnit b1 = new AUnit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
 			gameArea.add(b1);
 
-            gameArea.add(new TerrainObject(gameArea, 50, 50, rp.getModTerrainObjectByName("default", "TallTObject"), p2));
-            gameArea.add(new TerrainObject(gameArea, 150, 50, rp.getModTerrainObjectByName("default", "LongTObject"), p2));
+            gameArea.add(new TerrainObject(gameArea, 150, 50, rp.getModTerrainObjectByName("default", "LongTObject"), null));
+            gameArea.add(new TerrainObject(gameArea, 250, 50, rp.getModTerrainObjectByName("default", "TallTObject"), null));
+            gameArea.add(new TerrainObject(gameArea, 250, 150, rp.getModTerrainObjectByName("default", "TallTObject"), null));
+            gameArea.add(new TerrainObject(gameArea, 250, 250, rp.getModTerrainObjectByName("default", "TallTObject"), null));
+            gameArea.add(new TerrainObject(gameArea, 250, 350, rp.getModTerrainObjectByName("default", "TallTObject"), null));
+            gameArea.add(new TerrainObject(gameArea, 350, 350, rp.getModTerrainObjectByName("default", "LargeTObject"), null));
 
 			//</editor-fold>
 		} catch (ResourceException ex) {

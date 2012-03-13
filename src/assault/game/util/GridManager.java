@@ -101,7 +101,7 @@ public class GridManager implements Disposable {
 				for (int i = 0; i < widthInGrid; i++) {
 					for (int j = 0; j < heightInGrid; j++) {
 						try {
-							addToCell(x + i, y + j, null);
+                            removeFromCell(x + i, y + j, go);
 						} catch (IndexOutOfBoundsException e) {
 						}
 					}

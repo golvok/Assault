@@ -10,7 +10,7 @@
 
 <AObject type="TerrainObject">
 	<name>TallTObject</name>
-	<dims width="20" height="60"/>
+	<dims width="20" height="70"/>
 	<health max="10"/>
 	<img>
 		<base src="images/TTO.png"/>
