@@ -16,7 +16,7 @@ import java.util.TimerTask;
  *
  * @author matt
  */
-public class AProjectile extends AObject{
+public class Projectile extends AObject{
 	private Point eP = new Point();
 	private int speed = 3;
 	private double dX = 0;//difference X, Y
@@ -29,7 +29,7 @@ public class AProjectile extends AObject{
 	private Timer moverTimer = new Timer();
 	private boolean selected = false;
 	private Image miniIcon = null;
-	public AProjectile(GameArea g,int sX, int sY, int eX, int eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
+	public Projectile(GameArea g,int sX, int sY, int eX, int eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
 		super(g,sX,sY,size,size,miniIcon,naturalImage,ownerPlayer);
 		X = sX;
 		Y = sY;

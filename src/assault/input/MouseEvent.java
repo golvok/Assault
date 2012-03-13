@@ -4,7 +4,7 @@
  */
 package assault.input;
 
-import assault.display.APaintable;
+import assault.display.Paintable;
 import java.awt.Shape;
 
 /**
@@ -46,7 +46,7 @@ public class MouseEvent extends ButtonInputEvent {
 	 * @param ap
 	 * @return 
 	 */
-	public MouseEvent translate(APaintable ap) {
+	public MouseEvent translate(Paintable ap) {
 		return new MouseEvent(getX() - ap.getX(), getY() - ap.getY(), getButton(), getNewState(), getModifiers());
 	}
 

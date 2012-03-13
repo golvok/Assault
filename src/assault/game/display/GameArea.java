@@ -4,19 +4,19 @@
  */
 package assault.game.display;
 
-import assault.display.APaintable;
+import assault.display.Paintable;
 import assault.display.AssaultWindow;
 import assault.display.InputRegistarContainer;
-import assault.game.gameObjects.AGroup;
+import assault.game.gameObjects.Group;
 import assault.game.gameObjects.AObject;
-import assault.game.gameObjects.AUnit;
+import assault.game.gameObjects.Unit;
 import assault.game.gameObjects.Selectable;
 import assault.game.util.GridManager;
 import assault.game.util.GridObject;
 import assault.game.util.TerrainGridManager;
 import assault.game.util.commands.*;
 import assault.game.util.pathfinding.AStarPathFinder;
-import assault.game.util.pathfinding.PathFinder;
+import assault.game.util.pathfinding.RawPathFinder;
 import assault.game.util.pathfinding.PathFindingGridObject;
 import assault.game.util.terrain.TerrainGenerator;
 import assault.input.InputEventUtil;
@@ -40,15 +40,15 @@ public class GameArea extends InputRegistarContainer {
 	public final static Integer NORMAL_DEPTH = new Integer(2);
 	public final static Integer BULLET_DEPTH = new Integer(3);
 	public final static Integer STATUS_BOX_DEPTH = new Integer(4);
-	private final List<AUnit> aUnits = Collections.synchronizedList(new ArrayList<AUnit>(32));
+	private final List<Unit> units = Collections.synchronizedList(new ArrayList<Unit>(32));
 	private AObject[] selected = new AObject[1];
 	private int numSelected = 0;
 	private MoveCmd gaMover;
 	private TerrainGridManager gManager;
-	private Thread movementThread;
+	//private Thread movementThread;
 	private ThreadBlocker<Point> mouseThreadBlocker = new ThreadBlocker<Point>();
 	private ThreadBlocker<AObject> nextAOTargetedThreadBlocker = new ThreadBlocker<AObject>();
-	private PathFinder pF;
+	private RawPathFinder pF;
 	private final AssaultWindow aWindow;
 	private final TerrainGenerator terrainGenerator;
 
@@ -57,22 +57,22 @@ public class GameArea extends InputRegistarContainer {
 		aWindow = aw;
 		terrainGenerator = tg;
 		System.out.println("Creating movement thread");
-		movementThread = new Thread(new Runnable() {
+		/*movementThread = new Thread(new Runnable() {
 
-			private AUnit[] aUnitArray = new AUnit[0];
+			private Unit[] unitArray = new Unit[0];
 
 			@Override
 			public void run() {
 				while (!stopMT) {
 					//System.out.println("MT_TICK");
-					synchronized (aUnits) {
+					synchronized (units) {
 						//System.out.println("MT_GOT_LOCK");
-						aUnitArray = aUnits.toArray(aUnitArray);
+						unitArray = units.toArray(unitArray);
 					}
 					//System.out.println("MT_RELINQUISH_LOCK");
-					for (int i = 0; i < aUnitArray.length; i++) {
-						if (aUnitArray[i] != null) {
-							aUnitArray[i].advance();
+					for (int i = 0; i < unitArray.length; i++) {
+						if (unitArray[i] != null) {
+							unitArray[i].getMover().advanceTarget(?);
 						}
 					}
 					synchronized (Thread.currentThread()) {
@@ -85,7 +85,7 @@ public class GameArea extends InputRegistarContainer {
 				}
 				//movementThread = null;
 			}
-		});
+		});*/
 
 		System.out.println("Crteating gridManager");
 		gManager = new TerrainGridManager(getWidth(), getHeight(), 10, terrainGenerator, this);
@@ -119,7 +119,7 @@ public class GameArea extends InputRegistarContainer {
 	 * @return
 	 * @see add(APaintable ap, boolean addToGM)
 	 */
-	public boolean add(APaintable ap) {
+	public boolean add(Paintable ap) {
 		return add(ap, true);
 	}
 	private volatile boolean stopMT = false;
@@ -136,14 +136,14 @@ public class GameArea extends InputRegistarContainer {
 	 * AGroup
 	 * @return true if successful, false if not
 	 */
-	public boolean add(APaintable ap, boolean addToGM) {
-		if (!movementThread.isAlive()) {
+	public boolean add(Paintable ap, boolean addToGM) {
+		/*if (!movementThread.isAlive()) {
 			System.out.println("starting movement thread");
 			movementThread.start();
-		}
+		}*/
 
 		if (ap != null) {
-			if (addToGM && ap instanceof AObject && !(ap instanceof AGroup)) {
+			if (addToGM && ap instanceof AObject && !(ap instanceof Group)) {
 				if (!gManager.add((AObject) ap)) {
 					System.out.println("unable to add " + ap + " to GA");
 					return false;
@@ -154,15 +154,12 @@ public class GameArea extends InputRegistarContainer {
 			 * } else if (ap instanceof AGroup) {//this extends AUnit, therefore
 			 * addGroup((AGroup) ap); } else
 			 */
-			if (ap instanceof AUnit) {//_this_ must be below AGroup
-				aUnits.add((AUnit) ap);
+			if (ap instanceof Unit) {//_this_ must be below AGroup
+				units.add((Unit) ap);
 			}/*
 			 * else if (ap != null) { super.add(ap, NORMAL_DEPTH);
 			}
 			 */
-			if (ap instanceof AObject) {
-				((AObject) ap).addSubPartsToGA();
-			}
 			addChild(ap);
 			return true;
 		} else {
@@ -181,28 +178,28 @@ public class GameArea extends InputRegistarContainer {
 	 * GROUP_DEPTH); }
 	}
 	 */
-	public void add(APaintable[] aps) {
+	public void add(Paintable[] aps) {
 		add(aps, true);
 	}
 
-	public void add(APaintable[] aps, boolean addToGM) {
+	public void add(Paintable[] aps, boolean addToGM) {
 		for (int i = 0; i < aps.length; i++) {
 			this.add(aps[i], addToGM);
 		}
 	}
 
-	public void remove(APaintable ap) {
+	public void remove(Paintable ap) {
 		removeChild(ap);
 	}
 
 	public void remove(AObject ao) {
-		if (ao != null && !(ao instanceof AGroup)) {
+		if (ao != null && !(ao instanceof Group)) {
 			if (ao instanceof Selectable) {
 				((Selectable) ao).deselect();
 			}
 			getGM().remove(ao);
-			if (ao instanceof AUnit) {
-				aUnits.remove((AUnit) ao);
+			if (ao instanceof Unit) {
+				units.remove((Unit) ao);
 			}
 			System.out.println("GA: removing " + ao);
 			removeChild(ao);
@@ -326,12 +323,12 @@ public class GameArea extends InputRegistarContainer {
 		return temp;
 	}
 
-	private AUnit[] getAUnitSelection() {
-		AUnit[] aus = new AUnit[getSelection().length];
+	private Unit[] getAUnitSelection() {
+		Unit[] aus = new Unit[getSelection().length];
 		int j = 0;
 		for (int i = 0; i < selected.length; i++) {
-			if (selected[i] instanceof AUnit) {
-				aus[j] = (AUnit) selected[i];
+			if (selected[i] instanceof Unit) {
+				aus[j] = (Unit) selected[i];
 				j++;
 			}
 		}
@@ -355,11 +352,11 @@ public class GameArea extends InputRegistarContainer {
 		getAW().getACDM().setCmdBtns(ao);
 	}
 
-	public GridManager getGM() {
+	public final GridManager getGM() {
 		return gManager;
 	}
 
-	public PathFinder getPF() {
+	public RawPathFinder getPF() {
 		return pF;
 	}
 
@@ -395,7 +392,7 @@ public class GameArea extends InputRegistarContainer {
 		}
 	}
 
-	public void executeCommandOnSelectionBySelection(ACommand cmd) {
+	public void executeCommandOnSelectionBySelection(Command cmd) {
 		executeCommand(cmd, getSelection(), getAUnitSelection());
 	}
 
@@ -410,10 +407,10 @@ public class GameArea extends InputRegistarContainer {
 	 * @param cmd
 	 * @param targets
 	 */
-	public void executeCommand(ACommand cmd, AObject[] targets, AUnit[] executors) {
+	public void executeCommand(Command cmd, AObject[] targets, Unit[] executors) {
 		if (cmd instanceof CreateCmd) {
 			for (int i = 0; i < executors.length; i++) {
-				AUnit builder = executors[i];
+				Unit builder = executors[i];
 				//System.out.println("executing CreateCmd");
 				((CreateCmd) cmd).execute(builder, this);
 			}

@@ -9,13 +9,13 @@ import assault.game.display.CommandDispatchMenu;
 import assault.game.display.GameArea;
 import assault.game.display.StatusDisplayMenu;
 import assault.game.display.TopGameContainer;
-import assault.game.gameObjects.AGroup;
-import assault.game.gameObjects.AUnit;
+import assault.game.gameObjects.Group;
+import assault.game.gameObjects.Unit;
 import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.ResourcePreloader;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.UnitResourceHolder;
-import assault.game.util.OSUtil;
+import assault.util.OSUtil;
 import assault.game.util.terrain.NormalTerrainGenerator;
 import assault.input.InputManager;
 import assault.util.ThreadBlocker;
@@ -30,7 +30,7 @@ import org.lwjgl.util.Color;
  * The main window
  * @author matt
  */
-public class AssaultWindow extends AContainer {
+public class AssaultWindow extends Container {
 
 	public enum GameState {
 		NOT_RUNNING,IN_MAIN_MENU,IN_GAME;
@@ -142,9 +142,11 @@ public class AssaultWindow extends AContainer {
 		dispose();
 	}
 
-	private void update(int delta) {
+    @Override
+	public void updateSelf(int delta) {
 		Display.setTitle("AssaultWindow @ " + ((int) (lastFps * 100d)) / 100d + " fps");
 		updateFps(delta);
+        super.updateSelf(delta);
 	}
 
 	private void renderGraphics() {
@@ -295,10 +297,10 @@ public class AssaultWindow extends AContainer {
 				gameArea.add(new AUnit(gameArea, (i * 100) + 50, 450, su2, p2));
 			}*/
 
-            AUnit b2 = new AUnit(gameArea, 515, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
+            Unit b2 = new Unit(gameArea, 515, 200, rp.getModUnitByName("default", "SimpleBuilding"), p2);
 			gameArea.add(b2);
 
-			AUnit b1 = new AUnit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
+			Unit b1 = new Unit(gameArea, 515, 100, rp.getModUnitByName("default", "SimpleBuilding"), p1);
 			gameArea.add(b1);
 
             gameArea.add(new TerrainObject(gameArea, 150, 50, rp.getModTerrainObjectByName("default", "LongTObject"), null));

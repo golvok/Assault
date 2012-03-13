@@ -15,13 +15,13 @@ import java.awt.Point;
  *
  * @author matt
  */
-public class AUnit extends AControllable {
+public class Unit extends Controllable {
 
 	private Point createPoint = new Point(0, 0);
 	private Point[] mountPoints;
-	private AWeapon[] weapons;
+	private Weapon[] weapons;
 
-	public AUnit(GameArea g, int x, int y, UnitResourceHolder src, Player owner) throws ResourceException {
+	public Unit(GameArea g, int x, int y, UnitResourceHolder src, Player owner) throws ResourceException {
 		super(g, x, y, src, 5, owner);
 		setCreatePoint(src.getCreatePoint());
 		setCmdBtnSet(src.getCmdBtns());
@@ -29,48 +29,21 @@ public class AUnit extends AControllable {
 		WeaponResourceHolder[] weaponsSources = src.getWeapons();
 		for (int i = 0; i < weaponsSources.length; i++) {
 			if (getMountPoint(i) != null && weaponsSources[i] != null) {
-				equipWeapon(new AWeapon(getGA(), weaponsSources[i], owner), i);
+				equipWeapon(new Weapon(getGA(), weaponsSources[i], owner), i);
 			}
 		}
 	}
 
-	public AUnit(GameArea g, Player owner) throws ResourceException {
+	public Unit(GameArea g, Player owner) throws ResourceException {
 		super(g, 0, 0, null, 0, owner);
 	}
 
-	@Override
-	public void addSubPartsToGA() {
-		super.addSubPartsToGA();
-		if (getGA() != null) {
-			if (weapons != null) {
-				for (int i = 0; i < weapons.length; i++) {
-					getGA().add(weapons[i], false);
-				}
-			}
-		}
-	}
 
-	@Override
-	public void updateSubPartsPosition() {
-		super.updateSubPartsPosition();
-		if (weapons != null) {
-			for (int i = 0; i < weapons.length; i++) {
-				if (weapons[i] != null) {
-					weapons[i].refreshPosition();
-				}
-			}
-		}
-	}
-
-	protected final boolean equipWeapon(AWeapon aw, int mountNum) {
+	protected final boolean equipWeapon(Weapon aw, int mountNum) {
 		//System.out.println("AUNIT_EQUIP_WEAPON");
 		if (mountNum < weapons.length && mountNum >= 0 && hasWeapon(aw) < 0 && aw != null) {
-			if (aw.mountOn(this, mountNum)) {
-				weapons[mountNum] = aw;
-				return true;
-			} else {
-				return false;
-			}
+			aw.setLocation(getMountPoint(mountNum));
+            addChild(aw);
 		}
 		return false;
 	}
@@ -82,7 +55,7 @@ public class AUnit extends AControllable {
 		}
 	}
 
-	public final AWeapon getWeapon(int mountNum) {
+	public final Weapon getWeapon(int mountNum) {
 		if (mountNum < weapons.length && mountNum >= 0) {
 			return weapons[mountNum];
 		}
@@ -95,7 +68,7 @@ public class AUnit extends AControllable {
 	 * @param aw
 	 * @return 
 	 */
-	public final int hasWeapon(AWeapon aw) {
+	public final int hasWeapon(Weapon aw) {
 		if (aw != null) {
 			for (int i = 0; i < weapons.length; i++) {
 				if (weapons[i] == aw) {
@@ -121,7 +94,7 @@ public class AUnit extends AControllable {
 		//System.out.println("AU_PAINT");
 	}
 
-	public void shootBulletAt(AObject target, AWeapon aw) {
+	public void shootBulletAt(AObject target, Weapon aw) {
 		if (hasWeapon(aw) >= 0) {
 			aw.shoot(target);
 		}
@@ -143,11 +116,11 @@ public class AUnit extends AControllable {
 			}
 		}
 		if (weapons != null) {
-			AWeapon[] tempW = new AWeapon[pts.length];
+			Weapon[] tempW = new Weapon[pts.length];
 			System.arraycopy(weapons, 0, tempW, 0, tempW.length);
 			weapons = tempW;
 		} else {
-			weapons = new AWeapon[pts.length];
+			weapons = new Weapon[pts.length];
 		}
 	}
 

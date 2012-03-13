@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author matt
  */
-public abstract class AContainer extends APaintable {
+public abstract class Container extends Paintable{
 
-	private final List<APaintable> children;
+	private final List<Paintable> children;
 
-	public AContainer(int x, int y, int width, int height, ArrayList<APaintable> startchildren) {
+	public Container(int x, int y, int width, int height, ArrayList<Paintable> startchildren) {
 		this(x, y, width, height, startchildren.size());
 		addChildren(startchildren);
 	}
@@ -30,9 +30,9 @@ public abstract class AContainer extends APaintable {
 	 * @param startSize the initial size passed to the children
 	 * <code>List</code>
 	 */
-	public AContainer(int x, int y, int width, int height, int startSize) {
+	public Container(int x, int y, int width, int height, int startSize) {
 		super(x, y, width, height);
-		children = Collections.synchronizedList(new ArrayList<APaintable>(startSize));
+		children = Collections.synchronizedList(new ArrayList<Paintable>(startSize));
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public abstract class AContainer extends APaintable {
 
 	public void drawChildren() {
 		synchronized (children) {
-			for (APaintable ap : children) {
+			for (Paintable ap : children) {
 				if (ap != null) {
 					ap.draw();
 				}
@@ -51,15 +51,30 @@ public abstract class AContainer extends APaintable {
 
 	}
 
-	public void addChildren(ArrayList<? extends APaintable> aps) {
+    @Override
+    public void updateSelf(int delta) {
+        updateChildren(delta);
+    }
+
+    public void updateChildren(int delta) {
+        synchronized (children) {
+			for (Paintable ap : children) {
+				if (ap != null) {
+					ap.update(delta);
+				}
+			}
+		}
+    }
+
+	public void addChildren(ArrayList<? extends Paintable> aps) {
 		if (aps != null) {
-			for (APaintable aPaintable : aps) {
-				addChild((APaintable) aPaintable);
+			for (Paintable aPaintable : aps) {
+				addChild((Paintable) aPaintable);
 			}
 		}
 	}
 
-	public void addChild(APaintable ap) {
+	public void addChild(Paintable ap) {
 		//System.out.println("adding "+ap+" to "+this);
 		if (ap != null) {
 			ap.setParent(this);
@@ -67,7 +82,7 @@ public abstract class AContainer extends APaintable {
 		}
 	}
 
-	protected void removeChild(APaintable ap) {
+	protected void removeChild(Paintable ap) {
 		children.remove(ap);
 	}
 
@@ -78,8 +93,8 @@ public abstract class AContainer extends APaintable {
 	@Override
 	public synchronized void dispose() {
 		if (!isDisposed()) {
-			ArrayList<APaintable> temp = new ArrayList<APaintable>(children);
-			for (APaintable ap : temp) {
+			ArrayList<Paintable> temp = new ArrayList<Paintable>(children);
+			for (Paintable ap : temp) {
 				if (ap != null) {
 					ap.dispose();
 				}

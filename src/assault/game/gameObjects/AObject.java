@@ -4,23 +4,23 @@
  */
 package assault.game.gameObjects;
 
-import assault.display.AContainer;
+import assault.display.AssaultWindow;
+import assault.display.Container;
 import assault.game.Player;
 import assault.game.display.GameArea;
-import assault.display.AssaultWindow;
-import assault.game.display.AStatusDisplayBox;
-import assault.game.util.GridObject;
+import assault.game.display.StatusDisplayBox;
 import assault.game.loading.resourceHolders.ObjectResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
-import org.lwjgl.util.Color;
+import assault.game.util.GridObject;
 import java.awt.Image;
+import org.lwjgl.util.Color;
 import org.lwjgl.util.ReadableColor;
 
 /**
  *
  * @author matt
  */
-public class AObject extends AContainer implements GridObject {
+public class AObject extends Container implements GridObject {
 
 	public final static int CROSS_SIZE = 4;
 	private Player owner;
@@ -29,7 +29,7 @@ public class AObject extends AContainer implements GridObject {
 	private boolean invincible = false;
 	private boolean paintCross = true;
 	private boolean showStatus = true;
-	private AStatusDisplayBox statDispBox = null;
+	private StatusDisplayBox statDispBox = null;
 	private ObjectResourceHolder src = null;
 	private final Image naturalImage;
 	private boolean alive = true;
@@ -71,12 +71,10 @@ public class AObject extends AContainer implements GridObject {
 		this.miniIcon = miniIcon;
 		this.naturalImage = naturalImage;
 		invincible = true;//may be set again by other constructors
-		statDispBox = new AStatusDisplayBox(this);
+		statDispBox = new StatusDisplayBox(this);
+        hideStatusBox();
+        addChild(statDispBox);
 		//System.out.println("AO_INIT");
-	}
-
-	public AObject(GameArea g, Player owner) {
-		this(g, 0, 0, 0, 0, null, null, owner);
 	}
 
 	//=======================END=CONSTRUCTORS========================
@@ -90,20 +88,9 @@ public class AObject extends AContainer implements GridObject {
 		super.dispose();
 	}
 
-	public void addSubPartsToGA() {
-		statDispBox.setVisible(false);
-		getGA().add(statDispBox);
-		correctStatDispBoxPos();
-	}
-
-	public void updateSubPartsPosition() {
-		correctStatDispBoxPos();
-	}
-
 	@Override
 	public void setLocation(int x, int y) {
 		super.setLocation(x, y);
-		updateSubPartsPosition();
 	}
 
 	@Override
@@ -138,11 +125,9 @@ public class AObject extends AContainer implements GridObject {
 	private boolean setHealth(int newHealth) {
 		if (newHealth > 0) {
 			health = newHealth;
-			correctStatDispBoxPos();
 			return false;
 		} else {
 			health = 0;
-			correctStatDispBoxPos();
 			return true;
 		}
 	}
@@ -226,15 +211,6 @@ public class AObject extends AContainer implements GridObject {
 		return (getSrc() != null ? getSrc().getQualifiedName() : getClass().getSimpleName()) + ", x = " + getX() + ", y = " + getY() + ", w = " + getWidth() + ", h = " + getHeight() + " #" + hashCode();
 	}
 
-	/**
-	 * correct the position of the Status display box to the
-	 * current location of this <code>AObject</code>
-	 */
-	public void correctStatDispBoxPos() {
-		if (statDispBox != null && statDispBox.isVisible()) {
-			statDispBox.correctPosition();
-		}
-	}
 	//====================Mouse Listeners========================
 
 	/**
@@ -270,7 +246,6 @@ public class AObject extends AContainer implements GridObject {
 	public void showStatusBox() {
 		if (showStatus && statDispBox != null) {
 			statDispBox.setVisible(true);
-			correctStatDispBoxPos();
 		}
 		//System.out.println("AO_SHOW_STATUS"+showStatus+this);
 	}

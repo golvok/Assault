@@ -13,12 +13,12 @@ import java.util.Iterator;
  *
  * @author matt
  */
-public class InputRegistarContainer extends AContainer implements InputRegistar, MouseListener, KeyboardListener {
+public class InputRegistarContainer extends Container implements InputRegistar, MouseListener, KeyboardListener {
 
-	private ArrayList<APaintable> mouseListeners = new ArrayList<APaintable>();
-	private ArrayList<APaintable> keyListeners = new ArrayList<APaintable>();
+	private ArrayList<Paintable> mouseListeners = new ArrayList<Paintable>();
+	private ArrayList<Paintable> keyListeners = new ArrayList<Paintable>();
 
-	public InputRegistarContainer(int x, int y, int width, int height, ArrayList<APaintable> startchildren) {
+	public InputRegistarContainer(int x, int y, int width, int height, ArrayList<Paintable> startchildren) {
 		super(x, y, width, height, startchildren);
 	}
 
@@ -27,7 +27,7 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 	}
 
 	@Override
-	public void addMouseEventReciever(APaintable ml) {
+	public void addMouseEventReciever(Paintable ml) {
 		if (ml instanceof MouseListener){
 			mouseListeners.add(ml);
 		}else{
@@ -36,12 +36,12 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 	}
 
 	@Override
-	public void removeMouseEventReciever(APaintable ml) {
+	public void removeMouseEventReciever(Paintable ml) {
 		mouseListeners.remove(ml);
 	}
 
 	@Override
-	public void addKeyboardEventReciever(APaintable kl){
+	public void addKeyboardEventReciever(Paintable kl){
 		if (kl instanceof KeyboardListener){
 			keyListeners.add(kl);
 		}else{
@@ -50,12 +50,12 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 	}
 
 	@Override
-	public void removeKeyboardEventReciever(APaintable kl) {
+	public void removeKeyboardEventReciever(Paintable kl) {
 		keyListeners.remove(kl);
 	}
 
 	@Override
-	protected void removeChild(APaintable ap) {
+	protected void removeChild(Paintable ap) {
 		super.removeChild(ap);
 		removeMouseEventReciever(ap);
 		removeKeyboardEventReciever(ap);
@@ -63,8 +63,8 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 
 	@Override
 	public void accept(MouseEvent me) {
-		for (Iterator<APaintable> it = mouseListeners.iterator(); it.hasNext();) {
-			APaintable ap = it.next();
+		for (Iterator<Paintable> it = mouseListeners.iterator(); it.hasNext();) {
+			Paintable ap = it.next();
 			if (ap != null && me.intersects(ap.getBounds())){
 				InputEventUtil.passAndTranslateMouseEventTo(ap, me);
 			}
@@ -73,8 +73,8 @@ public class InputRegistarContainer extends AContainer implements InputRegistar,
 
 	@Override
 	public void accept(KeyboardEvent ke) {
-		for (Iterator<APaintable> it = keyListeners.iterator(); it.hasNext();) {
-			APaintable ap = it.next();
+		for (Iterator<Paintable> it = keyListeners.iterator(); it.hasNext();) {
+			Paintable ap = it.next();
 			if (ap != null){
 				InputEventUtil.passKeyboardEventTo((KeyboardListener)ap, ke);
 			}

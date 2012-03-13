@@ -8,7 +8,7 @@ import assault.game.loading.ResourcePreloader;
 import assault.game.Player;
 import assault.game.display.GameArea;
 import assault.game.gameObjects.AObject;
-import assault.game.gameObjects.AResource;
+import assault.game.gameObjects.Resource;
 import java.awt.Point;
 import java.io.File;
 import org.jdom.input.SAXBuilder;
@@ -26,9 +26,9 @@ public class ResourceResourceHolder extends SelectableResourceHolder {
 	}
 
 	@Override
-	public AResource createObject(GameArea g, int x, int y, Player owner) {
+	public Resource createObject(GameArea g, int x, int y, Player owner) {
 		try {
-			return new AResource(g, x, y, this);
+			return new Resource(g, x, y, this);
 		} catch (ResourceException ex) {
 			return null;
 		}

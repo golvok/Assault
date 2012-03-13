@@ -7,6 +7,7 @@ package assault.game.gameObjects;
 import assault.game.Player;
 import assault.game.display.CommandDispatchMenu;
 import assault.game.display.GameArea;
+import assault.game.loading.resourceHolders.ResourceException;
 import assault.input.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,13 +19,13 @@ import org.lwjgl.util.Color;
  *
  * @author matt
  */
-public class AGroup extends AControllable {
+public class Group extends Controllable {
 
-	private List<AControllable> controllables = Collections.synchronizedList(new ArrayList<AControllable>(5));
+	private List<Controllable> controllables = Collections.synchronizedList(new ArrayList<Controllable>(5));
 	private boolean drawBox = false;
 
-	public AGroup(GameArea g, AControllable[] startControllables, Player owner) {
-		super(g, owner);
+	public Group(GameArea g, Controllable[] startControllables, Player owner) throws ResourceException {
+		super(g, 0, 0, null, 1, owner);
 		addControllables(startControllables);
 		doNotShowStatus();
 		doNotPaintCross();
@@ -37,14 +38,14 @@ public class AGroup extends AControllable {
 		super.dispose();
 	}
 	
-	public void addControllable(AControllable newControllable) {
+	public void addControllable(Controllable newControllable) {
 		controllables.add(newControllable);
 		newControllable.registerGroup(this);
 		resizeToControllables();
 		setCmdBtnSet(CommandDispatchMenu.getUniqueCmdBtnSet(controllables));
 	}
 
-	public void addControllables(AControllable[] newControllables) {
+	public final void addControllables(Controllable[] newControllables) {
 		for (int i = 0; i < newControllables.length; i++) {
 			if (newControllables[i] != null) {
 				controllables.add(newControllables[i]);
@@ -55,12 +56,12 @@ public class AGroup extends AControllable {
 		setCmdBtnSet(CommandDispatchMenu.getUniqueCmdBtnSet(controllables));
 	}
 
-	public void removeControllable(AControllable au) {
+	public void removeControllable(Controllable au) {
 		controllables.remove(au);
 		resizeToControllables();
 	}
 
-	public void removeControllables(AControllable[] aus) {
+	public void removeControllables(Controllable[] aus) {
 		for (int i = 0; i < aus.length; i++) {
 			removeControllable(aus[i]);
 		}
@@ -79,15 +80,15 @@ public class AGroup extends AControllable {
 	 * using <code>setBounds()</code> adjust the X ,Y, width and Height so that
 	 * this fits over the <code>AControllables</code> in <code>controllables</code>.
 	 */
-	public void resizeToControllables() {
+	public final void resizeToControllables() {
 		int GAP_SIZE = 10;
 		int newWidth = 0;//<---ends up being min size
 		int newHeight = 0;//<--|
 		int newX = Integer.MAX_VALUE;
 		int newY = Integer.MAX_VALUE;
-		int uDim = 0;
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		int uDim;
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				// x
@@ -102,7 +103,7 @@ public class AGroup extends AControllable {
 				}
 			}
 		}
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				// width
@@ -130,44 +131,23 @@ public class AGroup extends AControllable {
 		}
 	}
 
-	public AControllable[] getControllables() {
-		return controllables.toArray(new AControllable[controllables.size()]);
+    @Override
+    public void updateSelf(int delta) {
+        resizeToControllables();
+        super.updateSelf(delta);
+    }
+
+	public Controllable[] getControllables() {
+		return controllables.toArray(new Controllable[controllables.size()]);
 	}
 
-	public Iterator<AControllable> getControllablesIterator() {
+	public Iterator<Controllable> getControllablesIterator() {
 		return controllables.iterator();
 	}
 
-	@Override
-	public void moveTo(int x, int y) {
-		int aggx = getX();
-		int aggy = getY();
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
-			controllable = it.next();
-			if (controllable != null) {
-				controllable.moveTo(x + controllable.getX() - aggx, y + controllable.getY() - aggy);
-			}
-		}
-	}
-
-	/**
-	 * adjust x coord by <code>x</code> and y coord by <code>y</code>. (they can be negative)
-	 */
-	@Override
-	public void moveBy(int x, int y) {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
-			controllable = it.next();
-			if (controllable != null) {
-				controllable.moveBy(x, y);
-			}
-		}
-	}
-
 	public void doNotPaintCrossOfControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.doNotPaintCross();
@@ -176,8 +156,8 @@ public class AGroup extends AControllable {
 	}
 
 	public void doPaintCrossOfControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.doPaintCross();
@@ -189,8 +169,8 @@ public class AGroup extends AControllable {
 	 * sets the <code>showStatus</code> flag of the <code>AControllables</code> in <code>controllables</code> to false and hides the status box
 	 */
 	public void doNotShowStatusofControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.doNotShowStatus();
@@ -203,8 +183,8 @@ public class AGroup extends AControllable {
 	 * sets the <code>showStatus</code> flag of the <code>AControllables</code> in <code>controllables</code> to true
 	 */
 	public void doShowStatusOfControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.doShowStatus();
@@ -218,8 +198,8 @@ public class AGroup extends AControllable {
 	 */
 	@Override
 	public void showStatusBox() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.showStatusBox();
@@ -233,8 +213,8 @@ public class AGroup extends AControllable {
 	 */
 	@Override
 	public void hideStatusBox() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.hideStatusBox();
@@ -242,22 +222,9 @@ public class AGroup extends AControllable {
 		}
 	}
 
-	/**
-	 * correct the position of the Status display box of the <code>AControllables</code> in <code>controllables</code>
-	 */
-	public void correctStatDispBoxPosOfControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
-			controllable = it.next();
-			if (controllable != null) {
-				controllable.correctStatDispBoxPos();
-			}
-		}
-	}
-
 	public boolean isOneOrMoreControllablesSelected() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null && controllable.isSelected()) {
 				return true;
@@ -287,8 +254,8 @@ public class AGroup extends AControllable {
 	}
 
 	public void selectControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.select();
@@ -297,8 +264,8 @@ public class AGroup extends AControllable {
 	}
 
 	public void selectControllablesPseudo() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.pseudoSelect();
@@ -307,8 +274,8 @@ public class AGroup extends AControllable {
 	}
 
 	public void deselectControllables() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.deselect();
@@ -317,8 +284,8 @@ public class AGroup extends AControllable {
 	}
 
 	public void deselectControllablesPseudo() {
-		AControllable controllable;
-		for (Iterator<AControllable> it = controllables.iterator(); it.hasNext();) {
+		Controllable controllable;
+		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {
 				controllable.deselectPseudo();

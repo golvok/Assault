@@ -9,24 +9,24 @@ package assault.game.util.commands;
  *
  * @author matt
  */
-public abstract class AComplexCommand extends ACommand{
-	ACommand[] cmds;
+public abstract class ComplexCommand extends Command{
+	Command[] cmds;
 	
-	public AComplexCommand(String name,char shortCut,ACommand cmd) {
+	public ComplexCommand(String name,char shortCut,Command cmd) {
 		super(name, shortCut, cmd.getIcon());
-		this.cmds = new ACommand[1];
+		this.cmds = new Command[1];
 		cmds[0] = cmd;
 	}
-	public AComplexCommand(String name,ACommand cmd) {
+	public ComplexCommand(String name,Command cmd) {
 		super(name, cmd.getIcon());
-		this.cmds = new ACommand[1];
+		this.cmds = new Command[1];
 		cmds[0] = cmd;
 	}
-	public AComplexCommand(String name,char shortCut,ACommand[] cmds) {
+	public ComplexCommand(String name,char shortCut,Command[] cmds) {
 		super(name, shortCut, cmds[0].getIcon());
 		this.cmds = cmds;
 	}
-	public AComplexCommand(String name,ACommand[] cmds) {
+	public ComplexCommand(String name,Command[] cmds) {
 		super(name,cmds[0].getIcon());
 		this.cmds = cmds;
 	}

@@ -10,15 +10,15 @@ import assault.game.util.GridManager;
  *
  * @author 088241930
  */
-public abstract class PathFinder {
+public abstract class RawPathFinder {
 
     protected final GridManager gManager;
 	private boolean canceled = false;
       
-    public PathFinder(GridManager gm) {
+    public RawPathFinder(GridManager gm) {
         gManager = gm;
     }
-    public abstract PathObject findPath(PathFindingGridObject pfgo, int destX, int destY);
+    public abstract RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY);
 	
 	public void cancel(){
 		canceled = true;

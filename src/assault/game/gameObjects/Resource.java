@@ -13,9 +13,9 @@ import assault.game.loading.resourceHolders.ResourceResourceHolder;
  *
  * @author matt
  */
-public class AResource extends Selectable{
+public class Resource extends Selectable{
 
-	public AResource(GameArea g,int x,int y, ResourceResourceHolder src) throws ResourceException {
+	public Resource(GameArea g,int x,int y, ResourceResourceHolder src) throws ResourceException {
 		super(g, x, y, src, 1, null);
 	}
 }

@@ -11,17 +11,17 @@ import java.awt.image.BufferedImage;
  *
  * @author matt
  */
-public abstract class ACommand {
+public abstract class Command {
 	private boolean isValidCommand = true;
 	private BufferedImage icon;
 	private char shortCut = Character.MIN_VALUE;
 	private String cmdName;
 	
-	public ACommand(String name,char shortCut,BufferedImage icon) {
+	public Command(String name,char shortCut,BufferedImage icon) {
 		this(name, icon);
 		this.shortCut = shortCut;
 	}
-	public ACommand(String name,BufferedImage icon) {
+	public Command(String name,BufferedImage icon) {
 		System.out.println("Creating an ACommand");
 		if (name == null) {
 			isValidCommand = false;

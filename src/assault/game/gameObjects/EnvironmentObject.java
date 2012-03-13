@@ -15,13 +15,13 @@ import org.lwjgl.util.Color;
  *part of the terrain that can be interacted with (destroyed, created, selected ect.)
  * @author matt
  */
-public final class AEnvironmentObject extends AObject{
+public final class EnvironmentObject extends AObject{
 
     private Polygon shape = null;
 	private boolean selected = false;
 	private Image miniIcon = null;
 
-    public AEnvironmentObject(GameArea g, int x, int y, Point[] shape, Image miniIcon) {
+    public EnvironmentObject(GameArea g, int x, int y, Point[] shape, Image miniIcon) {
         super(g, x, y, miniIcon, null, null);
         setLocation(x, y);
         int[] xPoints = new int[shape.length];

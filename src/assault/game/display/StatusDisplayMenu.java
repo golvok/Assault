@@ -5,8 +5,8 @@
 package assault.game.display;
 
 import assault.display.InputRegistarContainer;
-import assault.game.gameObjects.AControllable;
-import assault.game.gameObjects.AGroup;
+import assault.game.gameObjects.Controllable;
+import assault.game.gameObjects.Group;
 import assault.game.gameObjects.AObject;
 import java.util.*;
 
@@ -17,9 +17,9 @@ import java.util.*;
 public class StatusDisplayMenu extends InputRegistarContainer {
 
 	private List<AObject> aObjects = Collections.synchronizedList(new ArrayList<AObject>(10));
-	private List<AStatusDisplayMenuBox> boxes = Collections.synchronizedList(new ArrayList<AStatusDisplayMenuBox>(10));
-	private Map<AObject, AStatusDisplayMenuBox> ao2Box = new HashMap<AObject, AStatusDisplayMenuBox>(10);
-	private Map<Integer, AStatusDisplayMenuBox> index2Box = new HashMap<Integer, AStatusDisplayMenuBox>(10);
+	private List<StatusDisplayMenuBox> boxes = Collections.synchronizedList(new ArrayList<StatusDisplayMenuBox>(10));
+	private Map<AObject, StatusDisplayMenuBox> ao2Box = new HashMap<AObject, StatusDisplayMenuBox>(10);
+	private Map<Integer, StatusDisplayMenuBox> index2Box = new HashMap<Integer, StatusDisplayMenuBox>(10);
 
 	public StatusDisplayMenu(int x, int y) {
 		super(x, y, 100, 100, 16);
@@ -45,7 +45,7 @@ public class StatusDisplayMenu extends InputRegistarContainer {
 		}
 		if (index <= aObjects.size()) {//to prevent blanks
 			//remove the box at index
-			AStatusDisplayMenuBox asdmbToRemove = index2Box.get(index);
+			StatusDisplayMenuBox asdmbToRemove = index2Box.get(index);
 			if (asdmbToRemove != null) {
 				if (!justMoving) {
 					removeChild(asdmbToRemove);
@@ -57,10 +57,10 @@ public class StatusDisplayMenu extends InputRegistarContainer {
 			}
 			//there now is an empty space,
 			//put a new one where it was or move the old one
-			AStatusDisplayMenuBox asdmb;
+			StatusDisplayMenuBox asdmb;
 			if (!justMoving) {
 				aObjects.add(ao);
-				asdmb = new AStatusDisplayMenuBox(ao, index);
+				asdmb = new StatusDisplayMenuBox(ao, index);
 				boxes.add(asdmb);
 				ao2Box.put(ao, asdmb);
 				index2Box.put(asdmb.getIndex(), asdmb);
@@ -86,11 +86,11 @@ public class StatusDisplayMenu extends InputRegistarContainer {
 	}
 
 	public void addBox(AObject ao) {
-		if (ao instanceof AGroup) {
-			addBoxes(((AGroup) ao).getControllables());
+		if (ao instanceof Group) {
+			addBoxes(((Group) ao).getControllables());
 		} else {
 			aObjects.add(ao);
-			AStatusDisplayMenuBox asdmb = new AStatusDisplayMenuBox(ao, boxes.size());
+			StatusDisplayMenuBox asdmb = new StatusDisplayMenuBox(ao, boxes.size());
 			boxes.add(asdmb);
 			ao2Box.put(ao, asdmb);
 			index2Box.put(asdmb.getIndex(), asdmb);
@@ -105,20 +105,20 @@ public class StatusDisplayMenu extends InputRegistarContainer {
 	}
 
 	public void removeBox(AObject ao) {
-		if (ao instanceof AGroup) {
-			AControllable[] aus = ((AGroup) ao).getControllables();
+		if (ao instanceof Group) {
+			Controllable[] aus = ((Group) ao).getControllables();
 			for (int i = 0; i < aus.length; i++) {
 				removeBox(aus[i]);
 			}
 		} else {
-			AStatusDisplayMenuBox asdmb = ao2Box.remove(ao);//also gets
+			StatusDisplayMenuBox asdmb = ao2Box.remove(ao);//also gets
 			if (asdmb != null) {
 				//decrease the indicies of all boxes after it
 				//and figure out where to repaint
 				int minY = Integer.MAX_VALUE;
 				int maxY = 0;
 				int maxX = 0;
-				AStatusDisplayMenuBox box;
+				StatusDisplayMenuBox box;
 				for (int i = 0; i < aObjects.size(); i++) {
 					box = index2Box.get(i);
 					if (box != null && box.getIndex() > asdmb.getIndex()) {

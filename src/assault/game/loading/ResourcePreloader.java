@@ -4,7 +4,7 @@
  */
 package assault.game.loading;
 
-import assault.display.APaintable;
+import assault.display.Paintable;
 import assault.game.loading.resourceHolders.*;
 import assault.util.Disposable;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import org.jdom.input.SAXBuilder;
  *
  * @author matt
  */
-public class ResourcePreloader extends APaintable implements Disposable{
+public class ResourcePreloader extends Paintable implements Disposable{
 
 	private BufferedImage[] commandImages = new BufferedImage[6];
 	//if any more of these are added make sure there is room in the array for them
@@ -193,4 +193,5 @@ public class ResourcePreloader extends APaintable implements Disposable{
 	public void dispose() {
 		super.dispose();
 	}
+    
 }

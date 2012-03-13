@@ -16,23 +16,21 @@ import java.util.Timer;
  *
  * @author matt
  */
-public class AWeapon extends AControllable{
+public class Weapon extends Controllable{
 
 	int bulletSize = 0;
 	boolean isProjectileWeapon = false;
-	private AUnit mounting;
-	private int mountNumber;
 	private int rotateX;
 	private int rotateY;
 	private boolean selected = false;
 	private Image miniIcon = null;
 
-	public AWeapon(GameArea g,WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
+	public Weapon(GameArea g,WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		this(g,0, 0, src, ownerPlayer);
 		setVisible(false);
 	}
 
-	public AWeapon(GameArea g, int x, int y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
+	public Weapon(GameArea g, int x, int y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		super(g, x - src.getRotatePointX(), y - src.getRotatePointY(), src,1, ownerPlayer);
 		doNotPaintCross();
 		doNotShowStatus();
@@ -58,7 +56,7 @@ public class AWeapon extends AControllable{
 			if (target.isAlive()) {
 				System.out.println("Shooting: " + target);
 				if (isProjectileWeapon) {
-					AProjectile proj = new AProjectile(getGA(),getX(), getY(), target.getX(), target.getY(), bulletSize, null, null, getOwner());
+					Projectile proj = new Projectile(getGA(),getX(), getY(), target.getX(), target.getY(), bulletSize, null, null, getOwner());
 					getGA().add(proj);
 					proj.shoot();
 					return false;
@@ -77,34 +75,11 @@ public class AWeapon extends AControllable{
 		return false;
 	}
 
-	protected boolean mountOn(AUnit au, int mountPoint) {
-		Point p = au.getMountPoint(mountPoint);//will return null if index is invalid
-		if (p != null) {
-			mounting = au;
-			mountNumber = mountPoint;
-			refreshPosition();
-			setVisible(true);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	@Override
 	public  void drawSelf() {
 		super.drawSelf();
 		drawConatiningBox(this);
 	}
-
-	void refreshPosition() {
-		if (mounting != null) {
-			Point p = mounting.getMountPoint(mountNumber);//will return null if index is invalid
-			if (p != null) {
-				setLocation(p.x - rotateX + mounting.getX(), p.y - rotateY + mounting.getY());
-			}
-		}
-	}
-
 
 	private class BulletHitObject {
 

@@ -11,13 +11,13 @@ import org.lwjgl.util.Color;
  *
  * @author Matt
  */
-public class AStatusDisplayMenuBox extends AStatusDisplayBox {
+public class StatusDisplayMenuBox extends StatusDisplayBox {
 
 	protected final static int BOX_HEIGHT = 20;
 	protected final static int BOX_WIDTH = 80;
 	private int index = 0;
 
-	public AStatusDisplayMenuBox(AObject ao, int index) {
+	public StatusDisplayMenuBox(AObject ao, int index) {
 		super(ao, BOX_WIDTH, BOX_HEIGHT);
 		setIndex(index);
 	}

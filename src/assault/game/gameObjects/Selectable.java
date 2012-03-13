@@ -23,13 +23,6 @@ public class Selectable extends AObject implements MouseListener {
 		super(g, x, y, src, owner);
 	}
 
-	/*public Selectable(GameArea g, int x, int y, ObjectResourceHolder src, Player owner) throws ResourceException {
-		super(g, x, y, src, owner);
-	}*/
-	public Selectable(GameArea g, Player owner) {
-		super(g, owner);
-	}
-
 	@Override
 	public synchronized void dispose() {
 		super.dispose();

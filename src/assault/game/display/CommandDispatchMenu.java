@@ -6,9 +6,9 @@ package assault.game.display;
 
 import assault.display.Button;
 import assault.display.Menu;
-import assault.game.gameObjects.AControllable;
+import assault.game.gameObjects.Controllable;
 import assault.game.gameObjects.AObject;
-import assault.game.util.commands.ACommand;
+import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.ShootCommand;
 import java.awt.Dimension;
@@ -26,7 +26,7 @@ import org.lwjgl.util.ReadableColor;
  */
 public class CommandDispatchMenu extends Menu {
 
-	private List<ACommandButton> aCButtons = Collections.synchronizedList(new ArrayList<ACommandButton>(10));
+	private List<CommandButton> aCButtons = Collections.synchronizedList(new ArrayList<CommandButton>(10));
 	private int numColumns;
 	private int numRows;
 
@@ -37,8 +37,8 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	public void setCmdBtns(AObject ao) {
-		if (ao instanceof AControllable) {
-			setCmdBtns(((AControllable) ao).getCmdBtnSet());
+		if (ao instanceof Controllable) {
+			setCmdBtns(((Controllable) ao).getCmdBtnSet());
 		}
 	}
 
@@ -58,9 +58,9 @@ public class CommandDispatchMenu extends Menu {
 		}
 	}
 
-	private void setCmdBtns(ACommandButton[] acbs) {
+	private void setCmdBtns(CommandButton[] acbs) {
 		removeAllCmdBtns();
-		ACommandButton acb;
+		CommandButton acb;
 		for (int i = 0; i < acbs.length; i++) {
 			if (acbs[i] != null) {
 				acb = acbs[i];
@@ -72,26 +72,26 @@ public class CommandDispatchMenu extends Menu {
 		//System.out.println("set command buttons");
 	}
 
-	public static ACommandButton[] constructBtnHierarchy(AObject[] aos) {
+	public static CommandButton[] constructBtnHierarchy(AObject[] aos) {
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
-	public static ACommandButton[] getUniqueCmdBtnSet(List<AControllable> units) {
-		return getUniqueCmdBtnSet(units.toArray(new AControllable[units.size()]));
+	public static CommandButton[] getUniqueCmdBtnSet(List<Controllable> units) {
+		return getUniqueCmdBtnSet(units.toArray(new Controllable[units.size()]));
 	}
 
-	public static ACommandButton[] getUniqueCmdBtnSet(AObject[] aos) {
+	public static CommandButton[] getUniqueCmdBtnSet(AObject[] aos) {
 		//TODO make this more effecient/go with a different model
 		//(sub menus for each type maybe?)
-		ACommandButton[] uniqueSet;
-		uniqueSet = new ACommandButton[6];
-		ACommandButton acb;
+		CommandButton[] uniqueSet;
+		uniqueSet = new CommandButton[6];
+		CommandButton acb;
 		if (aos != null) {
 			int firstAUindex = -1;//must be initialized to a value BELOW 0
 			boolean onlyOneAU = true;
 			//find AUs in aos, remembering the first one and breaking if a second is found
 			for (int m = 0; m < aos.length; m++) {
-				if (aos[m] instanceof AControllable) {
+				if (aos[m] instanceof Controllable) {
 					if (firstAUindex >= 0) {
 						//found a second
 						onlyOneAU = false;
@@ -104,29 +104,29 @@ public class CommandDispatchMenu extends Menu {
 			onlyOneAU = onlyOneAU && firstAUindex >= 0;//if there are none then onlyoneAU will be true and firstAUindex will still be BELOW 0
 			if (onlyOneAU) {
 				//if there's only one...
-				return ((AControllable) aos[firstAUindex]).getCmdBtnSet();
+				return ((Controllable) aos[firstAUindex]).getCmdBtnSet();
 			} else if (firstAUindex < 0) {
 				//there's none?
-				return new ACommandButton[0];
+				return new CommandButton[0];
 			}
-			ACommandButton[] aoSet;
+			CommandButton[] aoSet;
 			//iterate over aos
 			for (int i = firstAUindex; i < aos.length; i++) {
-				if (aos[i] instanceof AControllable) {
-					aoSet = ((AControllable) aos[i]).getCmdBtnSet();
+				if (aos[i] instanceof Controllable) {
+					aoSet = ((Controllable) aos[i]).getCmdBtnSet();
 					//iterate over cmdButton set
 					for (int j = 0; j < aoSet.length; j++) {
 						acb = aoSet[j];
 						if (acb != null) {
 							boolean isUnique = true;
-							ACommand cmdOfBtnToAdd = acb.getCmd();
+							Command cmdOfBtnToAdd = acb.getCmd();
 							//if the underlying command is null, add it anyways (also is a null check)
 							if (cmdOfBtnToAdd != null) {
-								Class<? extends ACommand> typeToAdd = cmdOfBtnToAdd.getClass();
+								Class<? extends Command> typeToAdd = cmdOfBtnToAdd.getClass();
 								//iterate over the existing unique set
 								for (int k = 0; k < uniqueSet.length; k++) {
 									if (uniqueSet[k] != null) {
-										ACommand cmdOfUniqueBtn = uniqueSet[k].getCmd();
+										Command cmdOfUniqueBtn = uniqueSet[k].getCmd();
 										if (cmdOfUniqueBtn != null) {
 											//if it's a createCmd, check the underlying ObjectResourceHolder for uniqueness
 											if (cmdOfUniqueBtn instanceof CreateCmd && typeToAdd.equals(CreateCmd.class)) {
@@ -161,7 +161,7 @@ public class CommandDispatchMenu extends Menu {
 								}
 								if (!foundEmptySlot) {
 									//if none make some
-									ACommandButton[] temp = new ACommandButton[uniqueSet.length + 3];
+									CommandButton[] temp = new CommandButton[uniqueSet.length + 3];
 									System.arraycopy(uniqueSet, 0, temp, 0, uniqueSet.length);
 									temp[uniqueSet.length] = acb;
 									uniqueSet = temp;
@@ -176,8 +176,8 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	protected void removeAllCmdBtns() {
-		ArrayList<ACommandButton> tmp = new ArrayList<ACommandButton>(aCButtons);
-		for (ACommandButton acb : tmp){
+		ArrayList<CommandButton> tmp = new ArrayList<CommandButton>(aCButtons);
+		for (CommandButton acb : tmp){
 			if (acb != null) {
 				acb.setEnabled(true);
 				removeButton(acb);
@@ -186,7 +186,7 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	public void disableAllExceptEsc() {
-		for (ACommandButton acb : aCButtons) {
+		for (CommandButton acb : aCButtons) {
 			if (acb != null) {
 				acb.setEnabled(false);
 			}
@@ -194,15 +194,15 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	void enableAll() {
-		for (ACommandButton acb : aCButtons) {
+		for (CommandButton acb : aCButtons) {
 			if (acb != null) {
 				acb.setEnabled(true);
 			}
 		}
 	}
 
-	public void enableAllExcept(ACommandButton exemptBtn) {
-		for (ACommandButton acb : aCButtons) {
+	public void enableAllExcept(CommandButton exemptBtn) {
+		for (CommandButton acb : aCButtons) {
 			if (acb != null && acb != exemptBtn) {
 				acb.setEnabled(true);
 			}
@@ -231,14 +231,14 @@ public class CommandDispatchMenu extends Menu {
 		}
 	}
 
-	private void addButton(ACommandButton acb) {
+	private void addButton(CommandButton acb) {
 		acb.setIndex(aCButtons.size(), numColumns);
 		aCButtons.add(acb);
 		super.addButton(acb);
 		refreshSizeAndNumRows();
 	}
 
-	private void removeButton(ACommandButton acb) {
+	private void removeButton(CommandButton acb) {
 		aCButtons.remove(acb);
 		super.removeButton(acb);
 		refreshSizeAndNumRows();

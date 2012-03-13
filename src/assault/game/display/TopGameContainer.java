@@ -1,11 +1,11 @@
 package assault.game.display;
 
-import assault.display.AContainer;
-import assault.display.APaintable;
+import assault.display.Container;
+import assault.display.Paintable;
 import assault.display.AssaultWindow;
 import assault.input.*;
 
-public class TopGameContainer extends AContainer implements InputDistributor {
+public class TopGameContainer extends Container implements InputDistributor {
 
 	private AssaultWindow window;
 	private CommandDispatchMenu cdm;
@@ -36,8 +36,8 @@ public class TopGameContainer extends AContainer implements InputDistributor {
 		sDisplayMenu = sdm;
 	}
 
-	public static TopGameContainer getTGC(APaintable ap) {
-		AContainer ac = null;
+	public static TopGameContainer getTGC(Paintable ap) {
+		Container ac = null;
 		if (ap != null) {
 			for (ac = ap.getParent(); !(ac instanceof TopGameContainer) && ac != null; ac = ac.getParent()) {
 			}
@@ -48,7 +48,7 @@ public class TopGameContainer extends AContainer implements InputDistributor {
 	@Override
 	public void accept(MouseEvent me) {
 
-		APaintable ap;
+		Paintable ap;
 		if (me.intersects(cdm.getBounds())) {
 			ap = cdm;
 		} else if (me.intersects(sDisplayMenu.getBounds())) {

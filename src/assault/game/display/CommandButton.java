@@ -4,18 +4,18 @@
  */
 package assault.game.display;
 
-import assault.game.util.commands.ACommand;
+import assault.game.util.commands.Command;
 
 /**
  *
  * @author matt
  */
-public class ACommandButton extends CDMButton {
+public class CommandButton extends CDMButton {
 
-	private ACommand cmd;
-	private ACommandButton btnRef = this;
+	private Command cmd;
+	private CommandButton btnRef = this;
 
-	public ACommandButton(ACommand acmd) {
+	public CommandButton(Command acmd) {
 		super(acmd.getName(), acmd.getShortCut(), acmd.getIcon());
 		cmd = acmd;
 		setEnabled(acmd.isValidCommand());
@@ -48,7 +48,7 @@ public class ACommandButton extends CDMButton {
 		}
 	}
 
-	public ACommand getCmd() {
+	public Command getCmd() {
 		return cmd;
 	}
 

@@ -4,11 +4,11 @@
  */
 package assault.game.loading.resourceHolders;
 
-import assault.game.display.ACommandButton;
+import assault.game.display.CommandButton;
 import assault.game.loading.ResourcePreloader;
 import assault.game.Player;
 import assault.game.display.GameArea;
-import assault.game.gameObjects.AWeapon;
+import assault.game.gameObjects.Weapon;
 import java.awt.Point;
 import java.io.File;
 import org.jdom.DataConversionException;
@@ -26,7 +26,7 @@ public class WeaponResourceHolder extends ControllableResourceHolder {
 	private boolean projectile;
 	private int rotatePointX;
 	private int rotatePointY;
-	private ACommandButton[] cmdBtns;
+	private CommandButton[] cmdBtns;
 
 	public WeaponResourceHolder(ResourcePreloader rp, SAXBuilder builder, ModResourceHolder mod, File xmlFile) throws BadlyFormattedXMLException, ResourceException {
 		super(rp, builder, mod, xmlFile);
@@ -56,12 +56,12 @@ public class WeaponResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	public AWeapon createObject(GameArea g, int x, int y, Player owner) throws ResourceException {
-		return new AWeapon(g, x, y, this, owner);
+	public Weapon createObject(GameArea g, int x, int y, Player owner) throws ResourceException {
+		return new Weapon(g, x, y, this, owner);
 	}
 
 	@Override
-	public AWeapon createObject(GameArea g, Point p, Player owner) throws ResourceException {
+	public Weapon createObject(GameArea g, Point p, Player owner) throws ResourceException {
 		return createObject(g, p.x, p.y, owner);
 	}
 

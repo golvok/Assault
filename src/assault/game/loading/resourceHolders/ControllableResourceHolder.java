@@ -4,9 +4,9 @@
  */
 package assault.game.loading.resourceHolders;
 
-import assault.game.display.ACommandButton;
+import assault.game.display.CommandButton;
 import assault.game.loading.ResourcePreloader;
-import assault.game.util.commands.ACommand;
+import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.MoveCmd;
 import java.io.File;
@@ -19,7 +19,7 @@ import org.jdom.input.SAXBuilder;
  */
 public class ControllableResourceHolder extends SelectableResourceHolder {
 
-	private ACommandButton[] cmdBtns;
+	private CommandButton[] cmdBtns;
 
 	public ControllableResourceHolder(ResourcePreloader rp, SAXBuilder sb, ModResourceHolder mod, File xmlFile) throws BadlyFormattedXMLException, ResourceException {
 		super(rp, sb, mod, xmlFile);
@@ -30,16 +30,16 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 		parseXmlButtons();
 	}
 
-	public ACommandButton[] getCmdBtns() {
-		ACommandButton[] temp = new ACommandButton[cmdBtns.length];
+	public CommandButton[] getCmdBtns() {
+		CommandButton[] temp = new CommandButton[cmdBtns.length];
 		System.arraycopy(cmdBtns, 0, temp, 0, cmdBtns.length);
 		return temp;
 	}
 
-	protected ACommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
+	protected CommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
 		String cmdType;
 		Element cmdE;
-		ACommand cmd = null;
+		Command cmd = null;
 		UnitResourceHolder unit = null;
 		//TODO add functionality for complex commands
 		try {
@@ -66,7 +66,7 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 			throw new BadlyFormattedXMLException(getQualifiedName(), "a button element is improperly formated (something's missing or named wrong)" + (unit != null ? " or there is something wrong (missing?) in " + unit.getQualifiedName() : "") + " Message: " + ex.getStackTrace()[0]);
 		}
 		if (cmd != null) {
-			return new ACommandButton(cmd);
+			return new CommandButton(cmd);
 		} else {
 			return null;
 		}
@@ -77,7 +77,7 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 		try {
 			Element[] xmlBtns = {};
 			xmlBtns = (Element[]) getRootE().getChild("buttons").getChildren("button").toArray(xmlBtns);
-			cmdBtns = new ACommandButton[xmlBtns.length];
+			cmdBtns = new CommandButton[xmlBtns.length];
 			for (int i = 0; i < xmlBtns.length; i++) {
 				try {
 					cmdBtns[i] = parseXmlButton(xmlBtns[i]);

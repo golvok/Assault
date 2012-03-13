@@ -11,11 +11,11 @@ import java.awt.Point;
  *
  * @author matt
  */
-public class PathObject {
+public class RawPathObject {
 
 	public Point[] points;//only int percision is needed
 
-	public PathObject(PathFindingGridPoint startPoint, PathFindingGridPoint endPoint, PathFindingGridPoint[][] cameFromSet, GridManager gm, boolean[][] onPath) {
+	public RawPathObject(PathFindingGridPoint startPoint, PathFindingGridPoint endPoint, PathFindingGridPoint[][] cameFromSet, GridManager gm, boolean[][] onPath) {
 		System.out.println("constructing path...");
 		if (startPoint != null && endPoint != null && cameFromSet != null && gm != null && onPath != null) {
 			int length = 0;

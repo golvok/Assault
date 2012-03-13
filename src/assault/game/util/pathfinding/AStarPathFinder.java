@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  *
  * @author matt
  */
-public class AStarPathFinder extends PathFinder {
+public class AStarPathFinder extends RawPathFinder {
 
 	private boolean started;
 	private final Object startedLock = new Object();
@@ -22,7 +22,7 @@ public class AStarPathFinder extends PathFinder {
     }
 
     @Override
-    public synchronized PathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
+    public synchronized RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
 		
 		synchronized (startedLock) {
 			if (started || isCanceled()) {
@@ -106,7 +106,7 @@ public class AStarPathFinder extends PathFinder {
             pfgo.getExamined()[lowF.getX()][lowF.getY()] = true;
             if (lowF.equals(end)) {//is this point the end? (.equals() has been overridden)
                 System.out.println("Found a path!");
-                return new PathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
+                return new RawPathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
             } else {
                 //.poll removes it from the openset
                 pfgo.getClosedSet()[lowF.getX()][lowF.getY()] = true;//add it to the closed set

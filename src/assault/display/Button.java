@@ -17,7 +17,7 @@ import org.lwjgl.util.Color;
  *
  * @author matt
  */
-public abstract class Button extends APaintable implements MouseListener, KeyboardListener {
+public abstract class Button extends Paintable implements MouseListener, KeyboardListener {
 
     private String name;
     private char hotkey;

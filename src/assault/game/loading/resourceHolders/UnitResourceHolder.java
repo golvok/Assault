@@ -6,10 +6,10 @@ package assault.game.loading.resourceHolders;
 
 import assault.game.loading.ResourcePreloader;
 import assault.game.Player;
-import assault.game.display.ACommandButton;
+import assault.game.display.CommandButton;
 import assault.game.display.GameArea;
-import assault.game.gameObjects.AUnit;
-import assault.game.util.commands.ACommand;
+import assault.game.gameObjects.Unit;
+import assault.game.util.commands.Command;
 import assault.game.util.commands.ShootCommand;
 import java.awt.Point;
 import java.io.File;
@@ -119,10 +119,10 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	protected ACommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
+	protected CommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
 		BadlyFormattedXMLException superException = null;
 		try {
-			ACommandButton superB = super.parseXmlButton(xmlBtn);
+			CommandButton superB = super.parseXmlButton(xmlBtn);
 			if (superB != null) {
 				return superB;
 			}
@@ -132,7 +132,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 		}
 		String cmdType;
 		Element cmdE;
-		ACommand cmd = null;
+		Command cmd = null;
 		//TODO add functionality for complex commands
 		try {
 			cmdE = xmlBtn.getChild("action").getChild("command");
@@ -167,16 +167,16 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 			}
 		}
 		if (cmd != null) {
-			return new ACommandButton(cmd);
+			return new CommandButton(cmd);
 		} else {
 			return null;
 		}
 	}
 
 	@Override
-	public AUnit createObject(GameArea g, int x, int y, Player owner) {
+	public Unit createObject(GameArea g, int x, int y, Player owner) {
 		try {
-			return new AUnit(g, x, y, this, owner);
+			return new Unit(g, x, y, this, owner);
 		} catch (ResourceException ex) {
 			getRp().addError(ex);
 			return null;
@@ -184,7 +184,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	public AUnit createObject(GameArea g, Point p, Player owner) {
+	public Unit createObject(GameArea g, Point p, Player owner) {
 		return createObject(g, p.x, p.y, owner);
 	}
 

@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  *
  * @author 088241930
  */
-public class DijkstraPathFinder extends PathFinder {
+public class DijkstraPathFinder extends RawPathFinder {
 
 	private Object startedLock = new Object();
 	private boolean started = false;
@@ -22,7 +22,7 @@ public class DijkstraPathFinder extends PathFinder {
 	}
 
 	@Override
-	public PathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
+	public RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
 		synchronized (startedLock) {
 			if (started || isCanceled()) {
 				return null;
@@ -93,7 +93,7 @@ public class DijkstraPathFinder extends PathFinder {
 			pfgo.getExamined()[lowF.getX()][lowF.getY()] = true;
 			if (lowF.getX() == destX && lowF.getY() == destY) {//is this point the end?
 				System.out.println("Found a path!");
-				return new PathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
+				return new RawPathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
 			} else {
 				//.poll removes it from the openset
 				pfgo.getClosedSet()[lowF.getX()][lowF.getY()] = true;//add it to the closed set
