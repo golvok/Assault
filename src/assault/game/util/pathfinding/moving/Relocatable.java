@@ -4,11 +4,11 @@
  */
 package assault.game.util.pathfinding.moving;
 
-import java.awt.Point;
+import assault.util.Point;
 
 /**
  *
- * @author Faith
+ * @author matt
  */
 public interface Relocatable {
 
@@ -20,15 +20,17 @@ public interface Relocatable {
 
     boolean[][] getOnPath();
 
+    double getMovementSpeed();
+
     void setLocation(Point p);
 
-    int getX();
+    double getX();
 
-    void setX(int x);
+    void setX(double x);
 
-    int getY();
+    double getY();
 
-    void setY(int y);
+    void setY(double y);
 
     Point getLocation();
 

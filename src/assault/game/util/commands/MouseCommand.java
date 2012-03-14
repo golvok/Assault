@@ -6,7 +6,7 @@
 package assault.game.util.commands;
 
 import assault.game.gameObjects.AObject;
-import java.awt.Point;
+import assault.util.Point;
 
 /**
  *

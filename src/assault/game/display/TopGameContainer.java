@@ -1,9 +1,12 @@
 package assault.game.display;
 
+import assault.display.AssaultWindow;
 import assault.display.Container;
 import assault.display.Paintable;
-import assault.display.AssaultWindow;
-import assault.input.*;
+import assault.input.InputDistributor;
+import assault.input.InputEventUtil;
+import assault.input.KeyboardEvent;
+import assault.input.MouseEvent;
 
 public class TopGameContainer extends Container implements InputDistributor {
 
@@ -12,7 +15,7 @@ public class TopGameContainer extends Container implements InputDistributor {
 	private GameArea gameArea;
 	private StatusDisplayMenu sDisplayMenu;
 
-	public TopGameContainer(int x, int y, int w, int h, AssaultWindow window) {
+	public TopGameContainer(double x, double y, double w, double h, AssaultWindow window) {
 		super(x, y, w, h, 4);
 		this.window = window;
 	}

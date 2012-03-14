@@ -4,12 +4,12 @@
  */
 package assault.game.loading.resourceHolders;
 
-import assault.game.display.CommandButton;
-import assault.game.loading.ResourcePreloader;
 import assault.game.Player;
+import assault.game.display.CommandButton;
 import assault.game.display.GameArea;
 import assault.game.gameObjects.Weapon;
-import java.awt.Point;
+import assault.game.loading.ResourcePreloader;
+import assault.util.Point;
 import java.io.File;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
@@ -56,13 +56,13 @@ public class WeaponResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	public Weapon createObject(GameArea g, int x, int y, Player owner) throws ResourceException {
+	public Weapon createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
 		return new Weapon(g, x, y, this, owner);
 	}
 
 	@Override
 	public Weapon createObject(GameArea g, Point p, Player owner) throws ResourceException {
-		return createObject(g, p.x, p.y, owner);
+		return createObject(g, p.getX(), p.getY(), owner);
 	}
 
 	public int getBulletSize() {

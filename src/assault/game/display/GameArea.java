@@ -4,26 +4,26 @@
  */
 package assault.game.display;
 
-import assault.display.Paintable;
 import assault.display.AssaultWindow;
 import assault.display.InputRegistarContainer;
-import assault.game.gameObjects.Group;
+import assault.display.Paintable;
 import assault.game.gameObjects.AObject;
-import assault.game.gameObjects.Unit;
+import assault.game.gameObjects.Group;
 import assault.game.gameObjects.Selectable;
+import assault.game.gameObjects.Unit;
 import assault.game.util.GridManager;
 import assault.game.util.GridObject;
 import assault.game.util.TerrainGridManager;
 import assault.game.util.commands.*;
 import assault.game.util.pathfinding.AStarPathFinder;
-import assault.game.util.pathfinding.RawPathFinder;
 import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.RawPathFinder;
 import assault.game.util.terrain.TerrainGenerator;
 import assault.input.InputEventUtil;
 import assault.input.KeyboardEvent;
 import assault.input.MouseEvent;
+import assault.util.Point;
 import assault.util.ThreadBlocker;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -88,7 +88,7 @@ public class GameArea extends InputRegistarContainer {
 		});*/
 
 		System.out.println("Crteating gridManager");
-		gManager = new TerrainGridManager(getWidth(), getHeight(), 10, terrainGenerator, this);
+		gManager = new TerrainGridManager((int)Math.ceil(getWidth()), (int)Math.ceil(getHeight()), 10, terrainGenerator, this);
 		System.out.println("creating pathfinder");
 		//pF = new DijkstraPathFinder(getGM());
 		pF = new AStarPathFinder(getGM());

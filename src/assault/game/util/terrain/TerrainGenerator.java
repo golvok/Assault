@@ -19,5 +19,5 @@ public abstract class TerrainGenerator {
 		return generateInto(g, 0, 0, g.getWidth(), g.getHeight(), seed);
 	}
 
-	public abstract boolean generateInto(GameArea g, int ga_x, int ga_y, int ga_width, int ga_height, int seed);
+	public abstract boolean generateInto(GameArea g, double ga_x, double ga_y, double ga_width, double ga_height, int seed);
 }

@@ -31,7 +31,7 @@ public class ResourcePreloader extends Paintable implements Disposable{
 	private SAXBuilder builder;
 	private boolean started = false;
 
-	public ResourcePreloader(String[] mods, int w, int h) {
+	public ResourcePreloader(String[] mods, double w, double h) {
 		super(0, 0, w, h);
 		modNames = mods;
 	}

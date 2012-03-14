@@ -9,7 +9,6 @@ import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.WeaponResourceHolder;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.Timer;
 
 /**
@@ -30,7 +29,7 @@ public class Weapon extends Controllable{
 		setVisible(false);
 	}
 
-	public Weapon(GameArea g, int x, int y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
+	public Weapon(GameArea g, double x, double y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		super(g, x - src.getRotatePointX(), y - src.getRotatePointY(), src,1, ownerPlayer);
 		doNotPaintCross();
 		doNotShowStatus();
@@ -80,6 +79,12 @@ public class Weapon extends Controllable{
 		super.drawSelf();
 		drawConatiningBox(this);
 	}
+
+    @Override
+    public double getMovementSpeed() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 	private class BulletHitObject {
 

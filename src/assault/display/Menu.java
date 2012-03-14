@@ -23,7 +23,7 @@ public class Menu extends InputRegistarContainer implements InputRegistar{
 		this(aw.getX(), aw.getY(), aw.getWidth(), aw.getHeight(), buttons);
 	}
 
-	public Menu(int x, int y, int width, int height, ArrayList<Button> startButtons) {
+	public Menu(double x, double y, double width, double height, ArrayList<Button> startButtons) {
 		super(x, y, width, height, startButtons.size());
 		buttons = new ArrayList<Button>(startButtons.size());
 		for (Button button : startButtons) {

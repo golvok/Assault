@@ -5,7 +5,7 @@
 	<dims width="30" height="20"/>
 	<health max="10"/>
 	<speeds>
-		<ground val="100"/>
+		<ground val="20"/>
 	</speeds>
 	<createPoint x="31" y="21"/>
 	<mountPoints>

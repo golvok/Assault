@@ -10,15 +10,15 @@ import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ObjectResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.util.pathfinding.PathFindingGridObject;
-import assault.game.util.pathfinding.moving.Relocatable;
 import assault.game.util.pathfinding.moving.Mover;
-import java.awt.Point;
+import assault.game.util.pathfinding.moving.Relocatable;
+import assault.util.Point;
 
 /**
  *
  * @author matt
  */
-public class Controllable extends Selectable implements PathFindingGridObject, Relocatable {
+public abstract class Controllable extends Selectable implements PathFindingGridObject, Relocatable {
 
     private Group aGroup = null;
     boolean[][] closed;
@@ -50,7 +50,7 @@ public class Controllable extends Selectable implements PathFindingGridObject, R
     boolean[][] open;
     private final Mover mover;
 
-    public Controllable(GameArea g, int x, int y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
+    public Controllable(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
         super(g, x, y, src, health, owner);
         mover = new Mover(this);
     }

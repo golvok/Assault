@@ -15,11 +15,11 @@ import assault.game.loading.resourceHolders.TerrainObjectResourceHolder;
  */
 public class TerrainObject extends Selectable {
 
-	public TerrainObject(GameArea g, int x, int y, TerrainObjectResourceHolder src, int health, Player owner) throws ResourceException {
+	public TerrainObject(GameArea g, double x, double y, TerrainObjectResourceHolder src, int health, Player owner) throws ResourceException {
 		super(g, x, y, src, health, owner);
 	}
 
-	public TerrainObject(GameArea g, int x, int y, TerrainObjectResourceHolder src, Player owner) throws ResourceException {
+	public TerrainObject(GameArea g, double x, double y, TerrainObjectResourceHolder src, Player owner) throws ResourceException {
 		this(g, x, y, src, src.getMaxHealth(), owner);
 	}
 

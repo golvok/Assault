@@ -7,8 +7,8 @@ package assault.game.gameObjects;
 
 import assault.game.Player;
 import assault.game.display.GameArea;
+import assault.util.Point;
 import java.awt.Image;
-import java.awt.Point;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -29,7 +29,7 @@ public class Projectile extends AObject{
 	private Timer moverTimer = new Timer();
 	private boolean selected = false;
 	private Image miniIcon = null;
-	public Projectile(GameArea g,int sX, int sY, int eX, int eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
+	public Projectile(GameArea g,double sX, double sY, double eX, double eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
 		super(g,sX,sY,size,size,miniIcon,naturalImage,ownerPlayer);
 		X = sX;
 		Y = sY;

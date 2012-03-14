@@ -115,9 +115,9 @@ public class StatusDisplayMenu extends InputRegistarContainer {
 			if (asdmb != null) {
 				//decrease the indicies of all boxes after it
 				//and figure out where to repaint
-				int minY = Integer.MAX_VALUE;
-				int maxY = 0;
-				int maxX = 0;
+				double minY = Double.MAX_VALUE;
+				double maxY = 0;
+				double maxX = 0;
 				StatusDisplayMenuBox box;
 				for (int i = 0; i < aObjects.size(); i++) {
 					box = index2Box.get(i);

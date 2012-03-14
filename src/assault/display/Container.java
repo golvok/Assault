@@ -16,7 +16,7 @@ public abstract class Container extends Paintable{
 
 	private final List<Paintable> children;
 
-	public Container(int x, int y, int width, int height, ArrayList<Paintable> startchildren) {
+	public Container(double x, double y, double width, double height, ArrayList<Paintable> startchildren) {
 		this(x, y, width, height, startchildren.size());
 		addChildren(startchildren);
 	}
@@ -30,7 +30,7 @@ public abstract class Container extends Paintable{
 	 * @param startSize the initial size passed to the children
 	 * <code>List</code>
 	 */
-	public Container(int x, int y, int width, int height, int startSize) {
+	public Container(double x, double y, double width, double height, int startSize) {
 		super(x, y, width, height);
 		children = Collections.synchronizedList(new ArrayList<Paintable>(startSize));
 	}

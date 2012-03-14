@@ -18,11 +18,11 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	private ArrayList<Paintable> mouseListeners = new ArrayList<Paintable>();
 	private ArrayList<Paintable> keyListeners = new ArrayList<Paintable>();
 
-	public InputRegistarContainer(int x, int y, int width, int height, ArrayList<Paintable> startchildren) {
+	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Paintable> startchildren) {
 		super(x, y, width, height, startchildren);
 	}
 
-	public InputRegistarContainer(int x, int y, int width, int height, int startSize) {
+	public InputRegistarContainer(double x, double y, double width, double height, int startSize) {
 		super(x, y, width, height, startSize);
 	}
 

@@ -9,7 +9,7 @@ import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Unit;
 import assault.game.gameObjects.Weapon;
 import assault.game.util.GridObject;
-import java.awt.Point;
+import assault.util.Point;
 
 /**
  *
@@ -60,7 +60,7 @@ public class ShootCommand extends Command implements MouseCommand, TargetCommand
 	@Override
 	public void executeOn(AObject[] aos, Point p) {
 		if (p != null) {
-			executeOn(aos, p.x, p.y);
+			executeOn(aos, (int)p.getX(),(int)p.getY());
 		}
 	}
 

@@ -6,17 +6,15 @@ package assault.game.display;
 
 import assault.display.Button;
 import assault.display.Menu;
-import assault.game.gameObjects.Controllable;
 import assault.game.gameObjects.AObject;
+import assault.game.gameObjects.Controllable;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.ShootCommand;
 import java.awt.Dimension;
 import java.awt.Polygon;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import org.lwjgl.util.ReadableColor;
 
@@ -270,18 +268,18 @@ public class CommandDispatchMenu extends Menu {
 			//ys[0] = 0
 
 			//xs[1] = 0
-			ys[1] = topRight.getY() + topRight.getHeight();
+			ys[1] = (int)(topRight.getY() + topRight.getHeight());
 
-			xs[2] = topRight.getX() + topRight.getWidth();
-			ys[2] = topRight.getY() + topRight.getHeight();
+			xs[2] = (int)(topRight.getX() + topRight.getWidth());
+			ys[2] = (int)(topRight.getY() + topRight.getHeight());
 
-			xs[3] = topRight.getX() + topRight.getWidth();
-			ys[3] = topRight.getY();
+			xs[3] = (int)(topRight.getX() + topRight.getWidth());
+			ys[3] = (int)(topRight.getY());
 
-			xs[4] = secondTopRight.getX() + secondTopRight.getWidth();
-			ys[4] = secondTopRight.getY() + secondTopRight.getHeight();
+			xs[4] = (int)(secondTopRight.getX() + secondTopRight.getWidth());
+			ys[4] = (int)(secondTopRight.getY() + secondTopRight.getHeight());
 
-			xs[5] = secondTopRight.getX() + secondTopRight.getWidth();
+			xs[5] = (int)(secondTopRight.getX() + secondTopRight.getWidth());
 			//ys[5] = 0; 
 		}
 		return new Polygon(xs, ys, 6);

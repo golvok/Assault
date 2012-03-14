@@ -11,7 +11,7 @@ import assault.game.gameObjects.AObject;
 import assault.game.loading.Texture;
 import assault.game.loading.TextureMaker;
 import java.awt.Color;
-import java.awt.Point;
+import assault.util.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
@@ -34,8 +34,8 @@ public class ObjectResourceHolder extends XmlResource {
 
 	public static final String TYPE_NAME = "Object";
 	protected ModResourceHolder mod;
-	private int width;
-	private int height;
+	private double width;
+	private double height;
 	private int maxHealth;
 	private BufferedImage miniIcon;
 	private BufferedImage naturalImage;
@@ -57,8 +57,8 @@ public class ObjectResourceHolder extends XmlResource {
 			getRp().setStatusString("\nloading Object values in " + getBaseFile());
 
 			//simple values
-			width = getRootE().getChild("dims").getAttribute("width").getIntValue();
-			height = getRootE().getChild("dims").getAttribute("height").getIntValue();
+			width = getRootE().getChild("dims").getAttribute("width").getDoubleValue();
+			height = getRootE().getChild("dims").getAttribute("height").getDoubleValue();
 			maxHealth = getRootE().getChild("health").getAttribute("max").getIntValue();
 
 			//name
@@ -108,12 +108,12 @@ public class ObjectResourceHolder extends XmlResource {
 	public synchronized void parseReferencialXmlValues() throws ResourceException {
 	}
 
-	public AObject createObject(GameArea g, int x, int y, Player owner) throws ResourceException {
+	public AObject createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
 		return new AObject(g, x, y, this, owner);
 	}
 
 	public AObject createObject(GameArea g, Point p, Player owner) throws ResourceException {
-		return createObject(g, p.x, p.y, owner);
+		return createObject(g, p.getX(), p.getY(), owner);
 	}
 
 	@Override
@@ -136,11 +136,11 @@ public class ObjectResourceHolder extends XmlResource {
 		return out;
 	}
 
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
-	public int getWidth() {
+	public double getWidth() {
 		return width;
 	}
 

@@ -6,10 +6,9 @@ package assault.game.loading.resourceHolders;
 
 import assault.game.Player;
 import assault.game.display.GameArea;
-import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.ResourcePreloader;
-import java.awt.Point;
+import assault.util.Point;
 import java.io.File;
 import org.jdom.DataConversionException;
 import org.jdom.input.SAXBuilder;
@@ -41,13 +40,13 @@ public class TerrainObjectResourceHolder extends SelectableResourceHolder {
 	}
 
 	@Override
-	public TerrainObject createObject(GameArea g, int x, int y, Player owner) throws ResourceException {
+	public TerrainObject createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
 		return new TerrainObject(g, x, y, this, owner);
 	}
 
 	@Override
 	public TerrainObject createObject(GameArea g, Point p, Player owner) throws ResourceException {
-		return createObject(g, p.x, p.y, owner);
+		return createObject(g, p.getX(), p.getY(), owner);
 	}
 
 	public boolean isImpassible() {

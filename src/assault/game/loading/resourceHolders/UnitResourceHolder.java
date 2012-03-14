@@ -11,7 +11,7 @@ import assault.game.display.GameArea;
 import assault.game.gameObjects.Unit;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.ShootCommand;
-import java.awt.Point;
+import assault.util.Point;
 import java.io.File;
 import java.util.List;
 import org.jdom.DataConversionException;
@@ -28,7 +28,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	private Point CreatePoint;
 	private Point[] mountPts = {};
 	private String[] speedNames = {};
-	private int[] speeds = {};
+	private double[] speeds = {};
 	private WeaponResourceHolder[] weapons = {};
 
 	/**
@@ -79,11 +79,11 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 				List<Element> speedElements = speedsElement.getChildren();
 				int numSpeeds = speedElements.size();
 				speedNames = new String[numSpeeds];
-				speeds = new int[numSpeeds];
+				speeds = new double[numSpeeds];
 				for (int i = 0; i < numSpeeds; i++) {
 					Element speed = speedElements.get(i);
 					speedNames[i] = speed.getName();
-					speeds[i] = speed.getAttribute("val").getIntValue();
+					speeds[i] = speed.getAttribute("val").getDoubleValue();
 				}
 			}
 
@@ -174,7 +174,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	public Unit createObject(GameArea g, int x, int y, Player owner) {
+	public Unit createObject(GameArea g, double x, double y, Player owner) {
 		try {
 			return new Unit(g, x, y, this, owner);
 		} catch (ResourceException ex) {
@@ -185,7 +185,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 
 	@Override
 	public Unit createObject(GameArea g, Point p, Player owner) {
-		return createObject(g, p.x, p.y, owner);
+		return createObject(g, p.getX(), p.getY(), owner);
 	}
 
 	/**
@@ -213,7 +213,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	 * @param type
 	 * @return 
 	 */
-	public int getSpeed(String type) {
+	public double getSpeed(String type) {
 		for (int i = 0; i < speedNames.length; i++) {
 			if (speedNames[i].equals(type)) {
 				return speeds[i];
@@ -228,8 +228,8 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 		return temp;
 	}
 
-	public int[] getSpeeds() {
-		int[] temp = new int[speeds.length];
+	public double[] getSpeeds() {
+		double[] temp = new double[speeds.length];
 		System.arraycopy(speeds, 0, temp, 0, speeds.length);
 		return temp;
 	}

@@ -19,7 +19,7 @@ public class Selectable extends AObject implements MouseListener {
 
 	private boolean selected = false;
 
-	public Selectable(GameArea g, int x, int y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
+	public Selectable(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
 		super(g, x, y, src, owner);
 	}
 

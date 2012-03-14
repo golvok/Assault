@@ -9,7 +9,7 @@ import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.UnitResourceHolder;
 import assault.game.loading.resourceHolders.WeaponResourceHolder;
-import java.awt.Point;
+import assault.util.Point;
 
 /**
  *
@@ -21,7 +21,7 @@ public class Unit extends Controllable {
 	private Point[] mountPoints;
 	private Weapon[] weapons;
 
-	public Unit(GameArea g, int x, int y, UnitResourceHolder src, Player owner) throws ResourceException {
+	public Unit(GameArea g, double x, double y, UnitResourceHolder src, Player owner) throws ResourceException {
 		super(g, x, y, src, 5, owner);
 		setCreatePoint(src.getCreatePoint());
 		setCmdBtnSet(src.getCmdBtns());
@@ -167,7 +167,7 @@ public class Unit extends Controllable {
 	 * @param x a relative x
 	 * @param y a relative y
 	 */
-	private void setCreatePoint(int x, int y) {
+	private void setCreatePoint(double x, double y) {
 		createPoint.x = x;
 		createPoint.y = y;
 	}
@@ -179,11 +179,16 @@ public class Unit extends Controllable {
 	 * @param p a point relative to this AU's origin
 	 */
 	private void setCreatePoint(Point p) {
-		setCreatePoint(p.x, p.y);
+		setCreatePoint(p.getX(), p.getY());
 	}
 
 	@Override
 	public UnitResourceHolder getSrc() {
 		return (UnitResourceHolder) super.getSrc();
 	}
+
+    @Override
+    public double getMovementSpeed() {
+        return getSrc().getSpeed("ground");
+    }
 }

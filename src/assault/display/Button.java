@@ -25,7 +25,7 @@ public abstract class Button extends Paintable implements MouseListener, Keyboar
     private Runnable action;
     private boolean enabled = true;
 
-    public Button(String name, int x, int y, int width, int height, char shortCut, BufferedImage icon, Runnable action) {
+    public Button(String name, double x, double y, double width, double height, char shortCut, BufferedImage icon, Runnable action) {
         super(x, y, width, height);
         this.name = name;
         setAction(action);

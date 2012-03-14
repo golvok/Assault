@@ -21,7 +21,9 @@
         </libraries>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>ao</word>
+            <word>deque</word>
             <word>gridmanager</word>
+            <word>waypoints</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

@@ -4,10 +4,10 @@
  */
 package assault.game.util.commands;
 
-import assault.game.loading.ResourcePreloader;
 import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Unit;
-import java.awt.Point;
+import assault.game.loading.ResourcePreloader;
+import assault.util.Point;
 
 /**
  *
@@ -31,7 +31,7 @@ public class MoveCmd extends Command implements MouseCommand {
 
 	@Override
 	public void executeOn(AObject[] aos, Point p) {
-		executeOn(aos, p.x, p.y);
+		executeOn(aos, (int)p.getX(),(int)p.getY());
 	}
 	
 }

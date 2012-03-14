@@ -47,7 +47,7 @@ public class MouseEvent extends ButtonInputEvent {
 	 * @return 
 	 */
 	public MouseEvent translate(Paintable ap) {
-		return new MouseEvent(getX() - ap.getX(), getY() - ap.getY(), getButton(), getNewState(), getModifiers());
+		return new MouseEvent((int)Math.round(getX() - ap.getX()), (int)Math.round(getY() - ap.getY()), getButton(), getNewState(), getModifiers());
 	}
 
 	public boolean intersects(Shape r) {

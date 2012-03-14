@@ -5,7 +5,7 @@
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
-import java.awt.Point;
+import assault.util.Point;
 
 /**
  *

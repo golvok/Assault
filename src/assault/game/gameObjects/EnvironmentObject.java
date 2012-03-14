@@ -5,8 +5,8 @@
 package assault.game.gameObjects;
 
 import assault.game.display.GameArea;
+import assault.util.Point;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import org.lwjgl.util.Color;
@@ -27,8 +27,8 @@ public final class EnvironmentObject extends AObject{
         int[] xPoints = new int[shape.length];
         int[] yPoints = new int[shape.length];
         for (int i = 0; i < shape.length; i++) {
-            xPoints[i] = shape[i].x;
-            yPoints[i] = shape[i].y;
+            xPoints[i] = (int)shape[i].x;
+            yPoints[i] = (int)shape[i].y;
         }
         this.shape = new Polygon(xPoints, yPoints, xPoints.length);
 

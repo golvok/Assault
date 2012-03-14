@@ -14,10 +14,10 @@ import java.awt.Shape;
  * @author matt
  */
 public interface GridObject extends Disposable{
-	public int getX();
-	public int getY();
-	public int getWidth();
-	public int getHeight();
+	public double getX();
+	public double getY();
+	public double getWidth();
+	public double getHeight();
 	public GameArea getGA();
 
     public Shape getBounds();

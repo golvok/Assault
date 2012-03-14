@@ -82,11 +82,11 @@ public class Group extends Controllable {
 	 */
 	public final void resizeToControllables() {
 		int GAP_SIZE = 10;
-		int newWidth = 0;//<---ends up being min size
-		int newHeight = 0;//<--|
-		int newX = Integer.MAX_VALUE;
-		int newY = Integer.MAX_VALUE;
-		int uDim;
+		double newWidth = 0;//<---ends up being min size
+		double newHeight = 0;//<--|
+		double newX = Integer.MAX_VALUE;
+		double newY = Integer.MAX_VALUE;
+		double uDim;
 		Controllable controllable;
 		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
@@ -316,4 +316,9 @@ public class Group extends Controllable {
 		super.mouseExited(e);
 		drawBox = false;
 	}
+
+    @Override
+    public double getMovementSpeed() {
+        throw new UnsupportedOperationException("something is wrong here. this method should not be called");
+    }
 }

@@ -7,7 +7,7 @@ package assault.game.util;
 import assault.game.display.GameArea;
 import assault.game.util.terrain.TerrainGenerator;
 import assault.util.Disposable;
-import java.awt.Point;
+import assault.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -130,7 +130,7 @@ public class GridManager implements Disposable {
 	 * @return (movementWasSuccessful)
 	 */
 	public boolean notifyOfImminentMovement(GridObject ao, Point oldPt, Point newPt) {
-		return notifyOfImminentMovement(ao, oldPt.x, oldPt.y, newPt.x, newPt.y);
+		return notifyOfImminentMovement(ao, oldPt.getX(), oldPt.getY(), newPt.getX(), newPt.getY());
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class GridManager implements Disposable {
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
-	public boolean notifyOfImminentMovement(GridObject go, int oldX, int oldY, int newX, int newY) {
+	public boolean notifyOfImminentMovement(GridObject go, double oldX, double oldY, double newX, double newY) {
 		synchronized (editlock) {
 			//System.out.println("oldX = "+oldX);
 			//System.out.println("oldY = "+oldY);
@@ -161,16 +161,16 @@ public class GridManager implements Disposable {
 			}
 			//System.out.println("GM: where it wants to go is clear @move");
 
-			oldX = convCoordToGrid(oldX);
-			oldY = convCoordToGrid(oldY);
-			newX = convCoordToGrid(newX);
-			newY = convCoordToGrid(newY);
+			int oldXg = convCoordToGrid(oldX);
+			int oldYg = convCoordToGrid(oldY);
+			int newXg = convCoordToGrid(newX);
+			int newYg = convCoordToGrid(newY);
 
 			try {
 				//check if it is indeed where it says it is
 				for (int i = 0; i < widthInGridOld; i++) {
 					for (int j = 0; j < heightInGridOld; j++) {
-						if (!getGridCellAtGrid(oldX + i, oldY + j).contains(go)) {
+						if (!getGridCellAtGrid(oldXg + i, oldYg + j).contains(go)) {
 							System.out.println("GM: NOT where it says it is @move");
 							//System.out.println("a "+getGridCellAtGrid(oldX + i, oldY + j)+" is there!");
 							//System.out.println("a "+go+" should be there!");
@@ -187,13 +187,13 @@ public class GridManager implements Disposable {
 			//remove it from the old location
 			for (int i = 0; i < widthInGridOld; i++) {
 				for (int j = 0; j < heightInGridOld; j++) {
-					removeFromCell(oldX + i, oldY + j, go);
+					removeFromCell(oldXg + i, oldYg + j, go);
 				}
 			}
 			//put it in the new location
 			for (int i = 0; i < widthInGridNew; i++) {
 				for (int j = 0; j < heightInGridNew; j++) {
-					addToCell(newX + i, newY + j, go);
+					addToCell(newXg + i, newYg + j, go);
 				}
 			}
 			return true;
@@ -368,7 +368,7 @@ public class GridManager implements Disposable {
 	 * @param go
 	 * @return 
 	 */
-	public boolean canBeAtPixel(int x, int y, GridObject go) {
+	public boolean canBeAtPixel(double x, double y, GridObject go) {
 		if (go == null) {
 			return false;
 		}
@@ -410,9 +410,9 @@ public class GridManager implements Disposable {
 	 * @param num
 	 * @return the grid normalized index equivalent of num
 	 */
-	public final int convCoordToGrid(int num) {
+	public final int convCoordToGrid(double num) {
 		if (num % gridSize == 0) {
-			return (num / gridSize);
+			return (int)(num / gridSize);
 		} else {
 			return /*int i = */ (int) Math.ceil((num) / (gridSize));
 			//System.out.println("converted " + num + "(coord) to " + i);
@@ -439,7 +439,7 @@ public class GridManager implements Disposable {
 	 * @param AMPcoord the corresponding coordinate singlet (w --> x and h --> y)
 	 * @return the converted dimension
 	 */
-	public final int convDimToGrid(int AMPdim, int AMPcoord) {
+	public final int convDimToGrid(double AMPdim, double AMPcoord) {
 		if (AMPcoord >= 0) {
 			if (AMPcoord % gridSize == 0 || (AMPcoord + AMPdim) % gridSize == 0) {
 				return (int) Math.ceil(((double) AMPdim) / ((double) gridSize));

@@ -37,7 +37,7 @@ package org.lwjgl.opengl;
  */
 
 import java.awt.Component;
-import java.awt.Point;
+import assault.util.Point;
 import java.awt.Rectangle;
 import java.nio.IntBuffer;
 

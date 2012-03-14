@@ -6,9 +6,12 @@ package assault.display;
 
 import assault.game.loading.Texture;
 import assault.util.Disposable;
+import assault.util.Point;
 import assault.util.Updateable;
-import java.awt.*;
+import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.ReadableColor;
 
@@ -18,14 +21,14 @@ import org.lwjgl.util.ReadableColor;
  */
 public abstract class Paintable implements Disposable, Updateable {
 
-    private int x;
-    private int y;
-    private int width;
-    private int height;
+    private double x;
+    private double y;
+    private double width;
+    private double height;
     private boolean visible;
     private Container parent;
 
-    public Paintable(int x, int y, int width, int height) {
+    public Paintable(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -36,7 +39,7 @@ public abstract class Paintable implements Disposable, Updateable {
     public final void draw() {
         if (isVisible()) {
             glPushMatrix();
-            glTranslatef(x, y, 0);
+            glTranslated(x, y, 0);
             drawSelf();
             glPopMatrix();
         }
@@ -52,11 +55,11 @@ public abstract class Paintable implements Disposable, Updateable {
     public void updateSelf(int delta) {
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
@@ -74,52 +77,52 @@ public abstract class Paintable implements Disposable, Updateable {
     }
 
     public Shape getBounds() {
-        return new Rectangle(x, y, width, height);
+        return new Rectangle2D.Double(x, y, width, height);
     }
 
-    public Dimension getSize() {
-        return new Dimension(width, height);
+    public Point getSize() {
+        return new Point(width, height);
     }
 
-    public Dimension getSize(Dimension rv) {
+    public Point getSize(Point rv) {
         if (rv == null) {
-            return new Dimension(width, height);
+            return new Point(width, height);
         } else {
-            rv.setSize(width, height);
+            rv.setLocation(width, height);
             return rv;
         }
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public void setSize(Dimension d) {
-        setSize(d.width, d.height);
+    public void setSize(Point d) {
+        setSize(d.getX(), d.getY());
     }
 
-    public void setSize(int width, int height) {
+    public void setSize(double width, double height) {
         this.width = width;
         this.height = height;
     }
 
-    public void setBounds(Rectangle r) {
-        setBounds(r.x, r.y, r.width, r.height);
+    public void setBounds(Rectangle2D r) {
+        setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
-    public void setBounds(int x, int y, int width, int height) {
+    public void setBounds(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -127,10 +130,10 @@ public abstract class Paintable implements Disposable, Updateable {
     }
 
     public void setLocation(Point p) {
-        setLocation(p.x, p.y);
+        setLocation(p.getX(),p.getY());
     }
 
-    public void setLocation(int x, int y) {
+    public void setLocation(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -143,14 +146,14 @@ public abstract class Paintable implements Disposable, Updateable {
         return visible;
     }
 
-    public static void drawRect(int x, int y, int w, int h) {
+    public static void drawRect(double x, double y, double w, double h) {
         //System.out.println(w+","+h);
         glBegin(GL_LINE_STRIP);
-        glVertex2i(x, y);
-        glVertex2i(x, y + h);
-        glVertex2i(x + w, y + h);
-        glVertex2i(x + w, y);
-        glVertex2f(x, y);
+        glVertex2d(x, y);
+        glVertex2d(x, y + h);
+        glVertex2d(x + w, y + h);
+        glVertex2d(x + w, y);
+        glVertex2d(x, y);
         glEnd();
         //drawLine(x, y, x+w, y+h);
     }
@@ -164,26 +167,26 @@ public abstract class Paintable implements Disposable, Updateable {
         drawRect(0, 0, ap.getWidth() + 1, ap.getWidth() + 1);
     }
 
-    public static void fillRect(int x, int y, int w, int h) {
+    public static void fillRect(double x, double y, double w, double h) {
         //System.out.println("fillrect");
         glBegin(GL_QUADS);
-        glVertex2i(x, y);
-        glVertex2i(x, y + h);
-        glVertex2i(x + w, y + h);
-        glVertex2i(x + w, y);
+        glVertex2d(x, y);
+        glVertex2d(x, y + h);
+        glVertex2d(x + w, y + h);
+        glVertex2d(x + w, y);
         glEnd();
     }
 
-    public static void drawLine(int x1, int y1, int x2, int y2) {
+    public static void drawLine(double x1, double y1, double x2, double y2) {
         glBegin(GL_LINES);
-        glVertex2i(x1, y1);
-        glVertex2i(x2, y2);
+        glVertex2d(x1, y1);
+        glVertex2d(x2, y2);
         glEnd();
     }
 
     public static void drawPolygon(Polygon pol) {
         glBegin(GL_LINES);
-        float[] points = new float[6];
+        double[] points = new double[6];
         PathIterator pi = pol.getPathIterator(null);
         loop:
         {
@@ -191,7 +194,7 @@ public abstract class Paintable implements Disposable, Updateable {
                 switch (pi.currentSegment(points)) {
                     case PathIterator.SEG_MOVETO:
                     case PathIterator.SEG_LINETO:
-                        glVertex2f(points[0], points[1]);
+                        glVertex2d(points[0], points[1]);
                         pi.next();
                         break;
                     case PathIterator.SEG_CLOSE:
@@ -206,19 +209,19 @@ public abstract class Paintable implements Disposable, Updateable {
         glColor4ub(c.getRedByte(), c.getGreenByte(), c.getBlueByte(), c.getAlphaByte());
     }
 
-    public static void drawTexture(int x, int y, int w, int h, int TexID) {
+    public static void drawTexture(double x, double y, double w, double h, int TexID) {
         glBindTexture(GL_TEXTURE_2D, TexID);
         setColour(ReadableColor.WHITE);
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0, 1);
-            glVertex2i(x, y);
+            glVertex2d(x, y);
             glTexCoord2f(0, 0);
-            glVertex2i(x, y + h);
+            glVertex2d(x, y + h);
             glTexCoord2f(1, 0);
-            glVertex2i(x + w, y + h);
+            glVertex2d(x + w, y + h);
             glTexCoord2f(1, 1);
-            glVertex2i(x + w, y);
+            glVertex2d(x + w, y);
         }
         glEnd();
     }
@@ -234,19 +237,19 @@ public abstract class Paintable implements Disposable, Updateable {
      * @param h
      * @param tex
      */
-    public static void drawTexture(int x, int y, int w, int h, Texture tex) {
+    public static void drawTexture(double x, double y, double w, double h, Texture tex) {
         glBindTexture(GL_TEXTURE_2D, tex.getTexID());
         setColour(ReadableColor.WHITE);
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0, tex.getTop());
-            glVertex2i(x, y);
+            glVertex2d(x, y);
             glTexCoord2f(0, 0);
-            glVertex2i(x, y + h);
+            glVertex2d(x, y + h);
             glTexCoord2f(tex.getLeft(), 0);
-            glVertex2i(x + w, y + h);
+            glVertex2d(x + w, y + h);
             glTexCoord2f(tex.getLeft(), tex.getTop());
-            glVertex2i(x + w, y);
+            glVertex2d(x + w, y);
         }
         glEnd();
     }

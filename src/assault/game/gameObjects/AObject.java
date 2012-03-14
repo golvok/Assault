@@ -37,7 +37,7 @@ public class AObject extends Container implements GridObject {
 	private AssaultWindow aw;
 	private Image miniIcon = null;
 
-	public AObject(GameArea g, int x, int y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
+	public AObject(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
 		this(g, x, y, src.getWidth(), src.getHeight(), health, src.getMaxHealth(), src.getMiniIcon(), src.getBaseImage(owner), owner);
 		if (!src.isValid()) {
 			throw new ResourceException("supplied resource holder for new object (" + src.getQualifiedName() + ") is invalid!");
@@ -45,26 +45,26 @@ public class AObject extends Container implements GridObject {
 		this.src = src;
 	}
 
-	public AObject(GameArea g, int x, int y, ObjectResourceHolder src, Player owner) throws ResourceException {
+	public AObject(GameArea g, double x, double y, ObjectResourceHolder src, Player owner) throws ResourceException {
 		this(g, x, y, src, src.getMaxHealth(), owner);
 	}
 
-	public AObject(GameArea g, int x, int y, int width, int height, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, double x, double y, double width, double height, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, width, height, maxHealth, maxHealth, miniIcon, naturalImage, owner);
 	}
 
-	public AObject(GameArea g, int x, int y, int width, int height, int health, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, double x, double y, double width, double height, int health, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, width, height, miniIcon, naturalImage, owner);
 		invincible = false;
 		setMaxHealth(maxHealth);
 		setHealth(health);
 	}
 
-	public AObject(GameArea g, int x, int y, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, double x, double y, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, 0, 0, miniIcon, naturalImage, owner);
 	}
 
-	public AObject(GameArea g, int x, int y, int width, int height, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, double x, double y, double width, double height, Image miniIcon, Image naturalImage, Player owner) {
 		super(x, y, width, height, 2);
 		setOwner(owner);
 		ga = g;
@@ -86,11 +86,6 @@ public class AObject extends Container implements GridObject {
 			//System.out.println("AO_DISPOSE");
 		}
 		super.dispose();
-	}
-
-	@Override
-	public void setLocation(int x, int y) {
-		super.setLocation(x, y);
 	}
 
 	@Override
