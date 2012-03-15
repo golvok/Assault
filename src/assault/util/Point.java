@@ -36,7 +36,19 @@ public class Point extends Double {
     public static Point multiply(Point p, double constant){
         return new Point(p.getX()*constant, p.getY()*constant);
     }
+	public static Point divide(Point p, double constant){
+        return new Point(p.getX()/constant, p.getY()/constant);
+    }
+	public static Point add(Point p1,Point p2){
+        return new Point(p1.getX()+p2.getX(), p1.getY()+p2.getY());
+    }
     public static double distance(Point p1,Point p2){
         return sqrt(pow(deltaX(p1, p2),2) + pow(deltaY(p1, p2),2));
     }
+	public static double magnitude(Point p){
+		return sqrt(pow(p.getX(), 2)+pow(p.getY(), 2));
+	}
+	public static Point unit(Point p){
+		return divide(p, magnitude(p));
+	}
 }

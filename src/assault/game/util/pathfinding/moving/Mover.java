@@ -17,6 +17,7 @@ public class Mover {
     AbstractPathObject path;
 
     public Mover(Relocatable r) {
+		path = new AbstractPathObject();
         setTarget(r);
     }
 
@@ -25,17 +26,21 @@ public class Mover {
      * @param delta delta time in ms
      */
     public void advanceTarget(int delta) {
-        if (path != null){
+        if (path != null && path.peek() != null){
+			//the speed is given per unit second
             double deltaDistance = delta*target.getMovementSpeed()/1000d;
+			System.out.println(deltaDistance);
             while (deltaDistance > 0){
                 double distanceToNextPoint = distance(target.getLocation(),path.peek());
                 if (deltaDistance - distanceToNextPoint >= 0){
                     target.setLocation(path.pop());//remove and set
                     deltaDistance -= distanceToNextPoint;
+					System.out.println("next");
                 }else{//less than 0, linear interpoltaion
-                    double slope = deltaY(target.getLocation(), path.peek())/deltaX(target.getLocation(), path.peek());
-                    
+					//offset the current location by the unit vector in the correct direction, multipleid by the wanted magnitude
+                    target.setLocation(add(target.getLocation(), multiply(unit(delta(target.getLocation(), path.peek())), deltaDistance)));
                     deltaDistance = 0;
+					System.out.println("partial");
                     break;
                 }
             }
@@ -47,6 +52,8 @@ public class Mover {
     }
 
     public void moveTo(Point p) {
+		path.clear();
+		path.addPoints(target.getPathFinder().findPath(target, (int)p.getX(), (int)p.getY()));
     }
 
     public void moveTo(double x, double y) {

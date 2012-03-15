@@ -4,13 +4,15 @@
  */
 package assault.game.util.pathfinding.moving;
 
+import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.RawPathFinder;
 import assault.util.Point;
 
 /**
  *
  * @author matt
  */
-public interface Relocatable {
+public interface Relocatable extends PathFindingGridObject{
 
     boolean[][] getClosedSet();
 
@@ -41,4 +43,6 @@ public interface Relocatable {
     void setOnOpenSet(boolean[][] open);
 
     void setOnPath(boolean[][] onPath);
+
+	public RawPathFinder getPathFinder();
 }

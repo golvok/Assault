@@ -10,6 +10,7 @@ import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ObjectResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.RawPathFinder;
 import assault.game.util.pathfinding.moving.Mover;
 import assault.game.util.pathfinding.moving.Relocatable;
 import assault.util.Point;
@@ -183,5 +184,10 @@ public abstract class Controllable extends Selectable implements PathFindingGrid
     public void setOnPath(boolean[][] onPath) {
         this.onPath = onPath;
     }
+
+	@Override
+	public RawPathFinder getPathFinder() {
+		return getGA().getPF();
+	}
 
 }
