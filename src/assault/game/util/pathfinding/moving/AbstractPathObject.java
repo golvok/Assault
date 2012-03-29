@@ -26,7 +26,7 @@ public class AbstractPathObject {
 		if (rpo != null) {
 			points = new ArrayDeque<Point>(rpo.points.length);
 			addPoints(rpo);
-		}else{
+		} else {
 			points = new ArrayDeque<Point>();
 		}
 	}
@@ -54,9 +54,11 @@ public class AbstractPathObject {
 	}
 
 	public final void addPoints(RawPathObject rpo) {
-		for (int i = 0; i < rpo.points.length; i++) {
-			Point p = rpo.points[i];
-			addPoint(p);
+		if (rpo != null) {
+			for (int i = rpo.points.length - 1; i >= 0; --i) {
+				Point p = rpo.points[i];
+				addPoint(p);
+			}
 		}
 	}
 
