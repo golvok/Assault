@@ -6,13 +6,16 @@ package assault.game.loading;
 
 import assault.display.Paintable;
 import assault.game.loading.resourceHolders.*;
+import assault.util.DataFile;
 import assault.util.Disposable;
+import assault.util.OSUtil;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *
@@ -181,12 +184,13 @@ public class ResourcePreloader extends Paintable implements Disposable{
 		System.out.println(s);
 	}
 	public static BufferedImage loadImage(String path){
+		File f = new DataFile(path);
 		try {
-			return ImageIO.read(new File(path));
+			return ImageIO.read(f);
 		} catch (IOException ex) {
-			System.out.println("problem loading image at "+path);
+			System.out.println("problem loading image at "+f.getAbsolutePath() + ": \n " + ex);
 		}
-		return null;
+		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 	}
 
 	@Override

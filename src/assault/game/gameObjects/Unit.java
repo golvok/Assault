@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package assault.game.gameObjects;
 
 import assault.game.Player;
@@ -162,8 +159,6 @@ public class Unit extends Controllable {
 	/**
 	 * set the point <i>relative</i> to the origin of this AObject,
 	 * where new AObjects will be created. 
-	 * This method calculates the actual create point
-	 * from the relative one given.
 	 * @param x a relative x
 	 * @param y a relative y
 	 */

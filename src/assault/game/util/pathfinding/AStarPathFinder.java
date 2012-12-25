@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
@@ -186,7 +183,7 @@ public class AStarPathFinder extends RawPathFinder {
         if (start.getX() == neigh.getX() || start.getY() == neigh.getY()) {
             return 1;
         } else {
-            return 1.4142136;//...623730951...;//approx sqrt(2) + 0.0000001
+        	return 1.4142135623730952;//approx sqrt(2) + 0.0000000000000001
         }
     }
 

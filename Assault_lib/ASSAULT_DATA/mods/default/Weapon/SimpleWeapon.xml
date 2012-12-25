@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AObject type="Weapon">
+	<name>SimpleWeapon</name>
+	<dims width="15" height="7"/>
+	<rotatePoint x="8" y="4"/>
+	<health max="25"/>
+	<projectile val="false"/>
+	<size val="3"/>
+	<speeds>
+		<shoot val="50"/>
+	</speeds>
+	<img>
+		<base src="/images/SimpleWeapon.png"/>
+	</img>
+	<miniIcon src="images/miniIcons/SimpleWeapon_miniIcon.png"/>
+	<buttons>
+	</buttons>
+</AObject>

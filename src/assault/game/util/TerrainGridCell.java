@@ -11,6 +11,10 @@ import assault.game.util.terrain.TerrainSquare;
  * @author matt
  */
 public class TerrainGridCell<E extends GridObject> extends GridCell<E> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private TerrainSquare terrainSquare;
 
 	public TerrainGridCell(int initSize) {

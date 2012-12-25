@@ -21,9 +21,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import org.jdom.DataConversionException;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.DataConversionException;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.lwjgl.util.ReadableColor;
 
 /**

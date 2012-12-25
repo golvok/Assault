@@ -26,14 +26,6 @@ public interface Relocatable extends PathFindingGridObject{
 
     void setLocation(Point p);
 
-    double getX();
-
-    void setX(double x);
-
-    double getY();
-
-    void setY(double y);
-
     Point getLocation();
 
     void setClosedSet(boolean[][] closed);

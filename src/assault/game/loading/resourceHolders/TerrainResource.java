@@ -8,9 +8,9 @@ import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.ResourcePreloader;
 import java.io.File;
 import java.io.IOException;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *

@@ -10,8 +10,8 @@ import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.MoveCmd;
 import java.io.File;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *

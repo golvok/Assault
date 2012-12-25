@@ -13,6 +13,7 @@ import static java.lang.Math.sqrt;
  * @author Matt
  */
 public class Point extends Double {
+	private static final long serialVersionUID = 1L;
 
     public Point() {
         this(0, 0);

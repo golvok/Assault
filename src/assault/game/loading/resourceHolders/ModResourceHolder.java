@@ -4,15 +4,17 @@
  */
 package assault.game.loading.resourceHolders;
 
-import assault.game.gameObjects.TerrainObject;
-import assault.game.loading.ResourcePreloader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+
+import assault.game.loading.ResourcePreloader;
+import assault.util.DataFile;
 
 /**
  *
@@ -44,7 +46,7 @@ public class ModResourceHolder extends XmlResource {
 	 * @param name name of the folder in src/mods/ to look in
 	 */
 	public ModResourceHolder(String name, ResourcePreloader rp, SAXBuilder sb) throws ResourceException {
-		super(rp, sb, new File("lib/ASSAULT_DATA/mods/" + name + "/" + INFO_FILE_NAME), name);
+		super(rp, sb, new DataFile("ASSAULT_DATA/mods/" + name + "/" + INFO_FILE_NAME), name);
 		rp.setStatusString("created mod named " + name);
 	}
 

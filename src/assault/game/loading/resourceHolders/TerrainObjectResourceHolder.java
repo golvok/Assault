@@ -10,8 +10,8 @@ import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.ResourcePreloader;
 import assault.util.Point;
 import java.io.File;
-import org.jdom.DataConversionException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.DataConversionException;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *

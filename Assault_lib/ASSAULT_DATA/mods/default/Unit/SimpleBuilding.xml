@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AObject type="Unit">
+	<name>SimpleBuilding</name>
+	<dims width="50" height="50"/>
+	<health max="1000"/>
+	<noSpeeds/>
+	<createPoint x="51" y="51"/>
+	<mountPoints>
+		<p i="1" x="25" y="25"/>
+	</mountPoints>
+	<img>
+		<base src="/images/SimpleBuilding.png"/>
+	</img>
+	<miniIcon src="images/miniIcons/SimpleBuilding_miniIcon.png"/>
+	<buttons>
+		<button>
+			<action type="Simple">
+				<command type="Create">
+					<name>createSU</name>
+					<hotKey>F</hotKey>
+					<iconSrc></iconSrc>
+					<unitType mod="default" name="SimpleUnit"/>
+				</command>
+			</action>
+		</button>
+		<button>
+			<action type="Simple">
+				<command type="Create">
+					<name>createSU2</name>
+					<hotKey>D</hotKey>
+					<iconSrc></iconSrc>
+					<unitType mod="default" name="SimpleUnit2"/>
+				</command>
+			</action>
+		</button>
+	</buttons>
+	<noWeapons/>
+</AObject>

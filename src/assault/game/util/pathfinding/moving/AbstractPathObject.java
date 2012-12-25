@@ -5,16 +5,17 @@
 package assault.game.util.pathfinding.moving;
 
 import assault.game.util.pathfinding.RawPathObject;
+import assault.util.Point;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import assault.util.Point;
 
 /**
  * really just a wrapper around a deque of points with some useful utility
  * methods, but conceals some that aren't needed. Supposed to be a more abstract
  * representation of a path, more like a list of waypoints than a path. However,
  * it is expected to be used as a place for those "intermediate" points as well.
- * (that's why it is a deque)
+ * (that's why it is a deque, you can put more points in front of the current points
+ * _and_ behind them)
  *
  * @author matt
  */

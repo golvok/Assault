@@ -6,7 +6,7 @@ package assault.game.loading.resourceHolders;
 
 import assault.game.loading.ResourcePreloader;
 import java.io.File;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *

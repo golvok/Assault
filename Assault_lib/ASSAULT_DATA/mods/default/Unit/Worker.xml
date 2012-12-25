@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : Worker.xml
+    Created on : November 21, 2011, 5:30 PM
+    Author     : matt
+    Description:
+        Purpose of the document follows.
+-->
+
+<AObject type="Unit">
+	<name>Worker</name>
+	<dims width="30" height="29"/>
+	<health max="10"/>
+	<speeds>
+		<ground val="100"/>
+	</speeds>
+	<createPoint x="31" y="21"/>
+	<noWeapons/>
+	<mountPoints>
+	</mountPoints>
+	<img>
+		<base src="/images/worker 2.png"/>
+	</img>
+	<miniIcon src="images/miniIcons/SimpleUnit_miniIcon.png"/>
+	<buttons>
+		<button>
+			<action type="Simple">
+				<command type="Move"/>
+			</action>
+		</button>
+	</buttons>
+</AObject>
+

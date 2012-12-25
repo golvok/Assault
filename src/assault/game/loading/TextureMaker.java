@@ -5,11 +5,18 @@
 package assault.game.loading;
 
 
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_RGB;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.color.ColorSpace;
@@ -23,12 +30,13 @@ import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
-import org.lwjgl.BufferUtils;
+import java.util.Map;
 
-
-import static org.lwjgl.opengl.GL11.*;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 /**
  * A utility class to load textures for OpenGL. This source is based
@@ -155,7 +163,8 @@ public class TextureMaker {
      * @param texture The texture to store the data into
      * @return A buffer containing the data
      */
-    private static ByteBuffer convertImageData(BufferedImage bufferedImage) {
+    @SuppressWarnings("rawtypes")
+	private static ByteBuffer convertImageData(BufferedImage bufferedImage) {
         ByteBuffer imageBuffer;
         WritableRaster raster;
         BufferedImage texImage;

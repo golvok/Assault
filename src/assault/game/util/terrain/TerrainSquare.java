@@ -6,10 +6,7 @@ package assault.game.util.terrain;
 
 import assault.display.Paintable;
 import assault.game.display.GameArea;
-import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.resourceHolders.GroundCover;
-import assault.game.loading.resourceHolders.ResourceException;
-import assault.game.loading.resourceHolders.TerrainObjectResourceHolder;
 
 /**
  *

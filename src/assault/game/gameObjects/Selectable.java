@@ -6,8 +6,8 @@ package assault.game.gameObjects;
 
 import assault.game.Player;
 import assault.game.display.GameArea;
-import assault.game.loading.resourceHolders.ObjectResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
+import assault.game.loading.resourceHolders.SelectableResourceHolder;
 import assault.input.MouseEvent;
 import assault.input.MouseListener;
 
@@ -19,7 +19,7 @@ public class Selectable extends AObject implements MouseListener {
 
 	private boolean selected = false;
 
-	public Selectable(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
+	public Selectable(GameArea g, double x, double y, SelectableResourceHolder src, int health, Player owner) throws ResourceException {
 		super(g, x, y, src, owner);
 	}
 

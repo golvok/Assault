@@ -11,7 +11,7 @@ import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Resource;
 import assault.util.Point;
 import java.io.File;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.input.SAXBuilder;
 
 /**
  *

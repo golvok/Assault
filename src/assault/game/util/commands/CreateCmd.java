@@ -8,7 +8,6 @@ package assault.game.util.commands;
 import assault.game.display.GameArea;
 import assault.game.gameObjects.Unit;
 import assault.game.loading.resourceHolders.UnitResourceHolder;
-import javax.swing.ImageIcon;
 
 /**
  *

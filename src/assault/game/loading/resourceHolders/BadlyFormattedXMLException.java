@@ -5,8 +5,8 @@
 package assault.game.loading.resourceHolders;
 
 import java.io.File;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 /**
  *
