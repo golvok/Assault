@@ -1,6 +1,6 @@
 #/bin/bash
 cd "$(dirname "$0")"
-cp -pRv lib/ASSAULT_DATA/ dist/lib/ASSAULT_DATA/
-mkdir dist/lib/lwjgl-2.8.3
-cp -pRv lib/lwjgl-2.8.3/native dist/lib/lwjgl-2.8.3/native
+cp -pRv Assault_lib/ASSAULT_DATA/ dist/Assault_lib/ASSAULT_DATA/
+mkdir dist/Assault_lib/lwjgl-2.8.5
+cp -pRv Assault_lib/lwjgl-2.8.5/native dist/Assault_lib/lwjgl-2.8.5/native
 

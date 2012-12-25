@@ -5,3 +5,5 @@ build.xml
 *~
 nbproject/private
 .DS_Store
+bin
+

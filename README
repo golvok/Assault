@@ -1,4 +1,9 @@
-The libraries can be found elsewhere but are included for convenience
-The project was initially made as a netbeans project and can be, for the most part, cloned and used as such
-A good deal of my (golvok) commits (mid march) are just in case I change computers
+A simple RTS framework, mostly for fun and practice.
+
+requires 
+	lwjgl (make sure it is the rigt version -- check Assault_lib/ and OSutil)
+	slick 2D
+	jdom2
+
+The file lwjgl-x.x.x should be a link to a folder containg the expanded contents of the lwjgl zip download (only the native folder is actually important)
 
