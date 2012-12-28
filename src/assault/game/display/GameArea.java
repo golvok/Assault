@@ -1,6 +1,13 @@
 
 package assault.game.display;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import org.lwjgl.util.Color;
+
 import assault.display.AssaultWindow;
 import assault.display.InputRegistarContainer;
 import assault.display.Paintable;
@@ -11,21 +18,20 @@ import assault.game.gameObjects.Unit;
 import assault.game.util.GridManager;
 import assault.game.util.GridObject;
 import assault.game.util.TerrainGridManager;
-import assault.game.util.commands.*;
-import assault.game.util.pathfinding.AStarPathFinder;
+import assault.game.util.commands.Command;
+import assault.game.util.commands.CreateCmd;
+import assault.game.util.commands.MouseCommand;
+import assault.game.util.commands.MoveCmd;
+import assault.game.util.commands.NormalCommand;
+import assault.game.util.commands.TargetCommand;
 import assault.game.util.pathfinding.PathFindingGridObject;
-import assault.game.util.pathfinding.RawPathFinder;
+import assault.game.util.pathfinding.PathingManager;
 import assault.game.util.terrain.TerrainGenerator;
 import assault.input.InputEventUtil;
 import assault.input.KeyboardEvent;
 import assault.input.MouseEvent;
 import assault.util.Point;
 import assault.util.ThreadBlocker;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import org.lwjgl.util.Color;
 
 /**
  *
@@ -45,7 +51,7 @@ public class GameArea extends InputRegistarContainer {
 	//private Thread movementThread;
 	private ThreadBlocker<Point> mouseThreadBlocker = new ThreadBlocker<Point>();
 	private ThreadBlocker<AObject> nextAOTargetedThreadBlocker = new ThreadBlocker<AObject>();
-	private RawPathFinder pF;
+	private PathingManager pManager;
 	private final AssaultWindow aWindow;
 	private final TerrainGenerator terrainGenerator;
 
@@ -84,11 +90,10 @@ public class GameArea extends InputRegistarContainer {
 			}
 		});*/
 
-		System.out.println("Crteating gridManager");
+		System.out.println("Creating gridManager");
 		gManager = new TerrainGridManager((int)Math.ceil(getWidth()), (int)Math.ceil(getHeight()), 10, terrainGenerator, this);
-		System.out.println("creating pathfinder");
-		//pF = new DijkstraPathFinder(getGM());
-		pF = new AStarPathFinder(getGM());
+		System.out.println("creating pathingManager");
+		pManager = new PathingManager(gManager);
 		//generate terrain
 		System.out.println("generating terrain");
 		terrainGenerator.generateInto(this, new Random().nextInt());
@@ -97,7 +102,7 @@ public class GameArea extends InputRegistarContainer {
 	@Override
 	public synchronized void dispose() {
 		if (!isDisposed()) {
-			stopMT = true;
+			//stopMT = true;
 			gManager.dispose();
 		}
 		super.dispose();
@@ -119,7 +124,7 @@ public class GameArea extends InputRegistarContainer {
 	public boolean add(Paintable ap) {
 		return add(ap, true);
 	}
-	private volatile boolean stopMT = false;
+	//private volatile boolean stopMT = false;
 
 	/**
 	 * add an APaintable to this GA. if (
@@ -260,7 +265,7 @@ public class GameArea extends InputRegistarContainer {
 			}
 		}
 		if (!removedSomething) {
-			System.out.println(ao.getClass() + " wasn't in the selection when GA.removeFromSelection(AObject) was attempted, did nothing");
+			System.out.println(ao + " wasn't in the selection when GA.removeFromSelection(AObject) was attempted, did nothing");
 		} else {
 			numSelected--;
 			getAW().getACDM().setCmdBtns(getSelection());
@@ -353,15 +358,15 @@ public class GameArea extends InputRegistarContainer {
 		return gManager;
 	}
 
-	public RawPathFinder getPF() {
-		return pF;
+	public PathingManager getPM() {
+		return pManager;
 	}
 
 	@Override
 	public void drawSelf() {
 		super.drawSelf();
 		//System.out.println("GA_PAINT");
-		if (numSelected == 1 && selected[0] instanceof PathFindingGridObject && getPF() != null) {
+		if (numSelected == 1 && selected[0] instanceof PathFindingGridObject && getPM() != null) {
 			PathFindingGridObject pfgo = (PathFindingGridObject) selected[0];
 			if (pfgo.getExamined() != null && pfgo.getOnOpenSet() != null && pfgo.getOnPath() != null) {
 				boolean[][] exa = pfgo.getExamined();

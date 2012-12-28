@@ -49,8 +49,7 @@ public class Mover {
     }
 
     public void moveTo(Point p) {
-		path.clear();
-		path.addPoints(target.getPathFinder().findPath(target, (int)p.getX(), (int)p.getY()));
+		target.getPathingManger().findPath(target, (int)p.getX(), (int)p.getY(),path,true,true);
     }
 
     public void moveTo(double x, double y) {

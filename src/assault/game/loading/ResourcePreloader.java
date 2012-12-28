@@ -4,18 +4,24 @@
  */
 package assault.game.loading;
 
-import assault.display.Paintable;
-import assault.game.loading.resourceHolders.*;
-import assault.util.DataFile;
-import assault.util.Disposable;
-import assault.util.OSUtil;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
 import org.jdom2.input.SAXBuilder;
+
+import assault.display.Paintable;
+import assault.game.loading.resourceHolders.ModResourceHolder;
+import assault.game.loading.resourceHolders.ResourceException;
+import assault.game.loading.resourceHolders.TerrainObjectResourceHolder;
+import assault.game.loading.resourceHolders.TerrainResource;
+import assault.game.loading.resourceHolders.UnitResourceHolder;
+import assault.game.loading.resourceHolders.WeaponResourceHolder;
+import assault.util.DataFile;
+import assault.util.Disposable;
 
 /**
  *

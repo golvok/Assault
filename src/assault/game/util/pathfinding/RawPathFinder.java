@@ -1,10 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
+import assault.game.util.pathfinding.moving.AbstractPathObject;
+import assault.util.Ptr;
 
 /**
  *
@@ -13,19 +12,10 @@ import assault.game.util.GridManager;
 public abstract class RawPathFinder {
 
     protected final GridManager gManager;
-	private boolean canceled = false;
       
     public RawPathFinder(GridManager gm) {
         gManager = gm;
     }
-    public abstract RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY);
-	
-	public void cancel(){
-		canceled = true;
-	}
-
-	public boolean isCanceled() {
-		return canceled;
-	}
+    public abstract RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY, AbstractPathObject apoToaddTo,boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled);
 	
 }

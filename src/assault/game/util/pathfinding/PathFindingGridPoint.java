@@ -3,7 +3,7 @@ package assault.game.util.pathfinding;
 
 /**
  *
- * @author 088241930
+ * @author Matthew Walker
  */
 public class PathFindingGridPoint {
 

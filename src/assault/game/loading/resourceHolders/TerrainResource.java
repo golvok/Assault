@@ -29,7 +29,6 @@ public class TerrainResource extends XmlResource {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void parseXmlValues() throws BadlyFormattedXMLException, ResourceException {
 		try {
 			getRp().setStatusString("\nloading Terrain values in " + getBaseFile());

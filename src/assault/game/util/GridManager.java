@@ -314,11 +314,16 @@ public class GridManager implements Disposable {
 	 */
 	public GridObject getGoAtPixel(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
-			List<GridObject> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
-			for (GridObject go : cell) {
-				if (go.getBounds().contains(x, y)) {
-					return go;
+			try{
+				List<GridObject> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
+
+				for (GridObject go : cell) {
+					if (go.getBounds().contains(x, y)) {
+						return go;
+					}
 				}
+			} catch (IndexOutOfBoundsException ex){
+				return null;
 			}
 			return null;
 		}

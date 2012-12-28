@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
@@ -9,19 +6,24 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- *
+ * there are measures to stop errors from occuring in this otherwise unused class
  * @author 088241930
  */
-public class DijkstraPathFinder extends RawPathFinder {
+public class DijkstraPathFinder /*extends RawPathFinder*/ {
 
 	private Object startedLock = new Object();
 	private boolean started = false;
+	private GridManager gManager;
 
 	public DijkstraPathFinder(GridManager gm) {
-		super(gm);
+		//super(gm);
 	}
 
-	@Override
+	private boolean isCanceled() {
+		return false;
+	}
+	
+	//@Override
 	public RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
 		synchronized (startedLock) {
 			if (started || isCanceled()) {
@@ -164,6 +166,8 @@ public class DijkstraPathFinder extends RawPathFinder {
 		System.out.println("couldn't find path. canceled = " + isCanceled());
 		return null;
 	}
+
+
 
 	private double fBetweenNeighs(PathFindingGridPoint srt, PathFindingGridPoint neigh) {
 		if (srt.getX() == neigh.getX() || srt.getY() == neigh.getY()) {

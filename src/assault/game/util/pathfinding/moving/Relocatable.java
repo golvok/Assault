@@ -5,7 +5,7 @@
 package assault.game.util.pathfinding.moving;
 
 import assault.game.util.pathfinding.PathFindingGridObject;
-import assault.game.util.pathfinding.RawPathFinder;
+import assault.game.util.pathfinding.PathingManager;
 import assault.util.Point;
 
 /**
@@ -36,5 +36,5 @@ public interface Relocatable extends PathFindingGridObject{
 
     void setOnPath(boolean[][] onPath);
 
-	public RawPathFinder getPathFinder();
+	public PathingManager getPathingManger();
 }

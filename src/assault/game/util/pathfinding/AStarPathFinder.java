@@ -2,6 +2,9 @@
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
+import assault.game.util.pathfinding.moving.AbstractPathObject;
+import assault.util.Ptr;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -11,23 +14,28 @@ import java.util.PriorityQueue;
  */
 public class AStarPathFinder extends RawPathFinder {
 
-	private boolean started;
-	private final Object startedLock = new Object();
+//	private boolean started;
+//	private final Object startedLock = new Object();
 	
     public AStarPathFinder(GridManager gm) {
         super(gm);
     }
 
     @Override
-    public synchronized RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
-		
-		synchronized (startedLock) {
-			if (started || isCanceled()) {
-				System.out.println("the pathfinder has allready been started, or was canceled before it started");
-				return null;
-			}
-			started = true;
-		}
+    public RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled) {
+    	if(canceled.getVal()){
+    		return null;
+    	}
+    	if (clearApo && clearImmediately && apoToaddTo != null){
+    		apoToaddTo.clear();
+    	}
+//		synchronized (startedLock) {
+//			if (started || isCanceled()) {
+//				System.out.println("the pathfinder has allready been started, or was canceled before it started");
+//				return;
+//			}
+//			started = true;
+//		}
 		
         int sx = gManager.convCoordToGrid(pfgo.getX());//start X
         int sy = gManager.convCoordToGrid(pfgo.getY());//start Y
@@ -90,7 +98,7 @@ public class AStarPathFinder extends RawPathFinder {
         int nx;//new
         int ny;
         //System.out.print("searching...");
-        while (!openSet.isEmpty() && !isCanceled()) {
+        while (!openSet.isEmpty() && !canceled.getVal()) {
             System.out.print(".");
             lowF = openSet.poll();//get the GP w/ the smallest f (retreive and remove)
             //System.out.println("exaimining : " + lowF.getX() + "," + lowF.getY() + " f:" + lowF.getF());
@@ -102,8 +110,15 @@ public class AStarPathFinder extends RawPathFinder {
             }*/
             pfgo.getExamined()[lowF.getX()][lowF.getY()] = true;
             if (lowF.equals(end)) {//is this point the end? (.equals() has been overridden)
+            	RawPathObject rpo = new RawPathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
                 System.out.println("Found a path!");
-                return new RawPathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
+                if (apoToaddTo != null){
+	                if (clearApo && !clearImmediately){
+	            		apoToaddTo.clear();
+	            	}
+	                apoToaddTo.addPoints(rpo);
+                }
+                return rpo;
             } else {
                 //.poll removes it from the openset
                 pfgo.getClosedSet()[lowF.getX()][lowF.getY()] = true;//add it to the closed set
@@ -175,7 +190,10 @@ public class AStarPathFinder extends RawPathFinder {
                 }
             }
         }
-        System.out.println("couldn't find path. canceled = "+isCanceled());
+        System.out.println("couldn't find path. canceled = " + canceled.getVal());
+        if (clearApo){
+        	apoToaddTo.clear();
+        }
         return null;
     }
 

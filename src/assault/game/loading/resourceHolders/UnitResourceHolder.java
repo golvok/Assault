@@ -44,7 +44,6 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void parseXmlValues() throws BadlyFormattedXMLException, ResourceException {
 		super.parseXmlValues();
 		getRp().setStatusString("loading the unit values in " + getBaseFile());
