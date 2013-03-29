@@ -4,7 +4,8 @@
  */
 package assault.input;
 
-import assault.display.Paintable;
+import assault.display.Bounded;
+
 import java.security.InvalidParameterException;
 
 /**
@@ -21,7 +22,7 @@ public class InputEventUtil {
 		}
 	}
 
-	public static void passAndTranslateMouseEventTo(Paintable ap, MouseEvent me) {
+	public static void passAndTranslateMouseEventTo(Bounded ap, MouseEvent me) {
 		if (ap instanceof MouseListener) {
 			if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
 				((MouseListener) ap).mousePressed (me.translate(ap));

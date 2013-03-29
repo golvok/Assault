@@ -36,7 +36,7 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	}
 
 	@Override
-	public void removeMouseEventReciever(Paintable ml) {
+	public void removeMouseEventReciever(Bounded ml) {
 		mouseListeners.remove(ml);
 	}
 
@@ -50,12 +50,12 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	}
 
 	@Override
-	public void removeKeyboardEventReciever(Paintable kl) {
+	public void removeKeyboardEventReciever(Bounded kl) {
 		keyListeners.remove(kl);
 	}
 
 	@Override
-	protected void removeChild(Paintable ap) {
+	protected void removeChild(Bounded ap) {
 		super.removeChild(ap);
 		removeMouseEventReciever(ap);
 		removeKeyboardEventReciever(ap);
@@ -64,7 +64,7 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	@Override
 	public void accept(MouseEvent me) {
 		for (Iterator<Paintable> it = mouseListeners.iterator(); it.hasNext();) {
-			Paintable ap = it.next();
+			Bounded ap = it.next();
 			if (ap != null && me.intersects(ap.getBounds())){
 				InputEventUtil.passAndTranslateMouseEventTo(ap, me);
 			}
@@ -74,7 +74,7 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	@Override
 	public void accept(KeyboardEvent ke) {
 		for (Iterator<Paintable> it = keyListeners.iterator(); it.hasNext();) {
-			Paintable ap = it.next();
+			Bounded ap = it.next();
 			if (ap != null){
 				InputEventUtil.passKeyboardEventTo((KeyboardListener)ap, ke);
 			}

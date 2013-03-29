@@ -4,6 +4,7 @@
  */
 package assault.input;
 
+import assault.display.Bounded;
 import assault.display.Paintable;
 
 /**
@@ -13,8 +14,8 @@ import assault.display.Paintable;
 public interface InputRegistar extends InputDistributor{
 	
 	public void    addMouseEventReciever(Paintable il);
-	public void removeMouseEventReciever(Paintable ml);
+	public void removeMouseEventReciever(Bounded ml);
 	
 	public void    addKeyboardEventReciever(Paintable il);
-	public void removeKeyboardEventReciever(Paintable kl);
+	public void removeKeyboardEventReciever(Bounded kl);
 }

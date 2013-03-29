@@ -44,8 +44,9 @@ public abstract class Controllable extends Selectable implements PathFindingGrid
 
 	@Override
 	public void setLocation(Point p) {
-		getGA().getGM().notifyOfImminentMovement(this, getLocation(), p);
-		super.setLocation(p);
+		if(getGA().getGM().notifyOfImminentMovement(this, getLocation(), p)){
+			super.setLocation(p);
+		}
 	}
 
     @Override
