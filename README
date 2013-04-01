@@ -1,10 +1,10 @@
 A simple RTS framework, mostly for fun and practice.
 
 requires 
-	lwjgl (make sure it is the rigt version -- check Assault_lib/ and OSutil)
+	lwjgl (make sure it is the rigt version -- check Assault_lib/ and src/assault/OSutil)
 	slick 2D
 	jdom2
 
-The file lwjgl-x.x.x should be a link to a folder containg the expanded contents of the lwjgl zip download (only the native folder is actually important)
+The file Assault_lib/lwjgl-x.x.x should be a link to a folder containg the expanded contents of the lwjgl zip download (only the native folder is actually important)
 
 If it still doesn't work, check .classpath, to see if there is anything else I forgot to add here.
