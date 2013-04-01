@@ -416,7 +416,7 @@ public class GridManager implements Disposable {
 		if (num % gridSize == 0) {
 			return (int)(num / gridSize);
 		} else {
-			return /*int i = */ (int) Math.ceil((num) / (gridSize));
+			return /*int i = */ (int) Math.floor((num) / (gridSize));
 			//System.out.println("converted " + num + "(coord) to " + i);
 			//return i;
 		}

@@ -4,6 +4,7 @@
  */
 package assault.input;
 
+import assault.display.Bounded;
 import assault.display.Paintable;
 import java.awt.Shape;
 
@@ -46,7 +47,7 @@ public class MouseEvent extends ButtonInputEvent {
 	 * @param ap
 	 * @return 
 	 */
-	public MouseEvent translate(Paintable ap) {
+	public MouseEvent translate(Bounded ap) {
 		return new MouseEvent((int)Math.round(getX() - ap.getX()), (int)Math.round(getY() - ap.getY()), getButton(), getNewState(), getModifiers());
 	}
 
@@ -56,6 +57,6 @@ public class MouseEvent extends ButtonInputEvent {
 
 	@Override
 	public String toString() {
-		return "MouseEvent: button "+getButton()+ (getNewState() == BUTTON_PRESSED ? " pressed " : " released") + " at ("+getX()+","+getY()+")";
+		return "MouseEvent: button "+ getButton() + (getNewState() == BUTTON_PRESSED ? " pressed " : " released") + " at ("+getX()+","+getY()+")";
 	}
 }

@@ -492,8 +492,9 @@ public class GameArea extends InputRegistarContainer {
 
 	@Override
 	public void accept(MouseEvent me) {
-		//System.out.println("GM_ACCEPT "+me);
+//		System.out.println("GM_ACCEPT " + me);
 		AObject ao = getAoAt(me.getX(), me.getY());
+//		System.out.println("aimed at " + ao);
 		if (ao != null && ao instanceof Selectable) {
 			InputEventUtil.passAndTranslateMouseEventTo(ao,me);
 		} else if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
@@ -501,21 +502,21 @@ public class GameArea extends InputRegistarContainer {
 		}
 	}
 	
-	private Selectable lastAsEntered;
+	private Selectable lastEntered;
 
 	public void mouseMoved(MouseEvent e) {
 		AObject ao = getAoAt(e.getX(), e.getY());
 		if (ao != null && ao instanceof Selectable) {
-			if (ao != lastAsEntered) {
-				if (lastAsEntered != null) {
-					lastAsEntered.mouseExited(e);
+			if (ao != lastEntered) {
+				if (lastEntered != null) {
+					lastEntered.mouseExited(e);
 				}
-				lastAsEntered = (Selectable) ao;
+				lastEntered = (Selectable) ao;
 				((Selectable) ao).mouseEntered(e);
 			}
-		} else if (lastAsEntered != null) {
-			lastAsEntered.mouseExited(e);
-			lastAsEntered = null;
+		} else if (lastEntered != null) {
+			lastEntered.mouseExited(e);
+			lastEntered = null;
 		}
 	}
 

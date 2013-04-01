@@ -55,7 +55,7 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	}
 
 	@Override
-	protected void removeChild(Bounded ap) {
+	protected void removeChild(Paintable ap) {
 		super.removeChild(ap);
 		removeMouseEventReciever(ap);
 		removeKeyboardEventReciever(ap);

@@ -21,7 +21,7 @@ public class ButtonInputEvent extends InputEvent{
 		this.newState = newState;
 	}
 	
-	public char getButton() {
+	public int getButton() {
 		return button;
 	}
 
