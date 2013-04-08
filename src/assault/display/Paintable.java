@@ -71,7 +71,7 @@ public abstract class Paintable extends Bounded implements Disposable, Updateabl
      * @param ap
      */
     public static void drawConatiningBox(Paintable ap) {
-        drawRect(0, 0, ap.getWidth(), ap.getWidth());
+        drawRect(0, 0, ap.getWidth(), ap.getHeight());
 //        System.out.println("bounding box of: " + ap);
     }
 
