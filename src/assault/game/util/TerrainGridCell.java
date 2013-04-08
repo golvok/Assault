@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.game.util;
 
+import assault.display.Bounded;
 import assault.game.util.terrain.TerrainSquare;
 
 /**
  *
  * @author matt
  */
-public class TerrainGridCell<E extends GridObject> extends GridCell<E> {
+public class TerrainGridCell<E extends Bounded> extends GridCell<E> {
 	/**
 	 * 
 	 */

@@ -4,13 +4,13 @@
  */
 package assault.game.util.terrain;
 
+import assault.display.Bounded;
 import assault.game.display.GameArea;
 import assault.game.gameObjects.TerrainObject;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.ResourceHolder;
 import assault.game.loading.resourceHolders.TerrainResource;
 import assault.game.util.GridManager;
-import assault.game.util.GridObject;
 import assault.game.util.TerrainGridCell;
 import assault.game.util.TerrainGridManager;
 
@@ -34,7 +34,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 		int widthInGrid = gm.convDimToGrid(ga_width, ga_y);
 		int heightInGrid = gm.convDimToGrid(ga_height, ga_x);
 
-		TerrainGridCell<GridObject> tgc;
+		TerrainGridCell<Bounded> tgc;
 
 		if (!(gm instanceof TerrainGridManager)) {
 			return false;
@@ -42,7 +42,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 
 		for (int x = xInGrid; x < widthInGrid; x++) {
 			for (int y = yInGrid; y < heightInGrid; y++) {
-				tgc = (TerrainGridCell<GridObject>) gm.getGridCellAtGrid(x, y);
+				tgc = (TerrainGridCell<Bounded>) gm.getGridCellAtGrid(x, y);
 				tgc.setTerrainSquare(new TerrainSquare(g, x, y, terrainSrc.getGroundCovers()[0]));
                 g.add(tgc.getTerrainSquare(),false);
 				if (x % 10 == 0 && y % 10 == 0){

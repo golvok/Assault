@@ -9,6 +9,7 @@ import java.util.Random;
 import org.lwjgl.util.Color;
 
 import assault.display.AssaultWindow;
+import assault.display.Bounded;
 import assault.display.InputRegistarContainer;
 import assault.display.Paintable;
 import assault.game.gameObjects.AObject;
@@ -16,7 +17,6 @@ import assault.game.gameObjects.Group;
 import assault.game.gameObjects.Selectable;
 import assault.game.gameObjects.Unit;
 import assault.game.util.GridManager;
-import assault.game.util.GridObject;
 import assault.game.util.TerrainGridManager;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
@@ -24,7 +24,7 @@ import assault.game.util.commands.MouseCommand;
 import assault.game.util.commands.MoveCmd;
 import assault.game.util.commands.NormalCommand;
 import assault.game.util.commands.TargetCommand;
-import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.PathFindingBounded;
 import assault.game.util.pathfinding.PathingManager;
 import assault.game.util.terrain.TerrainGenerator;
 import assault.input.InputEventUtil;
@@ -367,8 +367,8 @@ public class GameArea extends InputRegistarContainer {
 	public void drawSelf() {
 		super.drawSelf();
 		//System.out.println("GA_PAINT");
-		if (numSelected == 1 && selected[0] instanceof PathFindingGridObject && getPM() != null) {
-			PathFindingGridObject pfgo = (PathFindingGridObject) selected[0];
+		if (numSelected == 1 && selected[0] instanceof PathFindingBounded && getPM() != null) {
+			PathFindingBounded pfgo = (PathFindingBounded) selected[0];
 			if (pfgo.getExamined() != null && pfgo.getOnOpenSet() != null && pfgo.getOnPath() != null) {
 				boolean[][] exa = pfgo.getExamined();
 				boolean[][] open = pfgo.getOnOpenSet();
@@ -478,7 +478,7 @@ public class GameArea extends InputRegistarContainer {
 	public AObject getAoAt(int x, int y) {
 		if (getGM() != null) {
 			try {
-				GridObject go = getGM().getGoAtPixel(x, y);
+				Bounded go = getGM().getGoAtPixel(x, y);
 				if (go instanceof AObject && go.getBounds().contains(x, y)) {
 					return ((AObject) go);
 				}

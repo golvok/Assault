@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.display;
 
 import assault.game.loading.Texture;
@@ -16,7 +12,7 @@ import org.lwjgl.util.ReadableColor;
  *
  * @author matt
  */
-public abstract class Paintable extends Bounded implements Disposable, Updateable {
+public abstract class Paintable extends Bounded_Impl implements Disposable, Updateable {
 
     private boolean visible;
     private Container<? extends Bounded> parent;

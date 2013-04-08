@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.game.util.commands;
 
-import assault.game.loading.ResourcePreloader;
+import assault.display.Bounded;
 import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Unit;
 import assault.game.gameObjects.Weapon;
-import assault.game.util.GridObject;
+import assault.game.loading.ResourcePreloader;
 import assault.util.Point;
 
 /**
@@ -36,7 +32,7 @@ public class ShootCommand extends Command implements MouseCommand, TargetCommand
 
 	@Override
 	public void executeOn(AObject[] shooters, int x, int y) {
-		GridObject target = shooters[0].getGA().getGM().getGoAtPixel(x, y);
+		Bounded target = shooters[0].getGA().getGM().getGoAtPixel(x, y);
 		if (target instanceof AObject) {
 			executeOn(shooters, (AObject) target);
 		}

@@ -16,6 +16,6 @@ public abstract class RawPathFinder {
     public RawPathFinder(GridManager gm) {
         gManager = gm;
     }
-    public abstract RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY, AbstractPathObject apoToaddTo,boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled);
+    public abstract RawPathObject findPath(PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo,boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled);
 	
 }

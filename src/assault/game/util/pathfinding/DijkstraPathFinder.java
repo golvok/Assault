@@ -2,6 +2,8 @@
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
+import assault.game.util.ObjectManager;
+
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -15,7 +17,7 @@ public class DijkstraPathFinder /*extends RawPathFinder*/ {
 	private boolean started = false;
 	private GridManager gManager;
 
-	public DijkstraPathFinder(GridManager gm) {
+	public DijkstraPathFinder(ObjectManager gm) {
 		//super(gm);
 	}
 
@@ -24,7 +26,7 @@ public class DijkstraPathFinder /*extends RawPathFinder*/ {
 	}
 	
 	//@Override
-	public RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY) {
+	public RawPathObject findPath(PathFindingBounded pfgo, int destX, int destY) {
 		synchronized (startedLock) {
 			if (started || isCanceled()) {
 				return null;

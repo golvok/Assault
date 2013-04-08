@@ -14,12 +14,12 @@ import assault.input.MouseListener;
  * 
  * @author matt
  */
-public class InputRegistarContainer extends Container<Bounded> implements InputRegistar, MouseListener, KeyboardListener {
+public class InputRegistarContainer extends Container<Bounded_Impl> implements InputRegistar, MouseListener, KeyboardListener {
 
 	private ArrayList<MouseListener> mouseListeners = new ArrayList<>();
 	private ArrayList<KeyboardListener> keyListeners = new ArrayList<>();
 
-	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Bounded> startchildren) {
+	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Bounded_Impl> startchildren) {
 		super(x, y, width, height, startchildren);
 	}
 
@@ -62,9 +62,9 @@ public class InputRegistarContainer extends Container<Bounded> implements InputR
 	public void accept(MouseEvent me) {
 		for (Iterator<MouseListener> it = mouseListeners.iterator(); it.hasNext();) {
 			MouseListener ml = it.next();
-			if (ml instanceof Bounded){
-				if (me.intersects(((Bounded)ml).getBounds())){
-					InputEventUtil.passAndTranslateMouseEventTo((Bounded)ml, me);
+			if (ml instanceof Bounded_Impl){
+				if (me.intersects(((Bounded_Impl)ml).getBounds())){
+					InputEventUtil.passAndTranslateMouseEventTo((Bounded_Impl)ml, me);
 				}
 			}else{
 				InputEventUtil.passMouseEventTo(ml, me);

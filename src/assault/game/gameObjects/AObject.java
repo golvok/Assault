@@ -4,7 +4,13 @@
  */
 package assault.game.gameObjects;
 
+import java.awt.Image;
+
+import org.lwjgl.util.Color;
+import org.lwjgl.util.ReadableColor;
+
 import assault.display.AssaultWindow;
+import assault.display.Bounded;
 import assault.display.Container;
 import assault.display.Paintable;
 import assault.game.Player;
@@ -12,16 +18,12 @@ import assault.game.display.GameArea;
 import assault.game.display.StatusDisplayBox;
 import assault.game.loading.resourceHolders.ObjectResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
-import assault.game.util.GridObject;
-import java.awt.Image;
-import org.lwjgl.util.Color;
-import org.lwjgl.util.ReadableColor;
 
 /**
  *
  * @author matt
  */
-public class AObject extends Container<Paintable> implements GridObject {
+public class AObject extends Container<Paintable> implements Bounded {
 
 	public final static int CROSS_SIZE = 4;
 	private Player owner;
@@ -171,7 +173,6 @@ public class AObject extends Container<Paintable> implements GridObject {
 
 	/**
 	 */
-	@Override
 	public GameArea getGA() {
 		return ga;
 	}

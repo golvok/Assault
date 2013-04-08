@@ -1,13 +1,13 @@
 
 package assault.game.util.pathfinding;
 
-import assault.game.util.GridObject;
+import assault.display.Bounded;
 
 /**
  *
  * @author 088241930
  */
-public abstract interface PathFindingGridObject extends GridObject{
+public abstract interface PathFindingBounded extends Bounded{
     
     public boolean[][] getExamined();
     public boolean[][] getOnOpenSet();

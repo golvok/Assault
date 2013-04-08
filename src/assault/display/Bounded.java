@@ -5,101 +5,41 @@ import java.awt.geom.Rectangle2D;
 
 import assault.util.Point;
 
-public class Bounded {
+public interface Bounded {
 
-	protected double x;
-	protected double y;
-	protected double width;
-	protected double height;
+	public abstract double getWidth();
 
-	public Bounded(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
+	public abstract double getHeight();
 
-	public double getWidth() {
-	    return width;
-	}
+	public abstract Point getLocation();
 
-	public double getHeight() {
-	    return height;
-	}
+	public abstract Point getLocation(Point rv);
 
-	public Point getLocation() {
-	    return new Point(x, y);
-	}
+	public abstract Shape getBounds();
 
-	public Point getLocation(Point rv) {
-	    if (rv == null) {
-	        return new Point(x, y);
-	    } else {
-	        rv.setLocation(x, y);
-	        return rv;
-	    }
-	}
+	public abstract Point getSize();
 
-	public Shape getBounds() {
-	    return new Rectangle2D.Double(x, y, width, height);
-	}
+	public abstract Point getSize(Point rv);
 
-	public Point getSize() {
-	    return new Point(width, height);
-	}
+	public abstract double getX();
 
-	public Point getSize(Point rv) {
-	    if (rv == null) {
-	        return new Point(width, height);
-	    } else {
-	        rv.setLocation(width, height);
-	        return rv;
-	    }
-	}
+	public abstract void setX(double x);
 
-	public double getX() {
-	    return x;
-	}
+	public abstract double getY();
 
-	public void setX(double x) {
-	    this.x = x;
-	}
+	public abstract void setY(double y);
 
-	public double getY() {
-	    return y;
-	}
+	public abstract void setSize(Point d);
 
-	public void setY(double y) {
-	    this.y = y;
-	}
+	public abstract void setSize(double width, double height);
 
-	public void setSize(Point d) {
-	    setSize(d.getX(), d.getY());
-	}
+	public abstract void setBounds(Rectangle2D r);
 
-	public void setSize(double width, double height) {
-	    this.width = width;
-	    this.height = height;
-	}
+	public abstract void setBounds(double x, double y, double width,
+			double height);
 
-	public void setBounds(Rectangle2D r) {
-	    setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-	}
+	public abstract void setLocation(Point p);
 
-	public void setBounds(double x, double y, double width, double height) {
-	    this.x = x;
-	    this.y = y;
-	    this.width = width;
-	    this.height = height;
-	}
-
-	public void setLocation(Point p) {
-	    setLocation(p.getX(),p.getY());
-	}
-
-	public void setLocation(double x, double y) {
-	    this.x = x;
-	    this.y = y;
-	}
+	public abstract void setLocation(double x, double y);
 
 }

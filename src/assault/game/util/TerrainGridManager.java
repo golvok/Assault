@@ -1,6 +1,6 @@
-
 package assault.game.util;
 
+import assault.display.Bounded;
 import assault.game.display.GameArea;
 import assault.game.util.terrain.TerrainGenerator;
 
@@ -16,12 +16,12 @@ public class TerrainGridManager extends GridManager{
 	}
 
 	@Override
-	public GridCell<GridObject> generateGridCell(GameArea g, int x, int y) {
-		return new TerrainGridCell<GridObject>(4);
+	public GridCell<Bounded> generateGridCell(GameArea g, int x, int y) {
+		return new TerrainGridCell<Bounded>(4);
 	}
 
 	@Override
-	public TerrainGridCell<GridObject> getGridCellAtGrid(int x, int y) throws IndexOutOfBoundsException {
-		return (TerrainGridCell<GridObject>)super.getGridCellAtGrid(x, y);
+	public TerrainGridCell<Bounded> getGridCellAtGrid(int x, int y) throws IndexOutOfBoundsException {
+		return (TerrainGridCell<Bounded>)super.getGridCellAtGrid(x, y);
 	}
 }

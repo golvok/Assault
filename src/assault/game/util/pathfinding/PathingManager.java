@@ -19,21 +19,21 @@ public class PathingManager{
 	private final static int N_THREADS = 4;//TODO make this configurable
 	
 	private ExecutorService threadPool;
-	private Map<PathFindingGridObject, PathFindingRunnable> pfgo2Task;
+	private Map<PathFindingBounded, PathFindingRunnable> pfgo2Task;
 	private RawPathFinder rpf;
 	
 	public PathingManager(GridManager gm) {
 		threadPool = java.util.concurrent.Executors.newFixedThreadPool(N_THREADS);
-		pfgo2Task = Collections.synchronizedMap(new HashMap<PathFindingGridObject, PathFindingRunnable>(N_THREADS));
+		pfgo2Task = Collections.synchronizedMap(new HashMap<PathFindingBounded, PathFindingRunnable>(N_THREADS));
 		rpf = new AStarPathFinder(gm);
 	}
 
-	public void findPath(final PathFindingGridObject pfgo, final int destX, final int destY, final AbstractPathObject apoToaddTo, final boolean clearApo, final boolean clearImmediately) {
+	public void findPath(final PathFindingBounded pfgo, final int destX, final int destY, final AbstractPathObject apoToaddTo, final boolean clearApo, final boolean clearImmediately) {
 		PathFindingRunnable pfr = new PathFindingRunnable(rpf, pfgo, destX, destY, apoToaddTo, clearApo, clearImmediately);
 		pfgo2Task.put(pfgo, pfr);
 		threadPool.execute(pfr);
 	}
-	public int cancel(PathFindingGridObject pfgo){
+	public int cancel(PathFindingBounded pfgo){
 		PathFindingRunnable pfr = pfgo2Task.remove(pfgo);
 		if(pfr == null){
 			return 1;
@@ -45,7 +45,7 @@ public class PathingManager{
 }
 
 class PathFindingRunnable implements Runnable{
-	private PathFindingGridObject pfgo;
+	private PathFindingBounded pfgo;
 	private int destX;
 	private int destY;
 	private AbstractPathObject apoToaddTo;
@@ -54,7 +54,7 @@ class PathFindingRunnable implements Runnable{
 	private RawPathFinder rpf;
 	private Ptr<Boolean> canceled = new Ptr<>(false);
 	
-	public PathFindingRunnable(RawPathFinder rpf, PathFindingGridObject pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately) {
+	public PathFindingRunnable(RawPathFinder rpf, PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately) {
 		this.rpf = rpf;
 		this.pfgo = pfgo;
 		this.destX = destX;

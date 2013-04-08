@@ -6,11 +6,13 @@ package assault.game.util;
 
 import java.util.ArrayList;
 
+import assault.display.Bounded;
+
 /**
  *
  * @author matt
  */
-public class GridCell<E extends GridObject> extends ArrayList<E> {
+public class GridCell<E extends Bounded> extends ArrayList<E> {
 
 	/**
 	 * 

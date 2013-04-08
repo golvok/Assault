@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.game.gameObjects;
 
 import assault.game.Player;
@@ -9,7 +5,7 @@ import assault.game.display.CommandButton;
 import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ControllableResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
-import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.PathFindingBounded;
 import assault.game.util.pathfinding.PathingManager;
 import assault.game.util.pathfinding.moving.Mover;
 import assault.game.util.pathfinding.moving.Relocatable;
@@ -19,7 +15,7 @@ import assault.util.Point;
  *
  * @author matt
  */
-public abstract class Controllable extends Selectable implements PathFindingGridObject, Relocatable {
+public abstract class Controllable extends Selectable implements PathFindingBounded, Relocatable {
 
     private Group aGroup = null;
     private CommandButton[] cmdBtnSet = new CommandButton[0];

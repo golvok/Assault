@@ -1,6 +1,6 @@
 package assault.input;
 
-import assault.display.Bounded;
+import assault.display.Bounded_Impl;
 import java.awt.Shape;
 
 /**
@@ -42,7 +42,7 @@ public class MouseEvent extends ButtonInputEvent {
 	 * @param ap
 	 * @return 
 	 */
-	public MouseEvent translate(Bounded ap) {
+	public MouseEvent translate(Bounded_Impl ap) {
 		return new MouseEvent((int)Math.round(getX() - ap.getX()), (int)Math.round(getY() - ap.getY()), getButton(), getNewState(), getModifiers());
 	}
 

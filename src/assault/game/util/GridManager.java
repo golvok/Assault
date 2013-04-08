@@ -1,26 +1,27 @@
 
 package assault.game.util;
 
-import assault.game.display.GameArea;
-import assault.game.util.terrain.TerrainGenerator;
-import assault.util.Disposable;
-import assault.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import assault.display.Bounded;
+import assault.game.display.GameArea;
+import assault.game.util.terrain.TerrainGenerator;
+import assault.util.Point;
+
 /**
  *
  * @author matt
  */
-public class GridManager implements Disposable {
+public class GridManager implements ObjectManager {
 
 	private final int gridSize;
 	private final int width;
 	private final int height;
-	private final ArrayList<ArrayList<GridCell<GridObject>>> grid;
-	private final List<GridObject> gObjects = Collections.synchronizedList(new ArrayList<GridObject>(64/*random*/));
+	private final ArrayList<ArrayList<GridCell<Bounded>>> grid;
+	private final List<Bounded> gObjects = Collections.synchronizedList(new ArrayList<Bounded>(64/*random*/));
 	private final Object editlock = new Object();
 	protected TerrainGenerator terrainGenerator;
 	private final GameArea gameArea;
@@ -31,7 +32,7 @@ public class GridManager implements Disposable {
 		this.gridSize = gridSize;
 		this.width = convDimToGrid(pixelWidth, 0);
 		this.height = convDimToGrid(pixelHeight, 0);
-		grid = new ArrayList<ArrayList<GridCell<GridObject>>>();
+		grid = new ArrayList<ArrayList<GridCell<Bounded>>>();
 		initGrid();
 	}
 	
@@ -43,7 +44,7 @@ public class GridManager implements Disposable {
 		grid.ensureCapacity(width);
 		for (int i = 0; i < width; i++) {
 			try {
-				grid.add(i, new ArrayList<GridCell<GridObject>>(height));
+				grid.add(i, new ArrayList<GridCell<Bounded>>(height));
 				for (int j = 0; j < height; j++) {
 					try {
 						grid.get(i).add(j, generateGridCell(gameArea, i, j));
@@ -55,8 +56,8 @@ public class GridManager implements Disposable {
 		}
 	}
 
-	public GridCell<GridObject> generateGridCell(GameArea g, int x, int y) {
-		return new GridCell<GridObject>(4);
+	public GridCell<Bounded> generateGridCell(GameArea g, int x, int y) {
+		return new GridCell<Bounded>(4);
 	}
 	
 	/**
@@ -64,7 +65,8 @@ public class GridManager implements Disposable {
 	 * @param go
 	 * @return true if successful, false if not
 	 */
-	public boolean add(GridObject go) {
+	@Override
+	public boolean add(Bounded go) {
 		synchronized (editlock) {
 			int x = convCoordToGrid(go.getX());
 			int y = convCoordToGrid(go.getY());
@@ -87,7 +89,8 @@ public class GridManager implements Disposable {
 		return true;
 	}
 
-	public void remove(GridObject go) {
+	@Override
+	public void remove(Bounded go) {
 		if (go != null && gObjects.contains(go)) {
 			synchronized (editlock) {
 				int x = convCoordToGrid(go.getX());
@@ -109,6 +112,7 @@ public class GridManager implements Disposable {
 		}
 	}
 
+	@Override
 	public void removeAll() {
 		for (int i = 0; i < gObjects.size(); i++) {
 			remove(gObjects.get(i));
@@ -126,7 +130,8 @@ public class GridManager implements Disposable {
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
-	public boolean notifyOfImminentMovement(GridObject ao, Point oldPt, Point newPt) {
+	@Override
+	public boolean notifyOfImminentMovement(Bounded ao, Point oldPt, Point newPt) {
 		return notifyOfImminentMovement(ao, oldPt.getX(), oldPt.getY(), newPt.getX(), newPt.getY());
 	}
 
@@ -140,7 +145,8 @@ public class GridManager implements Disposable {
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
-	public boolean notifyOfImminentMovement(GridObject go, double oldX, double oldY, double newX, double newY) {
+	@Override
+	public boolean notifyOfImminentMovement(Bounded go, double oldX, double oldY, double newX, double newY) {
 		synchronized (editlock) {
 			//System.out.println("oldX = "+oldX);
 			//System.out.println("oldY = "+oldY);
@@ -204,7 +210,7 @@ public class GridManager implements Disposable {
 	 * @param ao
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
-	private void addToCell(int x, int y, GridObject ao) throws IndexOutOfBoundsException {
+	private void addToCell(int x, int y, Bounded ao) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {
 				grid.get(x).get(y).add(ao);
@@ -223,7 +229,7 @@ public class GridManager implements Disposable {
 	 * @param ao
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
-	private void removeFromCell(int x, int y, GridObject ao) throws IndexOutOfBoundsException {
+	private void removeFromCell(int x, int y, Bounded ao) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {
 				grid.get(x).get(y).remove(ao);
@@ -258,7 +264,7 @@ public class GridManager implements Disposable {
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
 	@SuppressWarnings("unused")
-	private void setCell(int x, int y, GridCell<GridObject> gos) throws IndexOutOfBoundsException {
+	private void setCell(int x, int y, GridCell<Bounded> gos) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {
 				grid.get(x).set(y, gos);
@@ -291,10 +297,11 @@ public class GridManager implements Disposable {
 	 * @return
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
+	@Override
 	public boolean isPixelEmpty(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
-			List<GridObject> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
-			for (GridObject go : cell) {
+			List<Bounded> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
+			for (Bounded go : cell) {
 				if (go.getBounds().contains(x, y)) {
 					return false;
 				}
@@ -313,12 +320,13 @@ public class GridManager implements Disposable {
 	 * @return
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
-	public GridObject getGoAtPixel(int x, int y) throws IndexOutOfBoundsException {
+	@Override
+	public Bounded getGoAtPixel(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try{
-				List<GridObject> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
+				List<Bounded> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
 
-				for (GridObject go : cell) {
+				for (Bounded go : cell) {
 					if (go.getBounds().contains(x, y)) {
 						return go;
 					}
@@ -338,7 +346,7 @@ public class GridManager implements Disposable {
 	 * @param y
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
-	public GridCell<GridObject> getGridCellAtGrid(int x, int y) throws IndexOutOfBoundsException {
+	public GridCell<Bounded> getGridCellAtGrid(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {
 				//System.out.println("cell ("+x+","+y+") is "+grid[x][y]);
@@ -359,7 +367,7 @@ public class GridManager implements Disposable {
 	 * @param go
 	 * @return 
 	 */
-	public boolean canBeAtGrid(int GridX, int GridY, GridObject go) {
+	public boolean canBeAtGrid(int GridX, int GridY, Bounded go) {
 		return canBeAtPixel(convGridToPixel(GridX), convGridToPixel(GridY), go);
 	}
 
@@ -371,7 +379,8 @@ public class GridManager implements Disposable {
 	 * @param go
 	 * @return 
 	 */
-	public boolean canBeAtPixel(double x, double y, GridObject go) {
+	@Override
+	public boolean canBeAtPixel(double x, double y, Bounded go) {
 		if (go == null) {
 			return false;
 		}
@@ -380,13 +389,13 @@ public class GridManager implements Disposable {
 			final int h = convDimToGrid(go.getHeight(), y);
 			final int GridX = convCoordToGrid(x);
 			final int GridY = convCoordToGrid(y);
-			GridCell<GridObject> cell;
+			GridCell<Bounded> cell;
 			try {
 				for (int i = GridX; i < GridX + w; i++) {
 					for (int j = GridY; j < GridY + h; j++) {
 						cell = getGridCellAtGrid(i, j);
 						if (!isCellEmpty(i, j)) {
-							for (GridObject goInCell : cell) {
+							for (Bounded goInCell : cell) {
 								//System.out.println((goInCell != go) + ", " + (goInCell.getBounds().intersects((Rectangle) go.getBounds())) + " "+ go.hashCode() +" " + x + ", " + y);
 								if (goInCell != null && goInCell != go && goInCell.getBounds().intersects(x, y, go.getWidth(), go.getHeight())) {
 									return false;
@@ -470,7 +479,7 @@ public class GridManager implements Disposable {
 	 * @param go
 	 * @return
 	 */
-	public Rectangle getGridbox(GridObject go) {
+	public Rectangle getGridbox(Bounded go) {
 		return new Rectangle(convCoordToGrid(go.getX()), convCoordToGrid(go.getY()), convDimToGrid(go.getWidth(), go.getX()), convDimToGrid(go.getHeight(), go.getY()));
 	}
 
@@ -486,10 +495,12 @@ public class GridManager implements Disposable {
 		return width;
 	}
 
+	@Override
 	public int getPixelHeight() {
 		return convGridToPixel(height);
 	}
 
+	@Override
 	public int getPixelWidth() {
 		return convGridToPixel(width);
 	}

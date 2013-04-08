@@ -22,7 +22,7 @@ public class AStarPathFinder extends RawPathFinder {
     }
 
     @Override
-    public RawPathObject findPath(PathFindingGridObject pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled) {
+    public RawPathObject findPath(PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled) {
     	if(canceled.getVal()){
     		return null;
     	}

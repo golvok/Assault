@@ -4,7 +4,7 @@
  */
 package assault.game.util.pathfinding.moving;
 
-import assault.game.util.pathfinding.PathFindingGridObject;
+import assault.game.util.pathfinding.PathFindingBounded;
 import assault.game.util.pathfinding.PathingManager;
 import assault.util.Point;
 
@@ -12,7 +12,7 @@ import assault.util.Point;
  *
  * @author matt
  */
-public interface Relocatable extends PathFindingGridObject{
+public interface Relocatable extends PathFindingBounded{
 
     boolean[][] getClosedSet();
 
