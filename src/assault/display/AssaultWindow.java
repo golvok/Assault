@@ -28,7 +28,7 @@ import org.lwjgl.util.Color;
  * The main window
  * @author matt
  */
-public class AssaultWindow extends Container {
+public class AssaultWindow extends Container<Bounded> {
 
 	public enum GameState {
 		NOT_RUNNING,IN_MAIN_MENU,IN_GAME;

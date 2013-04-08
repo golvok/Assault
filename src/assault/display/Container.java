@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.display;
 
 import java.util.ArrayList;
@@ -12,11 +8,11 @@ import java.util.List;
  *
  * @author matt
  */
-public abstract class Container extends Paintable{
+public abstract class Container<B extends Bounded> extends Paintable{
 
-	private final List<Paintable> children;
+	private final List<B> children;
 
-	public Container(double x, double y, double width, double height, ArrayList<Paintable> startchildren) {
+	public Container(double x, double y, double width, double height, ArrayList<B> startchildren) {
 		this(x, y, width, height, startchildren.size());
 		addChildren(startchildren);
 	}
@@ -32,7 +28,7 @@ public abstract class Container extends Paintable{
 	 */
 	public Container(double x, double y, double width, double height, int startSize) {
 		super(x, y, width, height);
-		children = Collections.synchronizedList(new ArrayList<Paintable>(startSize));
+		children = Collections.synchronizedList(new ArrayList<B>(startSize));
 	}
 
 	@Override
@@ -42,9 +38,9 @@ public abstract class Container extends Paintable{
 
 	public void drawChildren() {
 		synchronized (children) {
-			for (Paintable ap : children) {
-				if (ap != null) {
-					ap.draw();
+			for (B ap : children) {
+				if (ap instanceof Paintable) {
+					((Paintable)ap).draw();
 				}
 			}
 		}
@@ -58,31 +54,31 @@ public abstract class Container extends Paintable{
 
     public void updateChildren(int delta) {
         synchronized (children) {
-			for (Paintable ap : children) {
-				if (ap != null) {
-					ap.update(delta);
+			for (B ap : children) {
+				if (ap instanceof Paintable) {
+					((Paintable)ap).update(delta);
 				}
 			}
 		}
     }
 
-	public void addChildren(ArrayList<? extends Paintable> aps) {
+	public void addChildren(ArrayList<? extends B> aps) {
 		if (aps != null) {
-			for (Paintable aPaintable : aps) {
-				addChild((Paintable) aPaintable);
+			for (B ab : aps) {
+				addChild(ab);
 			}
 		}
 	}
 
-	public void addChild(Paintable ap) {
+	public void addChild(B ap) {
 		//System.out.println("adding "+ap+" to "+this);
-		if (ap != null) {
-			ap.setParent(this);
+		if (ap instanceof Paintable) {
+			((Paintable)ap).setParent(this);
 			children.add(ap);
 		}
 	}
 
-	protected void removeChild(Paintable ap) {
+	protected void removeChild(Bounded ap) {
 		children.remove(ap);
 	}
 
@@ -93,10 +89,10 @@ public abstract class Container extends Paintable{
 	@Override
 	public synchronized void dispose() {
 		if (!isDisposed()) {
-			ArrayList<Paintable> temp = new ArrayList<Paintable>(children);
-			for (Paintable ap : temp) {
-				if (ap != null) {
-					ap.dispose();
+			ArrayList<B> temp = new ArrayList<B>(children);
+			for (B ap : temp) {
+				if (ap instanceof Paintable) {
+					((Paintable)ap).dispose();
 				}
 				//System.out.println("dispose " + ap);
 			}

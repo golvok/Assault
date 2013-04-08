@@ -35,7 +35,7 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 		System.arraycopy(cmdBtns, 0, temp, 0, cmdBtns.length);
 		return temp;
 	}
-
+	@SuppressWarnings("unused")
 	protected CommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
 		String cmdType;
 		Element cmdE;
@@ -65,14 +65,14 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 		} catch (NullPointerException ex) {
 			throw new BadlyFormattedXMLException(getQualifiedName(), "a button element is improperly formated (something's missing or named wrong)" + (unit != null ? " or there is something wrong (missing?) in " + unit.getQualifiedName() : "") + " Message: " + ex.getStackTrace()[0]);
 		}
+		
 		if (cmd != null) {
 			return new CommandButton(cmd);
 		} else {
-			return null;
+			return null;//apparetly this is dead code. not sure how. added suppression
 		}
 	}
 
-	@SuppressWarnings(value = "unchecked")
 	private void parseXmlButtons() throws BadlyFormattedXMLException {
 		try {
 			Element[] xmlBtns = {};

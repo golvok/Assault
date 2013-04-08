@@ -33,6 +33,7 @@ public class ResourcePreloader extends Paintable implements Disposable{
 	//if any more of these are added make sure there is room in the array for them
 	public static final int MOVE_CMD_IMAGE_INDEX = 0;
 	public static final int CREATE_CMD_IMAGE_INDEX = 1;
+	@SuppressWarnings("unused")
 	private String statusString = "";
 	private ArrayList<Exception> errors = new ArrayList<Exception>(10);
 	private ModResourceHolder[] mods;

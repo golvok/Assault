@@ -14,6 +14,11 @@ import org.jdom2.JDOMException;
  */
 public class ResourceException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1812030109933166378L;
+	
 	private String reasonString;
 	public ResourceException(String location, Exception reason) {
 		this(location, reason == null ? null : reason.toString());

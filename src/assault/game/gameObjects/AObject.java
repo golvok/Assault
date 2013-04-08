@@ -6,6 +6,7 @@ package assault.game.gameObjects;
 
 import assault.display.AssaultWindow;
 import assault.display.Container;
+import assault.display.Paintable;
 import assault.game.Player;
 import assault.game.display.GameArea;
 import assault.game.display.StatusDisplayBox;
@@ -20,7 +21,7 @@ import org.lwjgl.util.ReadableColor;
  *
  * @author matt
  */
-public class AObject extends Container implements GridObject {
+public class AObject extends Container<Paintable> implements GridObject {
 
 	public final static int CROSS_SIZE = 4;
 	private Player owner;
@@ -31,11 +32,11 @@ public class AObject extends Container implements GridObject {
 	private boolean showStatus = true;
 	private StatusDisplayBox statDispBox = null;
 	private ObjectResourceHolder src = null;
-	private final Image naturalImage;
+//	private final Image naturalImage;
 	private boolean alive = true;
 	private GameArea ga;
 	private AssaultWindow aw;
-	private Image miniIcon = null;
+//	private Image miniIcon = null;
 
 	public AObject(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
 		this(g, x, y, src.getWidth(), src.getHeight(), health, src.getMaxHealth(), src.getMiniIcon(), src.getBaseImage(owner), owner);
@@ -68,8 +69,8 @@ public class AObject extends Container implements GridObject {
 		super(x, y, width, height, 2);
 		setOwner(owner);
 		ga = g;
-		this.miniIcon = miniIcon;
-		this.naturalImage = naturalImage;
+//		this.miniIcon = miniIcon;
+//		this.naturalImage = naturalImage;
 		invincible = true;//may be set again by other constructors
 		statDispBox = new StatusDisplayBox(this);
         hideStatusBox();
@@ -137,7 +138,7 @@ public class AObject extends Container implements GridObject {
 	 * @return true if the damage was successful
 	 */
 	protected boolean damage(int amount) {
-		if (isAlive()) {
+		if (isAlive() && !invincible) {
 			if (setHealth(getHealth() - amount)) {
 				kill();
 			}

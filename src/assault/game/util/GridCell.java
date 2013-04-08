@@ -12,6 +12,11 @@ import java.util.ArrayList;
  */
 public class GridCell<E extends GridObject> extends ArrayList<E> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2032438631101001461L;
+
 	public GridCell(int initSize) {
 		super(initSize);
 	}

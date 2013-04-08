@@ -14,6 +14,11 @@ import org.jdom2.Element;
  */
 public class BadlyFormattedXMLException extends ResourceException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2293004544894038123L;
+	
 	public BadlyFormattedXMLException(String location, DataConversionException dce, File baseFile){
 		super(location, "bad data in " + baseFile + " (something cant be converted from a string properly) Line: " + dce.getStackTrace()[0]);
 	}

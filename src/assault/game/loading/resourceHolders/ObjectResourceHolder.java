@@ -4,14 +4,7 @@
  */
 package assault.game.loading.resourceHolders;
 
-import assault.game.loading.ResourcePreloader;
-import assault.game.Player;
-import assault.game.display.GameArea;
-import assault.game.gameObjects.AObject;
-import assault.game.loading.Texture;
-import assault.game.loading.TextureMaker;
 import java.awt.Color;
-import assault.util.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.LookupOp;
 import java.awt.image.LookupTable;
@@ -20,11 +13,20 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.imageio.ImageIO;
+
 import org.jdom2.DataConversionException;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.lwjgl.util.ReadableColor;
+
+import assault.game.Player;
+import assault.game.display.GameArea;
+import assault.game.gameObjects.AObject;
+import assault.game.loading.ResourcePreloader;
+import assault.game.loading.Texture;
+import assault.game.loading.TextureMaker;
+import assault.util.Point;
 
 /**
  * override parseXmlValues() & parseReferentialXmlValues NOT load() & loadReferencial() (not that you can) and call super method in first line
@@ -96,8 +98,9 @@ public class ObjectResourceHolder extends XmlResource {
 			throw new BadlyFormattedXMLException(getQualifiedName(), ex, getBaseFile());
 		} catch (NullPointerException ex) {
 			throw new BadlyFormattedXMLException(getQualifiedName(), ex, getBaseFile(), getRootE());
-		} catch (JDOMException ex) {
-			throw new ResourceException(getQualifiedName(), ex, getBaseFile());
+//		} 
+//		catch (JDOMException ex) {
+//			throw new ResourceException(getQualifiedName(), ex, getBaseFile());
 		} catch (IOException ex) {
 			throw new ResourceException(getQualifiedName(),
 					"I/O error during parsing. (src: " + getBaseFile() + "):\n" + ex.toString());

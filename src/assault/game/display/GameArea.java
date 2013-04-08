@@ -344,6 +344,7 @@ public class GameArea extends InputRegistarContainer {
 	 *
 	 * @param ao
 	 */
+	@SuppressWarnings("unused")
 	private void setSelection(AObject ao) {
 		deselectAll();
 		selected = new AObject[3];

@@ -257,6 +257,7 @@ public class GridManager implements Disposable {
 	 * @param ao
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
+	@SuppressWarnings("unused")
 	private void setCell(int x, int y, GridCell<GridObject> gos) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {

@@ -18,8 +18,6 @@ import org.lwjgl.util.Color;
 public final class EnvironmentObject extends AObject{
 
     private Polygon shape = null;
-	private boolean selected = false;
-	private Image miniIcon = null;
 
     public EnvironmentObject(GameArea g, int x, int y, Point[] shape, Image miniIcon) {
         super(g, x, y, miniIcon, null, null);

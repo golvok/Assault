@@ -27,8 +27,6 @@ public class Projectile extends AObject{
 	private double Y = 0;
 	private boolean isShot = false;
 	private Timer moverTimer = new Timer();
-	private boolean selected = false;
-	private Image miniIcon = null;
 	public Projectile(GameArea g,double sX, double sY, double eX, double eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
 		super(g,sX,sY,size,size,miniIcon,naturalImage,ownerPlayer);
 		X = sX;
@@ -80,7 +78,7 @@ public class Projectile extends AObject{
 		if(!isShot){
 			isShot = true;
 			moverTimer.scheduleAtFixedRate(new TimerTask() {
-				public boolean running = true;
+//				public boolean running = true;
 				@Override
 				public void run() {
 					move();

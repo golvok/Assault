@@ -1,6 +1,7 @@
 package assault.game.display;
 
 import assault.display.AssaultWindow;
+import assault.display.Bounded;
 import assault.display.Container;
 import assault.display.Paintable;
 import assault.input.InputDistributor;
@@ -8,7 +9,7 @@ import assault.input.InputEventUtil;
 import assault.input.KeyboardEvent;
 import assault.input.MouseEvent;
 
-public class TopGameContainer extends Container implements InputDistributor {
+public class TopGameContainer extends Container<Bounded> implements InputDistributor {
 
 	private AssaultWindow window;
 	private CommandDispatchMenu cdm;
@@ -40,7 +41,7 @@ public class TopGameContainer extends Container implements InputDistributor {
 	}
 
 	public static TopGameContainer getTGC(Paintable ap) {
-		Container ac = null;
+		Container<? extends Bounded> ac = null;
 		if (ap != null) {
 			for (ac = ap.getParent(); !(ac instanceof TopGameContainer) && ac != null; ac = ac.getParent()) {
 			}

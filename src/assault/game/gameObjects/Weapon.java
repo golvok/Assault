@@ -8,8 +8,6 @@ import assault.game.Player;
 import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.loading.resourceHolders.WeaponResourceHolder;
-import java.awt.Image;
-import java.util.Timer;
 
 /**
  *
@@ -19,10 +17,8 @@ public class Weapon extends Controllable{
 
 	int bulletSize = 0;
 	boolean isProjectileWeapon = false;
-	private int rotateX;
-	private int rotateY;
-	private boolean selected = false;
-	private Image miniIcon = null;
+//	private int rotateX;
+//	private int rotateY;
 
 	public Weapon(GameArea g,WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		this(g,0, 0, src, ownerPlayer);
@@ -35,8 +31,8 @@ public class Weapon extends Controllable{
 		doNotShowStatus();
 		isProjectileWeapon = src.isProjectile();
 		bulletSize = src.getBulletSize();
-		rotateX = src.getRotatePointX();
-		rotateY = src.getRotatePointY();
+//		rotateX = src.getRotatePointX();
+//		rotateY = src.getRotatePointY();
 		setVisible(true);
 	}
 
@@ -88,14 +84,14 @@ public class Weapon extends Controllable{
 
 	private class BulletHitObject {
 
-		private Timer repaintTimer;
-		private boolean isDone = false;
-		private int[] bullethitLocsX = new int[7];
-		private int[] bullethitLocsY = new int[7];
+//		private Timer repaintTimer;
+//		private boolean isDone = false;
+//		private int[] bullethitLocsX = new int[7];
+//		private int[] bullethitLocsY = new int[7];
 
 		public BulletHitObject(AObject target) {
-			super();
-			/*setOpaque(false);
+			/*super();
+			setOpaque(false);
 			setSize(target.getSize());
 			target.add(this);
 			repaint();

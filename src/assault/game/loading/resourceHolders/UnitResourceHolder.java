@@ -117,6 +117,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 		getRp().setStatusString("loaded unit values in " + getBaseFile());
 	}
 
+	@SuppressWarnings("unused")
 	@Override
 	protected CommandButton parseXmlButton(Element xmlBtn) throws BadlyFormattedXMLException {
 		BadlyFormattedXMLException superException = null;
@@ -168,7 +169,7 @@ public class UnitResourceHolder extends ControllableResourceHolder {
 		if (cmd != null) {
 			return new CommandButton(cmd);
 		} else {
-			return null;
+			return null;//apparently dead code. added suppression
 		}
 	}
 

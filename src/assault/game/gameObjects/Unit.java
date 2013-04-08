@@ -45,6 +45,7 @@ public class Unit extends Controllable {
 		return false;
 	}
 
+	@SuppressWarnings("unused")
 	private void removeWeapon(int mountNum) {
 		if (mountNum < weapons.length && mountNum >= 0) {
 			weapons[mountNum].dispose();

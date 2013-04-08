@@ -19,7 +19,7 @@ import org.lwjgl.util.ReadableColor;
 public abstract class Paintable extends Bounded implements Disposable, Updateable {
 
     private boolean visible;
-    private Container parent;
+    private Container<? extends Bounded> parent;
 
     public Paintable(double x, double y, double width, double height) {
     	super(x, y, width, height);
@@ -71,7 +71,8 @@ public abstract class Paintable extends Bounded implements Disposable, Updateabl
      * @param ap
      */
     public static void drawConatiningBox(Paintable ap) {
-        drawRect(0, 0, ap.getWidth() + 1, ap.getWidth() + 1);
+        drawRect(0, 0, ap.getWidth(), ap.getWidth());
+//        System.out.println("bounding box of: " + ap);
     }
 
     public static void fillRect(double x, double y, double w, double h) {
@@ -161,11 +162,11 @@ public abstract class Paintable extends Bounded implements Disposable, Updateabl
         glEnd();
     }
 
-    public Container getParent() {
+    public Container<? extends Bounded> getParent() {
         return parent;
     }
 
-    public void setParent(Container parent) {
+    public void setParent(Container<? extends Bounded> parent) {
         if (getParent() != null) {
             getParent().removeChild(this);
         }

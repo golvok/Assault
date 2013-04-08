@@ -20,6 +20,7 @@ public class TerrainResource extends XmlResource {
 
 	private int range;
 	private GroundCover[] groundCovers = {};
+	@SuppressWarnings("unused")
 	private TerrainObject[] terrainObjects = {};
 	private final ModResourceHolder mod;
 
@@ -87,14 +88,17 @@ public class TerrainResource extends XmlResource {
 		return mod.getTerrainObjects();
 	}
 
+	@SuppressWarnings("unused")
 	private void setRange(int range) {
 		this.range = range;
 	}
 
+	@SuppressWarnings("unused")
 	private void setGroundCovers(GroundCover[] groundCovers) {
 		this.groundCovers = groundCovers;
 	}
 
+	@SuppressWarnings("unused")
 	private void setTerrainObjects(TerrainObject[] terrainObjects) {
 		this.terrainObjects = terrainObjects;
 	}

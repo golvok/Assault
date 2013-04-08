@@ -109,7 +109,8 @@ public abstract class Controllable extends Selectable implements PathFindingGrid
         }
     }
 
-    private void resizeAGroup() {
+    @SuppressWarnings("unused")
+	private void resizeAGroup() {
         if (aGroup != null) {
             aGroup.resizeToControllables();
         }

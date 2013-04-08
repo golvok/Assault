@@ -1,24 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.display;
 
-import assault.input.*;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import assault.input.InputEventUtil;
+import assault.input.InputRegistar;
+import assault.input.KeyboardEvent;
+import assault.input.KeyboardListener;
+import assault.input.MouseEvent;
+import assault.input.MouseListener;
+
 /**
- *
+ * 
  * @author matt
  */
-public class InputRegistarContainer extends Container implements InputRegistar, MouseListener, KeyboardListener {
+public class InputRegistarContainer extends Container<Bounded> implements InputRegistar, MouseListener, KeyboardListener {
 
-	private ArrayList<Paintable> mouseListeners = new ArrayList<Paintable>();
-	private ArrayList<Paintable> keyListeners = new ArrayList<Paintable>();
+	private ArrayList<MouseListener> mouseListeners = new ArrayList<>();
+	private ArrayList<KeyboardListener> keyListeners = new ArrayList<>();
 
-	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Paintable> startchildren) {
+	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Bounded> startchildren) {
 		super(x, y, width, height, startchildren);
 	}
 
@@ -27,56 +28,56 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	}
 
 	@Override
-	public void addMouseEventReciever(Paintable ml) {
-		if (ml instanceof MouseListener){
-			mouseListeners.add(ml);
-		}else{
-			throw new InvalidParameterException(ml+"is not a Mouselistener");
-		}
+	public void addMouseEventReciever(MouseListener ml) {
+		mouseListeners.add(ml);
 	}
 
 	@Override
-	public void removeMouseEventReciever(Bounded ml) {
+	public void removeMouseEventReciever(MouseListener ml) {
 		mouseListeners.remove(ml);
 	}
 
 	@Override
-	public void addKeyboardEventReciever(Paintable kl){
-		if (kl instanceof KeyboardListener){
-			keyListeners.add(kl);
-		}else{
-			throw new InvalidParameterException(kl+"is not a Keyboardlistener");
-		}
+	public void addKeyboardEventReciever(KeyboardListener kl) {
+		keyListeners.add(kl);
 	}
 
 	@Override
-	public void removeKeyboardEventReciever(Bounded kl) {
+	public void removeKeyboardEventReciever(KeyboardListener kl) {
 		keyListeners.remove(kl);
 	}
 
 	@Override
-	protected void removeChild(Paintable ap) {
-		super.removeChild(ap);
-		removeMouseEventReciever(ap);
-		removeKeyboardEventReciever(ap);
+	protected void removeChild(Bounded b) {
+		super.removeChild(b);
+		if (b instanceof MouseListener){
+			removeMouseEventReciever((MouseListener)b);
+		}
+		if (b instanceof KeyboardListener){
+			removeKeyboardEventReciever((KeyboardListener)b);
+		}
 	}
 
 	@Override
 	public void accept(MouseEvent me) {
-		for (Iterator<Paintable> it = mouseListeners.iterator(); it.hasNext();) {
-			Bounded ap = it.next();
-			if (ap != null && me.intersects(ap.getBounds())){
-				InputEventUtil.passAndTranslateMouseEventTo(ap, me);
+		for (Iterator<MouseListener> it = mouseListeners.iterator(); it.hasNext();) {
+			MouseListener ml = it.next();
+			if (ml instanceof Bounded){
+				if (me.intersects(((Bounded)ml).getBounds())){
+					InputEventUtil.passAndTranslateMouseEventTo((Bounded)ml, me);
+				}
+			}else{
+				InputEventUtil.passMouseEventTo(ml, me);
 			}
 		}
 	}
 
 	@Override
 	public void accept(KeyboardEvent ke) {
-		for (Iterator<Paintable> it = keyListeners.iterator(); it.hasNext();) {
-			Bounded ap = it.next();
-			if (ap != null){
-				InputEventUtil.passKeyboardEventTo((KeyboardListener)ap, ke);
+		for (Iterator<KeyboardListener> it = keyListeners.iterator(); it.hasNext();) {
+			KeyboardListener kl = it.next();
+			if (kl != null) {
+				InputEventUtil.passKeyboardEventTo((KeyboardListener) kl, ke);
 			}
 		}
 	}
@@ -105,5 +106,5 @@ public class InputRegistarContainer extends Container implements InputRegistar, 
 	public void keyPressed(KeyboardEvent ke) {
 		accept(ke);
 	}
-	
+
 }
