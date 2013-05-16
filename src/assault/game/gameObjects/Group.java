@@ -4,6 +4,7 @@
  */
 package assault.game.gameObjects;
 
+import assault.display.Bounded_Impl;
 import assault.game.Player;
 import assault.game.display.CommandDispatchMenu;
 import assault.game.display.GameArea;
@@ -56,12 +57,12 @@ public class Group extends Controllable {
 		setCmdBtnSet(CommandDispatchMenu.getUniqueCmdBtnSet(controllables));
 	}
 
-	public void removeControllable(Controllable au) {
+	public void removeControllable(Bounded_Impl au) {
 		controllables.remove(au);
 		resizeToControllables();
 	}
 
-	public void removeControllables(Controllable[] aus) {
+	public void removeControllables(Bounded_Impl[] aus) {
 		for (int i = 0; i < aus.length; i++) {
 			removeControllable(aus[i]);
 		}
@@ -87,7 +88,7 @@ public class Group extends Controllable {
 		double newX = Integer.MAX_VALUE;
 		double newY = Integer.MAX_VALUE;
 		double uDim;
-		Controllable controllable;
+		Bounded_Impl controllable;
 		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
 			if (controllable != null) {

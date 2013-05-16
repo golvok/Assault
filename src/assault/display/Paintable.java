@@ -48,6 +48,40 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
     public boolean isVisible() {
         return visible;
     }
+    
+    public Container<? extends Bounded> getParent() {
+        return parent;
+    }
+
+    public void setParent(Container<? extends Bounded> parent) {
+        if (getParent() != null) {
+            getParent().removeChild(this);
+        }
+        this.parent = parent;
+    }
+    private boolean disposed = false;
+
+    @Override
+    public synchronized void dispose() {
+        if (!isDisposed()) {
+            if (getParent() != null) {
+                getParent().removeChild(this);
+            }
+            disposed = true;
+            //System.out.println("AP_DISPOSE : "+this);
+        }
+    }
+
+    /**
+     * @return disposed
+     */
+    @Override
+    final public boolean isDisposed() {
+        return disposed;
+    }
+    
+    
+    //----------------Static methods for OpenGL drawing.-----------------
 
     public static void drawRect(double x, double y, double w, double h) {
         //System.out.println(w+","+h);
@@ -66,7 +100,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
      *
      * @param ap
      */
-    public static void drawConatiningBox(Paintable ap) {
+    public static void drawBoundingBox(Paintable ap) {
         drawRect(0, 0, ap.getWidth(), ap.getHeight());
 //        System.out.println("bounding box of: " + ap);
     }
@@ -156,36 +190,5 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
             glVertex2d(x + w, y);
         }
         glEnd();
-    }
-
-    public Container<? extends Bounded> getParent() {
-        return parent;
-    }
-
-    public void setParent(Container<? extends Bounded> parent) {
-        if (getParent() != null) {
-            getParent().removeChild(this);
-        }
-        this.parent = parent;
-    }
-    private boolean disposed = false;
-
-    @Override
-    public synchronized void dispose() {
-        if (!isDisposed()) {
-            if (getParent() != null) {
-                getParent().removeChild(this);
-            }
-            disposed = true;
-            //System.out.println("AP_DISPOSE : "+this);
-        }
-    }
-
-    /**
-     * @return the disposed
-     */
-    @Override
-    final public boolean isDisposed() {
-        return disposed;
     }
 }

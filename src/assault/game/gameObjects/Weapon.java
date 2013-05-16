@@ -22,7 +22,7 @@ public class Weapon extends Controllable{
 
 	public Weapon(GameArea g,WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		this(g,0, 0, src, ownerPlayer);
-		setVisible(false);
+		setVisible(true);
 	}
 
 	public Weapon(GameArea g, double x, double y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
@@ -73,7 +73,7 @@ public class Weapon extends Controllable{
 	@Override
 	public  void drawSelf() {
 		super.drawSelf();
-		drawConatiningBox(this);
+		drawBoundingBox(this);
 	}
 
     @Override

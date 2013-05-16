@@ -10,8 +10,8 @@ import assault.game.util.terrain.TerrainGenerator;
  */
 public class TerrainGridManager extends GridManager{
 	
-	public TerrainGridManager(int pixelWidth, int pixelHeight, int gridSize, TerrainGenerator tg,GameArea ga) {
-		super(pixelWidth, pixelHeight, gridSize,ga,tg);
+	public TerrainGridManager(int gridSize, GameArea ga,TerrainGenerator tg) {
+		super(gridSize,ga,tg);
 		//terrainGenerator = tg;
 	}
 

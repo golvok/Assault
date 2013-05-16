@@ -25,7 +25,7 @@ public class Unit extends Controllable {
 		setMountPoints(src.getMountPoints());
 		WeaponResourceHolder[] weaponsSources = src.getWeapons();
 		for (int i = 0; i < weaponsSources.length; i++) {
-			if (getMountPoint(i) != null && weaponsSources[i] != null) {
+			if (getMountPoint_rel(i) != null && weaponsSources[i] != null) {
 				equipWeapon(new Weapon(getGA(), weaponsSources[i], owner), i);
 			}
 		}
@@ -39,7 +39,7 @@ public class Unit extends Controllable {
 	protected final boolean equipWeapon(Weapon aw, int mountNum) {
 		//System.out.println("AUNIT_EQUIP_WEAPON");
 		if (mountNum < weapons.length && mountNum >= 0 && hasWeapon(aw) < 0 && aw != null) {
-			aw.setLocation(getMountPoint(mountNum));
+			aw.setLocation(getMountPoint_abs(mountNum));
             addChild(aw);
 		}
 		return false;
@@ -77,18 +77,22 @@ public class Unit extends Controllable {
 		return -1;
 	}
 
-	final Point getMountPoint(int number) {
+	final Point getMountPoint_rel(int number) {
 		if (number >= 0 && number < mountPoints.length && mountPoints[number] != null) {
 			return new Point(mountPoints[number]);
 		} else {
 			return null;
 		}
 	}
+	
+	final Point getMountPoint_abs(int number){
+		return Point.add(getCreatePoint_rel(), getLocation());
+	}
 
 	@Override
 	public void drawSelf() {
 		super.drawSelf();
-		drawConatiningBox(this);
+		drawBoundingBox(this);
 		//System.out.println("AU_PAINT");
 	}
 
@@ -144,7 +148,7 @@ public class Unit extends Controllable {
 	 * This one IS NOT relative!
 	 * @return 
 	 */
-	public Point getCreatePointAbs() {
+	public Point getCreatePoint_Abs() {
 		return new Point(createPoint.x + getX(), createPoint.y + getY());
 	}
 
@@ -153,7 +157,7 @@ public class Unit extends Controllable {
 	 * This one IS relative!
 	 * @return 
 	 */
-	public Point getCreatePointRel() {
+	public Point getCreatePoint_rel() {
 		return new Point(createPoint.x, createPoint.y);
 	}
 

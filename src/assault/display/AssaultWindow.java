@@ -28,7 +28,7 @@ import org.lwjgl.util.Color;
  * The main window
  * @author matt
  */
-public class AssaultWindow extends Container<Bounded_Impl> {
+public class AssaultWindow extends Container<Bounded> {
 
 	public enum GameState {
 		NOT_RUNNING,IN_MAIN_MENU,IN_GAME;
@@ -67,7 +67,7 @@ public class AssaultWindow extends Container<Bounded_Impl> {
 	private void init() {
 		System.out.println("init game window");
 		initGL();
-		getDelta();//to initialize this method
+		getDelta();//to initialise this method
 		inputManager = new InputManager(null);
 	}
 

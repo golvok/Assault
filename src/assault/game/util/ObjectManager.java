@@ -7,51 +7,47 @@ import assault.util.Point;
 public interface ObjectManager extends Disposable {
 
 	/**
-	 * add an ObjectObject to this ObjectManager
+	 * add a Bounded to this ObjectManager
 	 * 
-	 * @param go
+	 * @param b
 	 * @return true if successful, false if not
 	 */
-	public abstract boolean add(Bounded go);
+	public abstract boolean add(Bounded b);
 
-	public abstract void remove(Bounded go);
+	public abstract boolean remove(Bounded b);
 
 	public abstract void removeAll();
 
 	/**
-	 * moves the object in the ObjectManager should be called before when x and y
+	 * moves the object in the ObjectManager. should be called before when x and y
 	 * are actually changed and used as a decision weather to do so or not. Also
 	 * do not change the size between this and the movement
 	 * 
-	 * @param ao
+	 * @param willMove
 	 * @param newX
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
-	public abstract boolean notifyOfImminentMovement(Bounded ao,
-			Point oldPt, Point newPt);
+	public abstract boolean notifyOfImminentMovement(Bounded willMove, Point newPt);
 
 	/**
-	 * moves the object in the ObjectManager should be called before when x and y
+	 * moves the object in the ObjectManager. should be called before when x and y
 	 * are actually changed and used as a decision weather to do so or not. Also
 	 * do not change the size between this and the movement
 	 * 
-	 * @param go
+	 * @param willMove
 	 * @param newX
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
-	public abstract boolean notifyOfImminentMovement(Bounded go,
-			double oldX, double oldY, double newX, double newY);
+	public abstract boolean notifyOfImminentMovement(Bounded willMove,
+			double newX, double newY);
 
 	public abstract void dispose();
 
 	public abstract boolean isDisposed();
 
 	/**
-	 * gets the list of GO's that could be at pixel (x,y) then iterates over
-	 * them, returning the false if at least one's .bounds().contains(x,y) ==
-	 * true
 	 * 
 	 * @param x
 	 * @param y
@@ -63,9 +59,6 @@ public interface ObjectManager extends Disposable {
 			throws IndexOutOfBoundsException;
 
 	/**
-	 * gets the list of GO's that could be at pixel (x,y) then iterates over
-	 * them, returning the first one that .bounds().contains(x,y) null if no
-	 * match found
 	 * 
 	 * @param x
 	 * @param y
@@ -73,21 +66,21 @@ public interface ObjectManager extends Disposable {
 	 * @throws IndexOutOfBoundsException
 	 *             if it's well.. out of bounds...
 	 */
-	public abstract Bounded getGoAtPixel(int x, int y)
+	public abstract Bounded getBoundedAtPixel(int x, int y)
 			throws IndexOutOfBoundsException;
 
 	/**
-	 * using AMP co-ords, tests if <code>go</code> can exist at
-	 * <code>(x, y)</code> if go is null, returns false
+	 * using AMP co-ords, tests if <code>b</code> can exist at
+	 * <code>(x, y)</code> if b is null, returns false
 	 * 
 	 * @param x
 	 *            in the GA
 	 * @param y
 	 *            in the GA
-	 * @param go
+	 * @param b
 	 * @return
 	 */
-	public abstract boolean canBeAtPixel(double x, double y, Bounded go);
+	public abstract boolean canBeAtPixel(double x, double y, Bounded b);
 
 	public abstract int getPixelHeight();
 

@@ -2,6 +2,7 @@
 
 <AObject type="Weapon">
 	<name>SimpleWeapon</name>
+	<noClip/>
 	<dims width="15" height="7"/>
 	<rotatePoint x="8" y="4"/>
 	<health max="25"/>

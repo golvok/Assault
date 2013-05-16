@@ -16,7 +16,10 @@ import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Group;
 import assault.game.gameObjects.Selectable;
 import assault.game.gameObjects.Unit;
+import assault.game.util.DualObjectManager;
 import assault.game.util.GridManager;
+import assault.game.util.ObjectManager;
+import assault.game.util.QuadTreeManager;
 import assault.game.util.TerrainGridManager;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
@@ -47,7 +50,11 @@ public class GameArea extends InputRegistarContainer {
 	private AObject[] selected = new AObject[1];
 	private int numSelected = 0;
 	private MoveCmd gaMover;
-	private TerrainGridManager gManager;
+	
+	private ObjectManager oManager;
+	private ObjectManager gManager;
+	private ObjectManager qTManager;
+	
 	//private Thread movementThread;
 	private ThreadBlocker<Point> mouseThreadBlocker = new ThreadBlocker<Point>();
 	private ThreadBlocker<AObject> nextAOTargetedThreadBlocker = new ThreadBlocker<AObject>();
@@ -56,11 +63,11 @@ public class GameArea extends InputRegistarContainer {
 	private final TerrainGenerator terrainGenerator;
 
 	public GameArea(AssaultWindow aw, TerrainGenerator tg) {
-		super(5, 5, 790, 590, 32);//Horray! Magic numbers!
+		super(5, 5, 790, 590, 32);//Hooray! Magic numbers!
 		aWindow = aw;
 		terrainGenerator = tg;
-		System.out.println("Creating movement thread");
-		/*movementThread = new Thread(new Runnable() {
+		/*System.out.println("Creating movement thread");
+		movementThread = new Thread(new Runnable() {
 
 			private Unit[] unitArray = new Unit[0];
 
@@ -90,11 +97,16 @@ public class GameArea extends InputRegistarContainer {
 			}
 		});*/
 
-		System.out.println("Creating gridManager");
-		gManager = new TerrainGridManager((int)Math.ceil(getWidth()), (int)Math.ceil(getHeight()), 10, terrainGenerator, this);
+		System.out.println("Creating ObejectManager");
+		gManager = new TerrainGridManager(10, this, terrainGenerator);
+		qTManager = new QuadTreeManager(this, terrainGenerator);
+		oManager = new DualObjectManager(gManager, qTManager);
+
+		System.out.println("Adding QTM to OM " + this.add((QuadTreeManager)qTManager,false));
+		
 		System.out.println("creating pathingManager");
-		pManager = new PathingManager(gManager);
-		//generate terrain
+		pManager = new PathingManager((GridManager)gManager);
+		
 		System.out.println("generating terrain");
 		terrainGenerator.generateInto(this, new Random().nextInt());
 	}
@@ -103,7 +115,7 @@ public class GameArea extends InputRegistarContainer {
 	public synchronized void dispose() {
 		if (!isDisposed()) {
 			//stopMT = true;
-			gManager.dispose();
+			oManager.dispose();
 		}
 		super.dispose();
 	}
@@ -146,7 +158,7 @@ public class GameArea extends InputRegistarContainer {
 
 		if (ap != null) {
 			if (addToGM && ap instanceof AObject && !(ap instanceof Group)) {
-				if (!gManager.add((AObject) ap)) {
+				if (!oManager.add((AObject) ap)) {
 					System.out.println("unable to add " + ap + " to GA");
 					return false;
 				}
@@ -199,7 +211,7 @@ public class GameArea extends InputRegistarContainer {
 			if (ao instanceof Selectable) {
 				((Selectable) ao).deselect();
 			}
-			getGM().remove(ao);
+			getOM().remove(ao);
 			if (ao instanceof Unit) {
 				units.remove((Unit) ao);
 			}
@@ -355,10 +367,12 @@ public class GameArea extends InputRegistarContainer {
 		getAW().getACDM().setCmdBtns(ao);
 	}
 
-	public final GridManager getGM() {
-		return gManager;
+	public final ObjectManager getOM() {
+		return oManager;
 	}
-
+	public final GridManager getGM(){
+		return (GridManager)gManager;
+	}
 	public PathingManager getPM() {
 		return pManager;
 	}
@@ -368,6 +382,7 @@ public class GameArea extends InputRegistarContainer {
 		super.drawSelf();
 		//System.out.println("GA_PAINT");
 		if (numSelected == 1 && selected[0] instanceof PathFindingBounded && getPM() != null) {
+			GridManager gm = (GridManager) gManager;
 			PathFindingBounded pfgo = (PathFindingBounded) selected[0];
 			if (pfgo.getExamined() != null && pfgo.getOnOpenSet() != null && pfgo.getOnPath() != null) {
 				boolean[][] exa = pfgo.getExamined();
@@ -378,16 +393,16 @@ public class GameArea extends InputRegistarContainer {
 					for (int j = 0; j < exa[i].length; j++) {
 						if (path[i][j]) {
 							setColour(Color.CYAN);
-							fillRect(getGM().convGridToPixel(i) + 1, getGM().convGridToPixel(j) + 1, getGM().getGridSize() - 1, getGM().getGridSize() - 1);
+							fillRect(gm.convGridToPixel(i) + 1, gm.convGridToPixel(j) + 1, gm.getGridSize() - 1, gm.getGridSize() - 1);
 						} else if (closed[i][j]) {
 							setColour(Color.RED);
-							fillRect(getGM().convGridToPixel(i) + 1, getGM().convGridToPixel(j) + 1, getGM().getGridSize() - 1, getGM().getGridSize() - 1);
+							fillRect(gm.convGridToPixel(i) + 1, gm.convGridToPixel(j) + 1, gm.getGridSize() - 1, gm.getGridSize() - 1);
 						} else if (open[i][j]) {
 							setColour(Color.BLUE);
-							fillRect(getGM().convGridToPixel(i) + 1, getGM().convGridToPixel(j) + 1, getGM().getGridSize() - 1, getGM().getGridSize() - 1);
+							fillRect(gm.convGridToPixel(i) + 1, gm.convGridToPixel(j) + 1, gm.getGridSize() - 1, gm.getGridSize() - 1);
 						} else if (exa[i][j]) {
 							setColour(Color.BLACK);
-							fillRect(getGM().convGridToPixel(i) + 1, getGM().convGridToPixel(j) + 1, getGM().getGridSize() - 1, getGM().getGridSize() - 1);
+							fillRect(gm.convGridToPixel(i) + 1, gm.convGridToPixel(j) + 1, gm.getGridSize() - 1, gm.getGridSize() - 1);
 						}
 					}
 				}
@@ -476,9 +491,9 @@ public class GameArea extends InputRegistarContainer {
 	}
 
 	public AObject getAoAt(int x, int y) {
-		if (getGM() != null) {
+		if (getOM() != null) {
 			try {
-				Bounded go = getGM().getGoAtPixel(x, y);
+				Bounded go = getOM().getBoundedAtPixel(x, y);
 				if (go instanceof AObject && go.getBounds().contains(x, y)) {
 					return ((AObject) go);
 				}

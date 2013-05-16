@@ -1,4 +1,4 @@
-package assault.display;
+ package assault.display;
 
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -11,6 +11,7 @@ public class Bounded_Impl implements Bounded{
 	protected double y;
 	protected double width;
 	protected double height;
+	protected boolean noClip;
 
 	public Bounded_Impl(double x, double y, double width, double height) {
         this.x = x;
@@ -117,6 +118,11 @@ public class Bounded_Impl implements Bounded{
 	public void setLocation(double x, double y) {
 	    this.x = x;
 	    this.y = y;
+	}
+	
+	@Override
+	public boolean noClip() {
+		return noClip;
 	}
 
 }

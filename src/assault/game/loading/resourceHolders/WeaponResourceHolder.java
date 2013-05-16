@@ -34,7 +34,9 @@ public class WeaponResourceHolder extends ControllableResourceHolder {
 
 	@Override
 	public void parseXmlValues() throws BadlyFormattedXMLException, ResourceException {
+		setNoClip(true);//override the default value of noclip
 		super.parseXmlValues();
+		
 		getRp().setStatusString("loading weapon values in " + getBaseFile());
 		try {
 			//rotation point

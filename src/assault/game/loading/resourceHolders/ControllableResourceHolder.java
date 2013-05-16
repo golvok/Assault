@@ -1,17 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package assault.game.loading.resourceHolders;
+
+import java.io.File;
+
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 
 import assault.game.display.CommandButton;
 import assault.game.loading.ResourcePreloader;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.MoveCmd;
-import java.io.File;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
 
 /**
  *
@@ -20,11 +18,31 @@ import org.jdom2.input.SAXBuilder;
 public class ControllableResourceHolder extends SelectableResourceHolder {
 
 	private CommandButton[] cmdBtns;
+	private boolean noClip = false;
 
 	public ControllableResourceHolder(ResourcePreloader rp, SAXBuilder sb, ModResourceHolder mod, File xmlFile) throws BadlyFormattedXMLException, ResourceException {
 		super(rp, sb, mod, xmlFile);
 	}
 
+	@Override
+	protected void parseXmlValues() throws BadlyFormattedXMLException, ResourceException {
+		super.parseXmlValues();
+		try {
+			boolean hasNoClip = getRootE().getChild("noClip") != null;
+			boolean hasClip = getRootE().getChild("doClip") != null;
+			if (hasNoClip && !hasClip){
+				noClip = true;
+			}else if (!hasNoClip && hasClip){
+				noClip = false;
+				//subclasses might (and the weapon one does) override the default behaviour, by setting noclip before super.parseXmlValues().
+			}else if (hasNoClip && hasClip){
+				throw new BadlyFormattedXMLException(getQualifiedName(), "cannot spcecify both doClip and noClip");
+			}
+		}catch(NullPointerException npe){
+			throw new BadlyFormattedXMLException(getQualifiedName(), npe, getBaseFile(), getRootE());
+		}
+	}
+	
 	@Override
 	public synchronized void parseReferencialXmlValues() throws ResourceException {
 		parseXmlButtons();
@@ -88,5 +106,13 @@ public class ControllableResourceHolder extends SelectableResourceHolder {
 		} catch (NullPointerException ex) {
 			throw new BadlyFormattedXMLException(getQualifiedName(), ((getRootE() == null) ? ("Root element in " + getBaseFile() + " was null") : (getBaseFile() + " is improperly formated (something's missing or named wrong)")) + "\n\tMessage: " + ex.getStackTrace()[0]);
 		}
+	}
+
+	public boolean noClip() {
+		return noClip;
+	}
+	
+	protected void setNoClip(boolean b){
+		noClip = b;
 	}
 }

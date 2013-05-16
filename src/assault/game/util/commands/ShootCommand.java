@@ -32,7 +32,7 @@ public class ShootCommand extends Command implements MouseCommand, TargetCommand
 
 	@Override
 	public void executeOn(AObject[] shooters, int x, int y) {
-		Bounded target = shooters[0].getGA().getGM().getGoAtPixel(x, y);
+		Bounded target = shooters[0].getGA().getOM().getBoundedAtPixel(x, y);
 		if (target instanceof AObject) {
 			executeOn(shooters, (AObject) target);
 		}

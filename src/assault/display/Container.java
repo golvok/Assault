@@ -8,12 +8,12 @@ import java.util.List;
  *
  * @author matt
  */
-public abstract class Container<B extends Bounded> extends Paintable{
+public class Container<B extends Bounded> extends Paintable{
 
 	private final List<B> children;
 
 	public Container(double x, double y, double width, double height, ArrayList<B> startchildren) {
-		this(x, y, width, height, startchildren.size());
+		this(x, y, width, height, startchildren != null ? startchildren.size() : 0);
 		addChildren(startchildren);
 	}
 
@@ -38,9 +38,9 @@ public abstract class Container<B extends Bounded> extends Paintable{
 
 	public void drawChildren() {
 		synchronized (children) {
-			for (B ap : children) {
-				if (ap instanceof Paintable) {
-					((Paintable)ap).draw();
+			for (B child : children) {
+				if (child instanceof Paintable) {
+					((Paintable)child).draw();
 				}
 			}
 		}
@@ -54,9 +54,9 @@ public abstract class Container<B extends Bounded> extends Paintable{
 
     public void updateChildren(int delta) {
         synchronized (children) {
-			for (B ap : children) {
-				if (ap instanceof Paintable) {
-					((Paintable)ap).update(delta);
+			for (B child : children) {
+				if (child instanceof Paintable) {
+					((Paintable)child).update(delta);
 				}
 			}
 		}

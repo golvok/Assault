@@ -27,7 +27,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 	}
 
 	@Override
-	public boolean generateInto(GameArea g, double ga_x, double ga_y, double ga_width, double ga_height, int seed) {
+	public boolean generateInto(GameArea g, double ga_x, double ga_y, double ga_width, double ga_height, int seed) {		
 		GridManager gm = g.getGM();
 		int xInGrid = gm.convCoordToGrid(ga_x);
 		int yInGrid = gm.convCoordToGrid(ga_y);
@@ -43,7 +43,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 		for (int x = xInGrid; x < widthInGrid; x++) {
 			for (int y = yInGrid; y < heightInGrid; y++) {
 				tgc = (TerrainGridCell<Bounded>) gm.getGridCellAtGrid(x, y);
-				tgc.setTerrainSquare(new TerrainSquare(g, x, y, terrainSrc.getGroundCovers()[0]));
+				//tgc.setTerrainSquare(new TerrainSquare(g, x, y, terrainSrc.getGroundCovers()[0]));
                 g.add(tgc.getTerrainSquare(),false);
 				if (x % 10 == 0 && y % 10 == 0){
 					try {

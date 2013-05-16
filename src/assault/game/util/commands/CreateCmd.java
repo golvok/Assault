@@ -22,7 +22,7 @@ public class CreateCmd extends Command{
 	}
 	public void execute(Unit builder, GameArea ga){
 		if (builder != null){
-			ga.add(objectSource.createObject(ga,builder.getCreatePointAbs(), builder.getOwner()));
+			ga.add(objectSource.createObject(ga,builder.getCreatePoint_Abs(), builder.getOwner()));
 		}
 	}
 

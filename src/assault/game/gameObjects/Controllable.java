@@ -5,7 +5,6 @@ import assault.game.display.CommandButton;
 import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ControllableResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
-import assault.game.util.pathfinding.PathFindingBounded;
 import assault.game.util.pathfinding.PathingManager;
 import assault.game.util.pathfinding.moving.Mover;
 import assault.game.util.pathfinding.moving.Relocatable;
@@ -15,20 +14,22 @@ import assault.util.Point;
  *
  * @author matt
  */
-public abstract class Controllable extends Selectable implements PathFindingBounded, Relocatable {
+public abstract class Controllable extends Selectable implements Relocatable {
 
     private Group aGroup = null;
     private CommandButton[] cmdBtnSet = new CommandButton[0];
+    private final Mover mover;
+    
     //for pathfinding visualization
     private boolean[][] closed;
     private boolean[][] examined;
     private boolean[][] onPath;
     private boolean[][] open;
-    private final Mover mover;
 
     public Controllable(GameArea g, double x, double y, ControllableResourceHolder src, int health, Player owner) throws ResourceException {
         super(g, x, y, src, health, owner);
         mover = new Mover(this);
+        noClip = src.noClip();
 		setCmdBtnSet(src.getCmdBtns());
     }
 
@@ -40,7 +41,7 @@ public abstract class Controllable extends Selectable implements PathFindingBoun
 
 	@Override
 	public void setLocation(Point p) {
-		if(getGA().getGM().notifyOfImminentMovement(this, getLocation(), p)){
+		if(getGA().getOM().notifyOfImminentMovement(this, p)){
 			super.setLocation(p);
 		}
 	}

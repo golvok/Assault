@@ -23,15 +23,15 @@ public class GridManager implements ObjectManager {
 	private final ArrayList<ArrayList<GridCell<Bounded>>> grid;
 	private final List<Bounded> gObjects = Collections.synchronizedList(new ArrayList<Bounded>(64/*random*/));
 	private final Object editlock = new Object();
-	protected TerrainGenerator terrainGenerator;
+//	protected TerrainGenerator terrainGenerator;
 	private final GameArea gameArea;
 
-	public GridManager(int pixelWidth, int pixelHeight, int gridSize, GameArea ga, TerrainGenerator tg) {
+	public GridManager(int gridSize, GameArea ga, TerrainGenerator tg) {
 		gameArea = ga;
-		terrainGenerator = tg;
+//		terrainGenerator = tg;
 		this.gridSize = gridSize;
-		this.width = convDimToGrid(pixelWidth, 0);
-		this.height = convDimToGrid(pixelHeight, 0);
+		this.width = convDimToGrid(ga.getWidth(), 0);
+		this.height = convDimToGrid(ga.getHeight(), 0);
 		grid = new ArrayList<ArrayList<GridCell<Bounded>>>();
 		initGrid();
 	}
@@ -90,7 +90,7 @@ public class GridManager implements ObjectManager {
 	}
 
 	@Override
-	public void remove(Bounded go) {
+	public boolean remove(Bounded go) {
 		if (go != null && gObjects.contains(go)) {
 			synchronized (editlock) {
 				int x = convCoordToGrid(go.getX());
@@ -109,7 +109,9 @@ public class GridManager implements ObjectManager {
 				gObjects.remove(go);
 			}
 			//System.out.println("GM_REMOVE " + go);
+			return true;
 		}
+		return false;
 	}
 
 	@Override
@@ -125,14 +127,14 @@ public class GridManager implements ObjectManager {
 	 * should be called before when x and y are actually changed
 	 * and used as a decision weather to do so or not.
 	 * Also do not change the size between this and the movement
-	 * @param ao
+	 * @param willMove
 	 * @param newX
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
 	@Override
-	public boolean notifyOfImminentMovement(Bounded ao, Point oldPt, Point newPt) {
-		return notifyOfImminentMovement(ao, oldPt.getX(), oldPt.getY(), newPt.getX(), newPt.getY());
+	public boolean notifyOfImminentMovement(Bounded willMove, Point newPt) {
+		return notifyOfImminentMovement(willMove, newPt.getX(), newPt.getY());
 	}
 
 	/**
@@ -140,32 +142,32 @@ public class GridManager implements ObjectManager {
 	 * should be called before when x and y are actually changed
 	 * and used as a decision weather to do so or not.
 	 * Also do not change the size between this and the movement
-	 * @param go
+	 * @param willMove
 	 * @param newX
 	 * @param newY
 	 * @return (movementWasSuccessful)
 	 */
 	@Override
-	public boolean notifyOfImminentMovement(Bounded go, double oldX, double oldY, double newX, double newY) {
+	public boolean notifyOfImminentMovement(Bounded willMove, double newX, double newY) {
 		synchronized (editlock) {
 			//System.out.println("oldX = "+oldX);
 			//System.out.println("oldY = "+oldY);
 			//System.out.println("newX = "+newX);
 			//System.out.println("newY = "+newY);
-			int widthInGridOld = convDimToGrid(go.getWidth(), oldX);
-			int heightInGridOld = convDimToGrid(go.getHeight(), oldY);
-			int widthInGridNew = convDimToGrid(go.getWidth(), newX);
-			int heightInGridNew = convDimToGrid(go.getHeight(), newY);
+			int widthInGridOld = convDimToGrid(willMove.getWidth(), willMove.getX());
+			int heightInGridOld = convDimToGrid(willMove.getHeight(), willMove.getY());
+			int widthInGridNew = convDimToGrid(willMove.getWidth(), newX);
+			int heightInGridNew = convDimToGrid(willMove.getHeight(), newY);
 
 			//check if where it wants to go is clear
-			if (!canBeAtPixel(newX, newY, go)) {
+			if (!willMove.noClip() && !canBeAtPixel(newX, newY, willMove)) {
 				System.out.println("GM: where it wants to go is not open @move");
 				return false;
 			}
 			//System.out.println("GM: where it wants to go is clear @move");
 
-			int oldXg = convCoordToGrid(oldX);
-			int oldYg = convCoordToGrid(oldY);
+			int oldXg = convCoordToGrid(willMove.getX());
+			int oldYg = convCoordToGrid(willMove.getY());
 			int newXg = convCoordToGrid(newX);
 			int newYg = convCoordToGrid(newY);
 
@@ -173,8 +175,8 @@ public class GridManager implements ObjectManager {
 				//check if it is indeed where it says it is
 				for (int i = 0; i < widthInGridOld; i++) {
 					for (int j = 0; j < heightInGridOld; j++) {
-						if (!getGridCellAtGrid(oldXg + i, oldYg + j).contains(go)) {
-							System.out.println("GM: NOT where it says it is @move");
+						if (!getGridCellAtGrid(oldXg + i, oldYg + j).contains(willMove)) {
+							System.out.println("GM: it's NOT where it says it is @move");
 							//System.out.println("a "+getGridCellAtGrid(oldX + i, oldY + j)+" is there!");
 							//System.out.println("a "+go+" should be there!");
 							return false;
@@ -190,13 +192,13 @@ public class GridManager implements ObjectManager {
 			//remove it from the old location
 			for (int i = 0; i < widthInGridOld; i++) {
 				for (int j = 0; j < heightInGridOld; j++) {
-					removeFromCell(oldXg + i, oldYg + j, go);
+					removeFromCell(oldXg + i, oldYg + j, willMove);
 				}
 			}
 			//put it in the new location
 			for (int i = 0; i < widthInGridNew; i++) {
 				for (int j = 0; j < heightInGridNew; j++) {
-					addToCell(newXg + i, newYg + j, go);
+					addToCell(newXg + i, newYg + j, willMove);
 				}
 			}
 			return true;
@@ -321,7 +323,7 @@ public class GridManager implements ObjectManager {
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
 	@Override
-	public Bounded getGoAtPixel(int x, int y) throws IndexOutOfBoundsException {
+	public Bounded getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try{
 				List<Bounded> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));

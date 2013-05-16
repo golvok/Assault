@@ -35,11 +35,12 @@ public interface Bounded {
 
 	public abstract void setBounds(Rectangle2D r);
 
-	public abstract void setBounds(double x, double y, double width,
-			double height);
+	public abstract void setBounds(double x, double y, double width, double height);
 
 	public abstract void setLocation(Point p);
 
 	public abstract void setLocation(double x, double y);
+	
+	public abstract boolean noClip();
 
 }
