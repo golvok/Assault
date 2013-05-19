@@ -40,7 +40,7 @@ public class QuadTreeManager extends QuadTreeNode<Bounded> implements ObjectMana
 	}
 
 	@Override
-	public List<Bounded> getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
+	public List<Bounded> getBoundedsAt(int x, int y) throws IndexOutOfBoundsException {
 		return getAt(x,y);
 	}
 

@@ -44,11 +44,11 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 	}
 	
 	public boolean add(T obj_add){
-		dp("adding " + obj_add);
+//		dp("adding " + obj_add);
 		if (isLeaf && objects != null){
 			if(objects != null && objects.size() >= nMAX_UNTIL_SPLIT){
 				//create new branches
-				dp("creating new level");
+//				dp("creating new level");
 				branches = new ArrayList<QuadTreeNode<T>>(nSUB_TREES);
 				
 				//these HAVE to be correct with branchindex() !
@@ -58,37 +58,37 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 				branches.add(3,new QuadTreeNode<T>( (int)x ,(int)y ,   divX - (int)x                 ,   divY - (int)y                 ));
 				
 				//add the rest of the objects
-				dp("adding parent's objects");
-				++indentDepth;
+//				dp("adding parent's objects");
+//				++indentDepth;
 				for (T obj : objects) {
 					branches.get(branchIndex((int)obj.getX(), (int)obj.getY(), divX, divY)).add(obj);
 				}
-				--indentDepth;
-				dp("done adding parent's objects");
+//				--indentDepth;
+//				dp("done adding parent's objects");
 				isLeaf = false;
 				objects = null;
 				//add the new object
 				return add(obj_add);
 			}else{
-				dp("adding normally");
+//				dp("adding normally");
 				if (!obj_add.noClip()){//if it clips
-					dp("checking bounds");
+//					dp("checking bounds");
 					for (T obj : objects) {//check intersection
 						if (obj_add.getBounds().intersects(obj.getX(),obj.getY(),obj.getWidth(),obj.getHeight())){
-							dp("can't be there");
+//							dp("can't be there");
 							return false;
 						}
 					}
-					dp("all good");
+//					dp("all good");
 				}
 				objects.add(obj_add);
 				return true;
 			}
 		}else if (branches != null){
-			dp("I'm not a leaf... going deeper");
-			indentDepth++;
+//			dp("I'm not a leaf... going deeper");
+//			indentDepth++;
 			branches.get(branchIndex((int)obj_add.getX(), (int)obj_add.getY(), divX, divY)).add(obj_add);
-			indentDepth--;
+//			indentDepth--;
 			return true;
 		}else{
 			System.out.println("QTN: Something's wrong... I'm not a leaf or objects is null, and branches is null. " + obj_add + "wasn't added.");
@@ -96,19 +96,19 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 		}
 	}
 	
-	private static int indentDepth = 0;
+//	private static int indentDepth = 0;
 	
-	private void dp(String string) {
-		System.out.println("QOM: " + repeatchar(indentDepth, '\t') + string);
-	}
+//	private void dp(String string) {
+//		System.out.println("QOM: " + repeatchar(indentDepth, '\t') + string);
+//	}
 	
-	private String repeatchar(int n, char c){
-		String out = "";
-		for (int i = 0; i < n; i++) {
-			out += c;
-		}
-		return out;
-	}
+//	private String repeatchar(int n, char c){
+//		String out = "";
+//		for (int i = 0; i < n; i++) {
+//			out += c;
+//		}
+//		return out;
+//	}
 
 	
 	public class CanBeAtReturnVals {

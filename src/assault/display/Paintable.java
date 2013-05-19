@@ -87,7 +87,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
         //System.out.println(w+","+h);
         glBegin(GL_LINE_STRIP);
         glVertex2d(x, y);
-        glVertex2d(x, y + h);
+        glVertex2d(x - 1, y + h);//not sure why the -1 is necessary, but it fixes this corner
         glVertex2d(x + w, y + h);
         glVertex2d(x + w, y);
         glVertex2d(x, y);

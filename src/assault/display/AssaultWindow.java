@@ -121,8 +121,13 @@ public class AssaultWindow extends Container<Bounded> {
 					triedInitializing = false;
 				}
 			}
-
-			inputManager.processInput();
+			
+			try {
+				inputManager.processInput();
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+			
 			try {
 				update(getDelta());
 			}catch (Exception e){

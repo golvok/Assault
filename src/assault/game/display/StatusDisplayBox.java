@@ -49,7 +49,7 @@ public class StatusDisplayBox extends Paintable {
 			setColour(ReadableColor.BLACK);
 			drawRect(1, 1, getWidth(), (int) Math.floor((double) getHeight() / 3d));
 			setColour(ReadableColor.RED);
-			fillRect(1, 1, (int) (Math.floor((double) getWidth() * ((double) object.getHealth() / (double) object.getMaxHealth()) - 1d)), (int) (Math.floor((double) getHeight() / 3d - 1d)));
+			fillRect(1, 2, (int) (Math.floor((double) getWidth() * ((double) object.getHealth() / (double) object.getMaxHealth()) - 1d)), (int) (Math.floor((double) getHeight() / 3d - 1d)));
 		}
 		//System.out.println("ASDB_PAINT");
 	}

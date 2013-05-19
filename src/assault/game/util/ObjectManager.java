@@ -69,7 +69,7 @@ public interface ObjectManager extends Disposable {
 	 * @return the objects at the given point. 
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
-	public abstract List<Bounded> getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException;
+	public abstract List<Bounded> getBoundedsAt(int x, int y) throws IndexOutOfBoundsException;
 
 	/**
 	 * using AMP co-ords, tests if <code>b</code> can exist at

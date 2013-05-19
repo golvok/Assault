@@ -58,8 +58,8 @@ public class DualObjectManager implements ObjectManager {
 	}
 
 	@Override
-	public List<Bounded> getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
-		return compare(dom.getBoundedAtPixel(x, y) ,sub.getBoundedAtPixel(x, y) ,"getBoundedAtPixel");
+	public List<Bounded> getBoundedsAt(int x, int y) throws IndexOutOfBoundsException {
+		return compare(dom.getBoundedsAt(x, y) ,sub.getBoundedsAt(x, y) ,"getBoundedAtPixel");
 	}
 
 	@Override

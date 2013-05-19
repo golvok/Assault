@@ -323,20 +323,21 @@ public class GridManager implements ObjectManager {
 	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
 	 */
 	@Override
-	public Bounded getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
+	public List<Bounded> getBoundedsAt(int x, int y) throws IndexOutOfBoundsException {
+		List<Bounded> ret = new ArrayList<>();
 		synchronized (editlock) {
 			try{
 				List<Bounded> cell = getGridCellAtGrid(convCoordToGrid(x), convCoordToGrid(y));
 
-				for (Bounded go : cell) {
-					if (go.getBounds().contains(x, y)) {
-						return go;
+				for (Bounded b : cell) {
+					if (b.getBounds().contains(x, y)) {
+						ret.add(b);
+//						System.out.println("found " + b);
 					}
 				}
 			} catch (IndexOutOfBoundsException ex){
-				return null;
 			}
-			return null;
+			return ret;
 		}
 	}
 

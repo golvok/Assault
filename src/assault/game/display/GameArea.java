@@ -490,14 +490,15 @@ public class GameArea extends InputRegistarContainer {
 		mouseThreadBlocker.cancelWaitingThread();
 	}
 
-	public List<AObject> getAoAt(int x, int y) {
+	public List<AObject> getObjectsAt(int x, int y) {
 		if (getOM() != null) {
 			try {
-				List<Bounded> bs = getOM().getBoundedAtPixel(x, y);
+				List<Bounded> bs = getOM().getBoundedsAt(x, y);
 				ArrayList<AObject> ret = new ArrayList<>();
 				for (Bounded b : bs) {
-					if (bs instanceof AObject && b.getBounds().contains(x, y)) {
+					if (b instanceof AObject && b.getBounds().contains(x, y)) {
 						ret.add((AObject)b);
+						
 					}					
 				}
 				return ret;
@@ -507,18 +508,29 @@ public class GameArea extends InputRegistarContainer {
 		}
 		return null;
 	}
+	
+	public AObject getTopAoAt(int x, int y){
+		List<AObject> aos = getObjectsAt(x, y);
+		if(aos.size() > 0){
+			return aos.get(0);
+		}else{
+			return null;
+		}
+	}
 
 	//====================Mouse Listeners========================
 
 	@Override
 	public void accept(MouseEvent me) {
 //		System.out.println("GM_ACCEPT " + me);
-		List<AObject> aos = getAoAt(me.getX(), me.getY());
-		AObject topAo = aos.get(0);
+		List<AObject> aos = getObjectsAt(me.getX(), me.getY());		
 		
-//		System.out.println("aimed at " + topAo);
-		if (topAo != null && topAo instanceof Selectable) {
-			InputEventUtil.passAndTranslateMouseEventTo(topAo,me);
+		if (aos.size() > 0){ 
+			AObject topAo = aos.get(0);
+//			System.out.println("aimed at " + topAo);
+			if(topAo instanceof Selectable) {
+				InputEventUtil.passAndTranslateMouseEventTo(topAo,me);
+			}
 		} else if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
 			notifyOfMousePress(me.getX(), me.getY(), me.getButton(), me.getModifiers());
 		}
@@ -527,16 +539,18 @@ public class GameArea extends InputRegistarContainer {
 	private Selectable lastEntered;
 
 	public void mouseMoved(MouseEvent e) {
-		List<AObject> aos = getAoAt(e.getX(), e.getY());
-		AObject topAo = aos.get(0);
+		List<AObject> aos = getObjectsAt(e.getX(), e.getY());
 		
-		if (topAo != null && topAo instanceof Selectable) {
-			if (topAo != lastEntered) {
-				if (lastEntered != null) {
-					lastEntered.mouseExited(e);
+		if (aos.size() > 0) {
+			AObject topAo = aos.get(0);
+			if(topAo instanceof Selectable) {
+				if (topAo != lastEntered) {
+					if (lastEntered != null) {
+						lastEntered.mouseExited(e);
+					}
+					lastEntered = (Selectable) topAo;
+					((Selectable) topAo).mouseEntered(e);
 				}
-				lastEntered = (Selectable) topAo;
-				((Selectable) topAo).mouseEntered(e);
 			}
 		} else if (lastEntered != null) {
 			lastEntered.mouseExited(e);
