@@ -123,7 +123,11 @@ public class AssaultWindow extends Container<Bounded> {
 			}
 
 			inputManager.processInput();
-			update(getDelta());
+			try {
+				update(getDelta());
+			}catch (Exception e){
+				e.printStackTrace();
+			}
 			renderGraphics();
 			/*synchronized (this) {
 			try {

@@ -26,7 +26,8 @@ public class Weapon extends Controllable{
 	}
 
 	public Weapon(GameArea g, double x, double y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
-		super(g, x - src.getRotatePointX(), y - src.getRotatePointY(), src,1, ownerPlayer);
+		super(g, x, y, src,1, ownerPlayer);
+//		System.out.println("creating weapon: " + this);
 		doNotPaintCross();
 		doNotShowStatus();
 		isProjectileWeapon = src.isProjectile();

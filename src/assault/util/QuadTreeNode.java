@@ -9,6 +9,8 @@ import assault.display.Container;
 
 
 public class QuadTreeNode<T extends Bounded> extends Container<T>{
+	//TODO this whole thing needs to be made to work with rectangles...
+	
 	
 	public final static int nMAX_UNTIL_SPLIT = 10;
 	public final static int nSUB_TREES = 4; //please don't change this.
@@ -108,6 +110,26 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 		return out;
 	}
 
+	
+	public class CanBeAtReturnVals {
+		public static final int RETURN_VAL_LENGTH = 2;
+		//indices
+		public static final int CAN_IT_BOOL = 0;
+		public static final int CONTAINER_NODE = 1;
+	}
+	
+	public Object[] canBeAt(int x, int y, T t){
+		Object[] ret = new Object[CanBeAtReturnVals.RETURN_VAL_LENGTH];
+		QuadTreeNode<T> container = getLeaf(x,y);
+		ret[CanBeAtReturnVals.CONTAINER_NODE] = container;
+		ret[CanBeAtReturnVals.CAN_IT_BOOL] = container.getAt(x,y).size() != 0;
+		return ret;
+	}
+	
+	public boolean canBeAt_bool(int x, int y, T t){
+		return (boolean)canBeAt(x, y, t)[QuadTreeNode.CanBeAtReturnVals.CAN_IT_BOOL];
+	}
+	
 	public boolean remove(T obj){
 		if(obj == null){
 			return false;
@@ -118,6 +140,28 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 		}else{
 			System.out.println("QTN: objects was null and I'm not a leaf. " + obj + " wasn't removed.");
 			return false;
+		}
+	}
+	
+	public QuadTreeNode<T> getLeaf(int x, int y){
+		if (isLeaf){
+			return this;
+		}else{
+			return getBranch(this, x, y).getLeaf(x, y);
+		}
+	}
+	
+	public List<T> getAt(int x, int y){
+		if (isLeaf){
+			ArrayList<T> ret = new ArrayList<>();
+			for (T t : objects) {
+				if (t.getBounds().contains(x,y)){
+					ret.add(t);				
+				}
+			}
+			return ret;
+		}else{
+			return getBranch(this, x, y).getAt(x, y);
 		}
 	}
 	
@@ -137,24 +181,27 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 	}
 	
 	public QuadTreeNode<T> getContainer(T obj){
-		if (!isLeaf){
-			return branches.get(branchIndex(obj, divX, divY)).getContainer(obj);
-		}else{
+		if (isLeaf){
 			return this;
+		}else{
+			return branches.get(branchIndex(obj, divX, divY)).getContainer(obj);
 		}
 	}
+
+	List<QuadTreeNode<T>> getBranches(){
+		return branches;
+	}
 	
-	public T get(int x, int y){
-		if (isLeaf){
-			for (T obj : objects) {
-				if (obj.getBounds().contains(x,y)){
-					return obj;
-				}
-			}
-			return null;
-		} else {//not a leaf
-			return branches.get(branchIndex(x, y, divX, divY)).get(x, y);
-		}
+	public int getDivX() {
+		return divX;
+	}
+
+	public int getDivY() {
+		return divY;
+	}
+
+	public static final <Q extends Bounded> QuadTreeNode<Q> getBranch(QuadTreeNode<Q> parent, int x, int y){
+		return parent.getBranches().get(branchIndex(x, y, parent.getDivX(), parent.getDivY()));
 	}
 	
 	public static final int branchIndex(Bounded obj, int divX, int divY){

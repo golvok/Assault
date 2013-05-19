@@ -41,8 +41,16 @@ public abstract class Controllable extends Selectable implements Relocatable {
 
 	@Override
 	public void setLocation(Point p) {
-		if(getGA().getOM().notifyOfImminentMovement(this, p)){
-			super.setLocation(p);
+		super.setLocation(p);
+	}
+	
+	@Override
+	public boolean setLocation_safe(Point p) {
+		if (getGA().getOM().notifyOfImminentMovement(this, p)){
+			setLocation(p);
+			return true;
+		}else{
+			return false;
 		}
 	}
 

@@ -37,4 +37,13 @@ public interface Relocatable extends PathFindingBounded{
     void setOnPath(boolean[][] onPath);
 
 	public PathingManager getPathingManger();
+
+	/**
+	 * set the location in a safe way, ie. if there is some sort
+	 * of object managing entity, then check with it to see if 
+	 * the new location is valid.
+	 * @param add
+	 * @return true if the new location is safe, and the set was successful. False otherwise.
+	 */
+	boolean setLocation_safe(Point add);
 }

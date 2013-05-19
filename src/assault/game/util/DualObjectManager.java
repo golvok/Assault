@@ -1,5 +1,7 @@
 package assault.game.util;
 
+import java.util.List;
+
 import assault.display.Bounded;
 import assault.util.Point;
 
@@ -56,7 +58,7 @@ public class DualObjectManager implements ObjectManager {
 	}
 
 	@Override
-	public Bounded getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
+	public List<Bounded> getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
 		return compare(dom.getBoundedAtPixel(x, y) ,sub.getBoundedAtPixel(x, y) ,"getBoundedAtPixel");
 	}
 
@@ -76,7 +78,7 @@ public class DualObjectManager implements ObjectManager {
 	}
 
 	private <T> T compare(T doms, T subs,String thing){
-		if (doms != subs){
+		if (!doms.equals(subs)){
 			System.out.println("The OMs disagree on "+thing+": sub ("+sub.getClass().getCanonicalName()+") gave "+subs+" and dom gave "+doms);
 		}
 		return doms;

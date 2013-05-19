@@ -490,13 +490,17 @@ public class GameArea extends InputRegistarContainer {
 		mouseThreadBlocker.cancelWaitingThread();
 	}
 
-	public AObject getAoAt(int x, int y) {
+	public List<AObject> getAoAt(int x, int y) {
 		if (getOM() != null) {
 			try {
-				Bounded go = getOM().getBoundedAtPixel(x, y);
-				if (go instanceof AObject && go.getBounds().contains(x, y)) {
-					return ((AObject) go);
+				List<Bounded> bs = getOM().getBoundedAtPixel(x, y);
+				ArrayList<AObject> ret = new ArrayList<>();
+				for (Bounded b : bs) {
+					if (bs instanceof AObject && b.getBounds().contains(x, y)) {
+						ret.add((AObject)b);
+					}					
 				}
+				return ret;
 			} catch (ArrayIndexOutOfBoundsException e) {
 				return null;
 			}
@@ -509,10 +513,12 @@ public class GameArea extends InputRegistarContainer {
 	@Override
 	public void accept(MouseEvent me) {
 //		System.out.println("GM_ACCEPT " + me);
-		AObject ao = getAoAt(me.getX(), me.getY());
-//		System.out.println("aimed at " + ao);
-		if (ao != null && ao instanceof Selectable) {
-			InputEventUtil.passAndTranslateMouseEventTo(ao,me);
+		List<AObject> aos = getAoAt(me.getX(), me.getY());
+		AObject topAo = aos.get(0);
+		
+//		System.out.println("aimed at " + topAo);
+		if (topAo != null && topAo instanceof Selectable) {
+			InputEventUtil.passAndTranslateMouseEventTo(topAo,me);
 		} else if (me.getNewState() == MouseEvent.BUTTON_PRESSED) {
 			notifyOfMousePress(me.getX(), me.getY(), me.getButton(), me.getModifiers());
 		}
@@ -521,14 +527,16 @@ public class GameArea extends InputRegistarContainer {
 	private Selectable lastEntered;
 
 	public void mouseMoved(MouseEvent e) {
-		AObject ao = getAoAt(e.getX(), e.getY());
-		if (ao != null && ao instanceof Selectable) {
-			if (ao != lastEntered) {
+		List<AObject> aos = getAoAt(e.getX(), e.getY());
+		AObject topAo = aos.get(0);
+		
+		if (topAo != null && topAo instanceof Selectable) {
+			if (topAo != lastEntered) {
 				if (lastEntered != null) {
 					lastEntered.mouseExited(e);
 				}
-				lastEntered = (Selectable) ao;
-				((Selectable) ao).mouseEntered(e);
+				lastEntered = (Selectable) topAo;
+				((Selectable) topAo).mouseEntered(e);
 			}
 		} else if (lastEntered != null) {
 			lastEntered.mouseExited(e);

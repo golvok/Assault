@@ -1,5 +1,7 @@
 package assault.game.util;
 
+import java.util.List;
+
 import assault.display.Bounded;
 import assault.game.display.GameArea;
 import assault.game.util.terrain.TerrainGenerator;
@@ -28,29 +30,23 @@ public class QuadTreeManager extends QuadTreeNode<Bounded> implements ObjectMana
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
+		//TODO implement this properly
+		super.dispose();
 	}
-
-//	@Override
-//	public boolean isDisposed() {
-//        return disposed;
-//	}
 
 	@Override
 	public boolean isPixelEmpty(int x, int y) throws IndexOutOfBoundsException {
-		return get(x, y) == null;
+		return getAt(x, y).size() > 0;
 	}
 
 	@Override
-	public Bounded getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
-		return get(x,y);
+	public List<Bounded> getBoundedAtPixel(int x, int y) throws IndexOutOfBoundsException {
+		return getAt(x,y);
 	}
 
 	@Override
-	public boolean canBeAtPixel(double x, double y, Bounded go) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean canBeAtPixel(double x, double y, Bounded b) {
+		return canBeAt_bool((int)x, (int)y, b);
 	}
 
 	@Override
