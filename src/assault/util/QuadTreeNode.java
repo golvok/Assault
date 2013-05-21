@@ -111,23 +111,16 @@ public class QuadTreeNode<T extends Bounded> extends Container<T>{
 //	}
 
 	
-	public class CanBeAtReturnVals {
-		public static final int RETURN_VAL_LENGTH = 2;
-		//indices
-		public static final int CAN_IT_BOOL = 0;
-		public static final int CONTAINER_NODE = 1;
+	public class CanBeAtVals {
+		public boolean canItBeThere = false;
+		public QuadTreeNode<T> deepestLeaf = null;
 	}
 	
-	public Object[] canBeAt(int x, int y, T t){
-		Object[] ret = new Object[CanBeAtReturnVals.RETURN_VAL_LENGTH];
-		QuadTreeNode<T> container = getLeaf(x,y);
-		ret[CanBeAtReturnVals.CONTAINER_NODE] = container;
-		ret[CanBeAtReturnVals.CAN_IT_BOOL] = container.getAt(x,y).size() != 0;
+	public CanBeAtVals canBeAt(int x, int y, T t){
+		CanBeAtVals ret = new CanBeAtVals();
+		ret.deepestLeaf = getLeaf(x,y);
+		ret.canItBeThere = ret.deepestLeaf.getAt(x,y).size() != 0;
 		return ret;
-	}
-	
-	public boolean canBeAt_bool(int x, int y, T t){
-		return (boolean)canBeAt(x, y, t)[QuadTreeNode.CanBeAtReturnVals.CAN_IT_BOOL];
 	}
 	
 	public boolean remove(T obj){

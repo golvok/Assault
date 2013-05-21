@@ -46,7 +46,7 @@ public class QuadTreeManager extends QuadTreeNode<Bounded> implements ObjectMana
 
 	@Override
 	public boolean canBeAtPixel(double x, double y, Bounded b) {
-		return canBeAt_bool((int)x, (int)y, b);
+		return canBeAt((int)x, (int)y, b).canItBeThere;
 	}
 
 	@Override

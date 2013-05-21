@@ -126,8 +126,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
         glBegin(GL_LINES);
         double[] points = new double[6];
         PathIterator pi = pol.getPathIterator(null);
-        loop:
-        {
+        loop: {
             while (true) {
                 switch (pi.currentSegment(points)) {
                     case PathIterator.SEG_MOVETO:
