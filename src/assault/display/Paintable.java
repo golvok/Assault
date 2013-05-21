@@ -87,7 +87,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
         //System.out.println(w+","+h);
         glBegin(GL_LINE_STRIP);
         glVertex2d(x, y);
-        glVertex2d(x - 1, y + h);//not sure why the -1 is necessary, but it fixes this corner
+        glVertex2d(x , y + h);
         glVertex2d(x + w, y + h);
         glVertex2d(x + w, y);
         glVertex2d(x, y);
@@ -96,13 +96,13 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
     }
 
     /**
-     * the APaintable is <i>contained</i> in the box this function draws
+     * draws the inclusive edges of the Paintable
      *
      * @param ap
      */
     public static void drawBoundingBox(Paintable ap) {
-        drawRect(0, 0, ap.getWidth(), ap.getHeight());
-//        System.out.println("bounding box of: " + ap);
+        drawRect(1, 0, ap.getWidth() - 1, ap.getHeight() - 1);
+//		System.out.println("bounding box of: " + ap);
     }
 
     public static void fillRect(double x, double y, double w, double h) {
