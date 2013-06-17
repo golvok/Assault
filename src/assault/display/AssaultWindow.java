@@ -151,7 +151,7 @@ public class AssaultWindow extends Container<Bounded> {
 
     @Override
 	public void updateSelf(int delta) {
-		Display.setTitle("AssaultWindow @ " + ((int) (lastFps * 100d)) / 100d + " fps");
+		Display.setTitle(String.format("AssaultWindow @ %.2f fps", lastFps));
 		updateFps(delta);
         super.updateSelf(delta);
 	}
@@ -161,7 +161,7 @@ public class AssaultWindow extends Container<Bounded> {
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		draw();
+		adjustMatrixAndDrawSelf();
 	}
 
 	@Override

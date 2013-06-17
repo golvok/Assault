@@ -22,7 +22,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
         this.visible = true;
     }
 
-    public final void draw() {
+    public final void adjustMatrixAndDrawSelf() {
         if (isVisible()) {
             glPushMatrix();
             glTranslated(x, y, 0);

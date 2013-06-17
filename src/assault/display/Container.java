@@ -40,7 +40,7 @@ public class Container<B extends Bounded> extends Paintable{
 		synchronized (children) {
 			for (B child : children) {
 				if (child instanceof Paintable) {
-					((Paintable)child).draw();
+					((Paintable)child).adjustMatrixAndDrawSelf();
 				}
 			}
 		}
@@ -62,7 +62,7 @@ public class Container<B extends Bounded> extends Paintable{
 		}
     }
 
-	public void addChildren(ArrayList<? extends B> aps) {
+	public void addChildren(List<? extends B> aps) {
 		if (aps != null) {
 			for (B ab : aps) {
 				addChild(ab);
@@ -99,5 +99,9 @@ public class Container<B extends Bounded> extends Paintable{
 			removeAllChildren();
 		}
 		super.dispose();
+	}
+	
+	public List<B> getChildren(){
+		return Collections.unmodifiableList(children);
 	}
 }
