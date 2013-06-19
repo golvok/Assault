@@ -47,11 +47,34 @@ public class IndentingDebugPrinter {
 		}
 	}
 	
-	public static void dp(String line, LineTag... lineTags) {
+	/**
+	 * for optimisation. ie prevent implicitly creating string buffers and the like unless actually printing.
+	 */
+	public static abstract class Line{
+		public abstract String l();
+		@Override
+		public String toString() {
+			return l();
+		}
+	}
+	
+	public static void dp(final String line, LineTag... lineTags) {
+		dp(new Line() {
+			@Override
+			public String l() {
+				return line;
+			}
+		},lineTags);
+	}
+
+	/**
+	 * optimised version. The string should never be constructed unless it actually prints
+	 */
+	public static void dp(Line line, LineTag... lineTags) {
 		LineTag firstEnabledLineTag = getFirstEnabledLineTag(lineTags);
 		if(firstEnabledLineTag != null){
 			String prefix = firstEnabledLineTag.prefixTag + ": " + repeatchar(firstEnabledLineTag.indentLevel.nIndents * 2, ' ');
-			System.out.println(prefix + line.replace("\n", '\n' + prefix));
+			System.out.println(prefix + line.toString().replace("\n", '\n' + prefix));
 		}
 	}
 	
