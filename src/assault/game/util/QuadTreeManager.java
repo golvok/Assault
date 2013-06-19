@@ -3,6 +3,7 @@ package assault.game.util;
 import java.util.List;
 
 import assault.display.Bounded;
+import assault.display.Bounded_Impl;
 import assault.display.Container;
 import assault.game.display.GameArea;
 import assault.game.util.terrain.TerrainGenerator;
@@ -21,10 +22,21 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 	}
 
 	@Override
-	public boolean notifyOfImminentMovement(Bounded willMove, Point newPt) {
-		// TODO optimise
+	public boolean notifyOfImminentMovement(final Bounded willMove, Point newPt) {
+		// TODO make this do this properly
+		Bounded newRegion = new Bounded_Impl(newPt.x, newPt.y, willMove.getWidth(), willMove.getHeight()){
+			@Override
+			public String toString() {
+				return super.toString() + " (" + willMove + ')';
+			}
+		};
+		List<Bounded> allthatClipWithNewRegion = rootNode.getAllClipping(newRegion); 
+		if(allthatClipWithNewRegion.size() > 1 || !allthatClipWithNewRegion.get(0).equals(willMove)){
+			return false;
+		}
+		
 		remove(willMove);
-		return add(willMove);
+		return rootNode.addAs(newRegion,willMove).isSuccess();
 	}
 
 	@Override
@@ -39,7 +51,6 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 	
 	@Override
 	public void dispose() {
-		//TODO implement this properly
 		super.dispose();
 	}
 
@@ -55,7 +66,7 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 
 	@Override
 	public boolean canBeAtPixel(double x, double y, Bounded b) {
-		return rootNode.canBeAt((int)x, (int)y, b).canItBeThere;
+		return rootNode.canBeAt((int)x, (int)y, b);
 	}
 
 	@Override
@@ -70,7 +81,7 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 
 	@Override
 	public boolean add(Bounded b) {
-		return rootNode.add(b);
+		return rootNode.add(b).isSuccess();
 	}
 
 	@Override

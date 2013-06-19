@@ -125,4 +125,22 @@ public class Bounded_Impl implements Bounded{
 		return noClip;
 	}
 
+	@Override
+	public boolean clipsWith(Bounded test) {
+		if(noClip() || test.noClip()){
+			return false;
+		}else{
+			return getBounds().intersects(test.getX(),test.getY(),test.getWidth(),test.getHeight());
+		}
+	}
+	
+	@Override
+	public String toString() {
+		String dims = "x = " + getX() + ", y = " + getY() + ", w = " + getWidth() + ", h = " + getHeight() + " #" + hashCode();
+		if (getClass() == Bounded_Impl.class){
+			return getClass().getSimpleName() + ", " + dims;
+		}
+		return dims;
+	}
+	
 }

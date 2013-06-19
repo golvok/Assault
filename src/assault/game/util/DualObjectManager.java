@@ -79,7 +79,7 @@ public class DualObjectManager implements ObjectManager {
 
 	private <T> T compare(T doms, T subs,String thing){
 		if (!doms.equals(subs)){
-			System.out.println("The OMs disagree on "+thing+": sub ("+sub.getClass().getCanonicalName()+") gave "+subs+" and dom gave "+doms);
+			System.out.println("The OMs disagree on "+thing+": sub ("+sub.getClass().getSimpleName()+") gave "+subs+" and dom gave "+doms);
 		}
 		return doms;
 	}

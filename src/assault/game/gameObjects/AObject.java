@@ -205,7 +205,7 @@ public class AObject extends Container<Paintable> implements Bounded {
 
 	@Override
 	public String toString() {
-		return (getSrc() != null ? getSrc().getQualifiedName() : getClass().getSimpleName()) + ", x = " + getX() + ", y = " + getY() + ", w = " + getWidth() + ", h = " + getHeight() + " #" + hashCode();
+		return (getSrc() != null ? getSrc().getQualifiedName() : getClass().getSimpleName()) + ", " + super.toString();
 	}
 
 	//====================Mouse Listeners========================

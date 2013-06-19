@@ -42,5 +42,7 @@ public interface Bounded {
 	public abstract void setLocation(double x, double y);
 	
 	public abstract boolean noClip();
+	
+	public abstract boolean clipsWith(Bounded test);
 
 }

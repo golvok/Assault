@@ -9,20 +9,26 @@ import java.util.List;
 import assault.display.Bounded;
 import assault.display.Container;
 import assault.util.IndentingDebugPrinter.IndentLevel;
+import assault.util.IndentingDebugPrinter.Line;
 import assault.util.IndentingDebugPrinter.LineTag;
 import assault.util.IndentingDebugPrinter.PrefixTag;
 
 
 public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
-	//TODO this whole thing needs to be made to work with rectangles...
 	
 	private static final PrefixTag CLASS_TAG = new PrefixTag("QTN");
+	
 	private static final IndentLevel ADD_METHOD_INDENT_LEVEL = new IndentLevel();
 	private static final LineTag ADD_TAG = new LineTag("add",CLASS_TAG,ADD_METHOD_INDENT_LEVEL);
 	private static final LineTag NUM_OBJ_TAG = new LineTag("num_obj",CLASS_TAG,ADD_METHOD_INDENT_LEVEL);
+
+	private static final IndentLevel GET_AT_METHOD_INDENT = new IndentLevel();
+	public static final LineTag GET_AT_TAG = new LineTag("getAt", CLASS_TAG, GET_AT_METHOD_INDENT);
 	
 	static {
-		ADD_TAG.enabled = false;
+//		ADD_TAG.enabled = false;
+//		NUM_OBJ_TAG.enabled = false;
+//		GET_AT_TAG.enabled = false;
 	}
 	
 	public final static int nMAX_UNTIL_SPLIT = 1;
@@ -31,10 +37,9 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	private int divX;
 	private int divY;
 	
-	private boolean isLeaf = true;
 	private List<QuadTreeNode<T>> branches = null;
 	
-	private List<T> objects = Collections.synchronizedList(new ArrayList<T>(nMAX_UNTIL_SPLIT));
+	private List<T> objects = new ArrayList<T>(nMAX_UNTIL_SPLIT);
 	
 	
 	public QuadTreeNode(int x, int y, int width, int height){
@@ -57,12 +62,50 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 		System.out.println("created new quadtreenode: " + this);
 	}
 	
-	public boolean add(T obj_add){
-		dp("adding " + obj_add, ADD_TAG);
-		if (isLeaf && objects != null){
-			if(objects != null && objects.size() >= nMAX_UNTIL_SPLIT){
+	public enum AddRetVal{
+		ALL_GOOD(true),
+		WONT_FIT(false),
+		CANT_BE_THERE(false),
+		;
+		private boolean success;
+		private AddRetVal(boolean success) {
+			this.success = success;
+		}
+		public boolean isSuccess() {
+			return success;
+		}
+	}
+	
+	public AddRetVal add(T t){
+		return addAs(t,t);
+	}
+
+	public AddRetVal addAs(final Bounded surrogate,T actual){
+		dp(new Line() {public String l() {return
+				"adding " + surrogate + "; " + QuadTreeNode.this;}}, ADD_TAG);
+		if (!willFit(this,surrogate)){
+			dp("wont't fit!", ADD_TAG);
+			return AddRetVal.WONT_FIT;
+		}
+		if(branches == null){//hasn't split yet
+			if(objects.size() < nMAX_UNTIL_SPLIT){
+				dp("adding normally", ADD_TAG);//ie. not too many objects.
+				if (!surrogate.noClip()){//if it clips
+					dp("checking bounds", ADD_TAG);
+					for (T obj : objects) {//check intersection
+						if (surrogate.clipsWith(obj)){
+							dp("can't be there", ADD_TAG);
+							return AddRetVal.CANT_BE_THERE;
+						}
+					}
+					dp("all good", ADD_TAG);
+				}
+				objects.add(actual);
+				return AddRetVal.ALL_GOOD;
+			}else{
 				//create new branches
-				dp("creating new level, with " + objects.size() + " + 1 objects", ADD_TAG,NUM_OBJ_TAG);
+				dp(new Line() {public String l() {return
+					"creating new level. Have " + objects.size() + " + 1 objects to add.";}},ADD_TAG,NUM_OBJ_TAG);
 				if (NUM_OBJ_TAG.enabled){
 					StringBuilder builder = new StringBuilder();
 					builder.append("current objects:\n");
@@ -71,9 +114,9 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 						builder.append('\n');
 					}
 					builder.append("and, adding:\n");
-					builder.append(obj_add);
+					builder.append(surrogate);
 					builder.append('\n');
-					dp(builder.toString(),ADD_TAG,NUM_OBJ_TAG);
+					dp(builder.toString(),NUM_OBJ_TAG);
 				}
 				branches = new ArrayList<QuadTreeNode<T>>(nSUB_TREES);
 				
@@ -87,93 +130,100 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 				
 				//add the rest of the objects
 				dp("adding parent's objects", ADD_TAG);
-				ADD_METHOD_INDENT_LEVEL.increment();
+				List<T> addedSuccessfully = new ArrayList<>(nMAX_UNTIL_SPLIT);
 				for (T obj : objects) {
-					branches.get(branchIndex((int)obj.getX(), (int)obj.getY(), divX, divY)).add(obj);
-				}
-				ADD_METHOD_INDENT_LEVEL.decrement();
-				dp("done adding parent's objects", ADD_TAG);
-				isLeaf = false;
-				objects = null;
-//				add the new object
-				return add(obj_add);
-			}else{
-				dp("adding normally", ADD_TAG);
-				if (!obj_add.noClip()){//if it clips
-					dp("checking bounds", ADD_TAG);
-					for (T obj : objects) {//check intersection
-						if (obj_add.getBounds().intersects(obj.getX(),obj.getY(),obj.getWidth(),obj.getHeight())){
-							dp("can't be there", ADD_TAG);
-							return false;
-						}
+					ADD_METHOD_INDENT_LEVEL.increment();
+					AddRetVal branchAddResult = branches.get(branchIndex((int)obj.getX(), (int)obj.getY(), divX, divY)).add(obj);
+					ADD_METHOD_INDENT_LEVEL.decrement();
+					if(branchAddResult.isSuccess() || branchAddResult == AddRetVal.CANT_BE_THERE){//will leave the ones that won't fit.
+						addedSuccessfully.add(obj);
 					}
-					dp("all good", ADD_TAG);
 				}
-				objects.add(obj_add);
-				return true;
+				objects.removeAll(addedSuccessfully);
+				dp("done adding parent's objects", ADD_TAG);
 			}
-		}else if (branches != null){
-			dp("I'm not a leaf... going deeper", ADD_TAG);
-			ADD_METHOD_INDENT_LEVEL.increment();
-			branches.get(branchIndex((int)obj_add.getX(), (int)obj_add.getY(), divX, divY)).add(obj_add);
-			ADD_METHOD_INDENT_LEVEL.decrement();
-			return true;
-		}else{
-			System.out.println("QTN: Something's wrong... I'm not a leaf or objects is null, and branches is null. " + obj_add + "wasn't added.");
-			return false;
 		}
+		
+		ADD_METHOD_INDENT_LEVEL.increment();
+		AddRetVal branchAddResult = branches.get(branchIndex((int)surrogate.getX(), (int)surrogate.getY(), divX, divY)).addAs(surrogate,actual);
+		ADD_METHOD_INDENT_LEVEL.decrement();
+
+		if(branchAddResult == AddRetVal.WONT_FIT){
+			dp("keeping reference in parent",ADD_TAG);
+			objects.add(actual);
+			return AddRetVal.ALL_GOOD;
+		}
+		return branchAddResult;
 	}
 	
-	public class CanBeAtVals {
-		public boolean canItBeThere = false;
-		public QuadTreeNode<T> deepestLeaf = null;
-	}
-	
-	public CanBeAtVals canBeAt(int x, int y, T t){
-		CanBeAtVals ret = new CanBeAtVals();
-		ret.deepestLeaf = getLeaf(x,y);
-		ret.canItBeThere = ret.deepestLeaf.getAt(x,y).size() != 0;
-		return ret;
+	public boolean canBeAt(int x, int y, T t){
+		for (T obj : objects){
+			if(t.clipsWith(obj)){
+				return false;
+			}
+		}
+		if (branches != null){
+			if(willFitInABranch(this,t)){
+				return branches.get(branchIndex(this, t)).canBeAt(x, y, t);
+			}else{
+				return false;
+			}
+		}else{
+			return true;
+		}
 	}
 	
 	public boolean remove(T obj){
 		if(obj == null){
 			return false;
-		}else if (!isLeaf && branches != null){
-			return branches.get(branchIndex(obj, divX, divY)).remove(obj);
-		}else if (objects != null){
-			return objects.remove(obj);
+		}else if (objects.remove(obj)){
+			return true;
+		}else if (branches != null){ // && willFitInABranch(this,obj) ?
+			return getBranch(this,obj).remove(obj);
 		}else{
-			System.out.println("QTN: objects was null and I'm not a leaf. " + obj + " wasn't removed.");
+			System.out.println(CLASS_TAG + ": couldn'n find " + obj + ", so it wasn't removed.");
 			return false;
 		}
 	}
 	
-	public QuadTreeNode<T> getLeaf(int x, int y){
-		if (isLeaf){
-			return this;
-		}else{
-			return getBranch(this, x, y).getLeaf(x, y);
+	public List<T> getAt(int x, int y){
+		dp(new Line() {public String l() {return
+				QuadTreeNode.this.toString();}},GET_AT_TAG);
+		ArrayList<T> ret = new ArrayList<>();
+		for (T t : objects) {
+			if (t.getBounds().contains(x,y)){
+				ret.add(t);				
+			}
 		}
+		if (branches != null){
+			GET_AT_METHOD_INDENT.increment();
+			ret.addAll(getBranch(this, x, y).getAt(x, y));
+			GET_AT_METHOD_INDENT.decrement();
+		}
+		return ret;
 	}
 	
-	public List<T> getAt(int x, int y){
-		if (isLeaf){
-			ArrayList<T> ret = new ArrayList<>();
-			for (T t : objects) {
-				if (t.getBounds().contains(x,y)){
-					ret.add(t);				
+	public List<T> getAllClipping(Bounded region){
+		List<T> ret = new ArrayList<>();
+		if(region.clipsWith(this)){
+			for(T obj : objects){
+				if (region.clipsWith(obj)){
+					ret.add(obj);
 				}
 			}
-			return ret;
-		}else{
-			return getBranch(this, x, y).getAt(x, y);
 		}
+		if (branches != null){
+			for(QuadTreeNode<T> branch : branches){
+				ret.addAll(branch.getAllClipping(region));
+			}
+		}
+		return ret;
 	}
 	
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + " x=" + getX() + " y=" + getY() + " w=" + getWidth() + " h=" +getHeight();
+		return String.format("%s x=%f y=%f w=%f h=%f #o=%d b=%b\n  %s",
+				this.getClass().getSimpleName(),getX(),getY(),getWidth(),getHeight(),objects.size(),branches,objects.toString());
 	}
 	
 	@Override
@@ -190,7 +240,7 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	}
 	
 	public QuadTreeNode<T> getContainer(T obj){
-		if (isLeaf){
+		if (objects.contains(obj)){
 			return this;
 		}else{
 			return branches.get(branchIndex(obj, divX, divY)).getContainer(obj);
@@ -198,7 +248,7 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	}
 
 	List<QuadTreeNode<T>> getBranches(){
-		return branches;
+		return Collections.unmodifiableList(branches);
 	}
 	
 	public int getDivX() {
@@ -208,9 +258,26 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	public int getDivY() {
 		return divY;
 	}
+	
+	public static final <Q extends Bounded> boolean willFit(QuadTreeNode<Q> node, Bounded test){
+		return node.getBounds().contains(test.getX(),test.getY(),test.getWidth(),test.getHeight());
+	}
+	
+	public static final <Q extends Bounded> boolean willFitInABranch(QuadTreeNode<Q> hasBranches, Q test){
+		QuadTreeNode<Q> branch =  hasBranches.branches.get(0);
+		return branch.getWidth() >= test.getWidth() && branch.getHeight() >= test.getHeight();
+	}
 
+	public static final <Q extends Bounded> QuadTreeNode<Q> getBranch(QuadTreeNode<Q> parent, Q test){
+		return getBranch(parent, (int)test.getX(), (int)test.getY());
+	}
+	
 	public static final <Q extends Bounded> QuadTreeNode<Q> getBranch(QuadTreeNode<Q> parent, int x, int y){
 		return parent.getBranches().get(branchIndex(x, y, parent.getDivX(), parent.getDivY()));
+	}
+	
+	public static final int branchIndex(QuadTreeNode<? extends Bounded> parent, Bounded obj){
+		return branchIndex(obj, parent.getDivX(), parent.getDivY());
 	}
 	
 	public static final int branchIndex(Bounded obj, int divX, int divY){
@@ -218,17 +285,17 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	}
 	
 	/**
-	<pre>Return the index of the branch which the point will fall in.
-	defines:   
-	             y
-	       ------^------
-	       |     |     |
-	       |  1  |  0  |
- 	  divY ------------> x
- 	       |  3  |  2  |
- 	       |     |     |
- 	       ------|------
- 	           divX </pre>
+	*<pre>Return the index of the branch which the point will fall in.
+	*defines:   
+	*           y
+	*           ^-----------+
+	*           |     |     |
+	*           |  1  |  0  |
+ 	*      divY-+-----+-----|
+ 	*           |  3  |  2  |
+ 	*           |     |     |
+ 	*           o-----|-----+-> x
+ 	*               divX </pre>
 	**/
 	public static final int branchIndex(int x, int y, int divX, int divY){
 		//the creation of the sub nodes should match this always.

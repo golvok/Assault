@@ -34,6 +34,7 @@ import assault.input.InputEventUtil;
 import assault.input.KeyboardEvent;
 import assault.input.MouseEvent;
 import assault.util.Point;
+import assault.util.QuadTreeNode;
 import assault.util.ThreadBlocker;
 
 /**
@@ -523,7 +524,13 @@ public class GameArea extends InputRegistarContainer {
 	@Override
 	public void accept(MouseEvent me) {
 //		System.out.println("GM_ACCEPT " + me);
+		if(me.getNewState() == MouseEvent.BUTTON_RELEASED){
+			QuadTreeNode.GET_AT_TAG.enabled = false;
+		}
 		List<AObject> aos = getObjectsAt(me.getX(), me.getY());		
+		if(me.getNewState() == MouseEvent.BUTTON_RELEASED){
+			QuadTreeNode.GET_AT_TAG.enabled = true;
+		}
 		
 		if (aos.size() > 0){ 
 			AObject topAo = aos.get(0);
