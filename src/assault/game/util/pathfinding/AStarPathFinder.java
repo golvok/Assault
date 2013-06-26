@@ -59,7 +59,7 @@ public class AStarPathFinder extends RawPathFinder {
         //g - the length of the path from the start to the point
         //f = h + g
 		
-        double h = calcH(destX, sx, destY, sy);
+        float h = (float)calcH(destX, sx, destY, sy);
 
         AStarGridPoint end = new AStarGridPoint(destX, destY);
         AStarGridPoint start = new AStarGridPoint(sx, sy, 0, h);//startx,starty, g(0 at this point), h
@@ -91,7 +91,7 @@ public class AStarPathFinder extends RawPathFinder {
         openSet.add(start);
         AStarGridPoint lowF;
         //used for the creation of the neighbours
-        double neighNewG;
+        float neighNewG;
         boolean newGIsBetter;
         int nxOff;//offset
         int nyOff;
@@ -176,7 +176,7 @@ public class AStarPathFinder extends RawPathFinder {
                             cameFrom[neigh.getX()][neigh.getY()] = lowF;
                             neigh.setG(neighNewG);
                             //neigh.setH(calcH(neigh, end));
-                            neigh.setH(calcHWithVectorCross(start, end, neigh));
+                            neigh.setH((float)calcHWithVectorCross(start, end, neigh));
                             //System.out.println("new h = "+neigh.h);
                             neigh.setF(neigh.getG() + neigh.getH());
                             //System.out.println("new f = "+neigh.getF());
@@ -197,11 +197,11 @@ public class AStarPathFinder extends RawPathFinder {
         return null;
     }
 
-    private double gBetweenNeighs(AStarGridPoint start, AStarGridPoint neigh) {
+    private float gBetweenNeighs(AStarGridPoint start, AStarGridPoint neigh) {
         if (start.getX() == neigh.getX() || start.getY() == neigh.getY()) {
             return 1;
         } else {
-        	return 1.4142135623730952;//approx sqrt(2) + 0.0000000000000001
+        	return (float)1.4142135623730952;//approx sqrt(2) + 0.0000000000000001
         }
     }
 

@@ -40,7 +40,7 @@ public class AObject extends Container<Paintable> implements Bounded {
 	private AssaultWindow aw;
 //	private Image miniIcon = null;
 
-	public AObject(GameArea g, double x, double y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
+	public AObject(GameArea g, float x, float y, ObjectResourceHolder src, int health, Player owner) throws ResourceException {
 		this(g, x, y, src.getWidth(), src.getHeight(), health, src.getMaxHealth(), src.getMiniIcon(), src.getBaseImage(owner), owner);
 		if (!src.isValid()) {
 			throw new ResourceException("supplied resource holder for new object (" + src.getQualifiedName() + ") is invalid!");
@@ -48,26 +48,26 @@ public class AObject extends Container<Paintable> implements Bounded {
 		this.src = src;
 	}
 
-	public AObject(GameArea g, double x, double y, ObjectResourceHolder src, Player owner) throws ResourceException {
+	public AObject(GameArea g, float x, float y, ObjectResourceHolder src, Player owner) throws ResourceException {
 		this(g, x, y, src, src.getMaxHealth(), owner);
 	}
 
-	public AObject(GameArea g, double x, double y, double width, double height, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, float x, float y, float width, float height, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, width, height, maxHealth, maxHealth, miniIcon, naturalImage, owner);
 	}
 
-	public AObject(GameArea g, double x, double y, double width, double height, int health, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, float x, float y, float width, float height, int health, int maxHealth, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, width, height, miniIcon, naturalImage, owner);
 		invincible = false;
 		setMaxHealth(maxHealth);
 		setHealth(health);
 	}
 
-	public AObject(GameArea g, double x, double y, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, float x, float y, Image miniIcon, Image naturalImage, Player owner) {
 		this(g, x, y, 0, 0, miniIcon, naturalImage, owner);
 	}
 
-	public AObject(GameArea g, double x, double y, double width, double height, Image miniIcon, Image naturalImage, Player owner) {
+	public AObject(GameArea g, float x, float y, float width, float height, Image miniIcon, Image naturalImage, Player owner) {
 		super(x, y, width, height, 2);
 		setOwner(owner);
 		ga = g;

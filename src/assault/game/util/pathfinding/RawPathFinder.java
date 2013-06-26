@@ -1,4 +1,3 @@
-
 package assault.game.util.pathfinding;
 
 import assault.game.util.GridManager;
@@ -7,7 +6,7 @@ import assault.util.Ptr;
 
 /**
  *
- * @author 088241930
+ * @author Matthew Walker
  */
 public abstract class RawPathFinder {
 

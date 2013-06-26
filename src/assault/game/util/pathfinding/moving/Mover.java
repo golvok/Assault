@@ -30,9 +30,9 @@ public class Mover {
     	//the checks arent enough, one time path.peek was null after it was checked
         if (path != null && path.peek() != null){
 			//the speed is given per unit second
-            double deltaDistance = delta*target.getMovementSpeed()/1000d;
+            float deltaDistance = delta*target.getMovementSpeed()/1000f;
             while (deltaDistance > 0 && path.peek()!= null){
-                double distanceToNextPoint = distance(target.getLocation(),path.peek());
+                float distanceToNextPoint = distancef(target.getLocation(),path.peek());
                 if (deltaDistance - distanceToNextPoint >= 0){
                     if (target.setLocation_safe(path.peek())){
                     	path.pop();
@@ -50,7 +50,7 @@ public class Mover {
         }
     }
 
-    public void moveBy(double x, double y) {
+    public void moveBy(float x, float y) {
         moveTo(target.getX() + x, target.getY() + y);
     }
 
@@ -58,7 +58,7 @@ public class Mover {
 		target.getPathingManger().findPath(target, (int)p.getX(), (int)p.getY(),path,true,true);
     }
 
-    public void moveTo(double x, double y) {
+    public void moveTo(float x, float y) {
         moveTo(new Point(x, y));
     }
 

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.lwjgl.util.Color;
+import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -83,11 +84,11 @@ public class Group extends Controllable {
 	 */
 	public final void resizeToControllables() {
 		int GAP_SIZE = 10;
-		double newWidth = 0;//<---ends up being min size
-		double newHeight = 0;//<--|
-		double newX = Integer.MAX_VALUE;
-		double newY = Integer.MAX_VALUE;
-		double uDim;
+		float newWidth = 0;//<---ends up being min size
+		float newHeight = 0;//<--|
+		float newX = Integer.MAX_VALUE;
+		float newY = Integer.MAX_VALUE;
+		float uDim;
 		Bounded_Impl controllable;
 		for (Iterator<Controllable> it = controllables.iterator(); it.hasNext();) {
 			controllable = it.next();
@@ -120,7 +121,7 @@ public class Group extends Controllable {
 			}
 		}
 		//System.out.println("setting bounds of AGroup to: \nX = "+(newX-GAP_SIZE/2)+" Y = "+(newY-GAP_SIZE/2)+" width = "+(newWidth+GAP_SIZE)+" height = "+(newHeight+GAP_SIZE));
-		setBounds(newX - GAP_SIZE / 2, newY - GAP_SIZE / 2, newWidth + GAP_SIZE, newHeight + GAP_SIZE);
+		this.bounds = new Rectangle(newX - GAP_SIZE / 2, newY - GAP_SIZE / 2, newWidth + GAP_SIZE, newHeight + GAP_SIZE);
 	}
 
 	@Override
@@ -319,7 +320,7 @@ public class Group extends Controllable {
 	}
 
     @Override
-    public double getMovementSpeed() {
+    public float getMovementSpeed() {
         throw new UnsupportedOperationException("something is wrong here. this method should not be called");
     }
 }

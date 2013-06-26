@@ -1,12 +1,26 @@
 package assault.display;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glColor4ub;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+
+import org.lwjgl.util.ReadableColor;
+import org.newdawn.slick.geom.Shape;
+
 import assault.game.loading.Texture;
 import assault.util.Disposable;
+import assault.util.Point;
 import assault.util.Updateable;
-import java.awt.Polygon;
-import java.awt.geom.PathIterator;
-import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.util.ReadableColor;
 
 /**
  *
@@ -17,7 +31,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
     private boolean visible;
     private Container<? extends Bounded> parent;
 
-    public Paintable(double x, double y, double width, double height) {
+    public Paintable(float x, float y, float width, float height) {
     	super(x, y, width, height);
         this.visible = true;
     }
@@ -25,7 +39,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
     public final void adjustMatrixAndDrawSelf() {
         if (isVisible()) {
             glPushMatrix();
-            glTranslated(x, y, 0);
+            glTranslated(getX(), getY(), 0);
             drawSelf();
             glPopMatrix();
         }
@@ -83,14 +97,14 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
     
     //----------------Static methods for OpenGL drawing.-----------------
 
-    public static void drawRect(double x, double y, double w, double h) {
+    public static void drawRect(float x, float y, float w, float h) {
         //System.out.println(w+","+h);
         glBegin(GL_LINE_STRIP);
-        glVertex2d(x, y);
-        glVertex2d(x , y + h);
-        glVertex2d(x + w, y + h);
-        glVertex2d(x + w, y);
-        glVertex2d(x, y);
+        glVertex2f(x, y);
+        glVertex2f(x , y + h);
+        glVertex2f(x + w, y + h);
+        glVertex2f(x + w, y);
+        glVertex2f(x, y);
         glEnd();
         //drawLine(x, y, x+w, y+h);
     }
@@ -105,60 +119,66 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
 //		System.out.println("bounding box of: " + ap);
     }
 
-    public static void fillRect(double x, double y, double w, double h) {
+    public static void fillRect(float x, float y, float w, float h) {
         //System.out.println("fillrect");
         glBegin(GL_QUADS);
-        glVertex2d(x, y);
-        glVertex2d(x, y + h);
-        glVertex2d(x + w, y + h);
-        glVertex2d(x + w, y);
+        glVertex2f(x, y);
+        glVertex2f(x, y + h);
+        glVertex2f(x + w, y + h);
+        glVertex2f(x + w, y);
         glEnd();
     }
 
-    public static void drawLine(double x1, double y1, double x2, double y2) {
+    public static void drawLine(float x1, float y1, float x2, float y2) {
         glBegin(GL_LINES);
-        glVertex2d(x1, y1);
-        glVertex2d(x2, y2);
+        glVertex2f(x1, y1);
+        glVertex2f(x2, y2);
         glEnd();
     }
 
-    public static void drawPolygon(Polygon pol) {
+    public static void drawPolygon(Point[] points, boolean close) {
         glBegin(GL_LINES);
-        double[] points = new double[6];
-        PathIterator pi = pol.getPathIterator(null);
-        loop: {
-            while (true) {
-                switch (pi.currentSegment(points)) {
-                    case PathIterator.SEG_MOVETO:
-                    case PathIterator.SEG_LINETO:
-                        glVertex2d(points[0], points[1]);
-                        pi.next();
-                        break;
-                    case PathIterator.SEG_CLOSE:
-                        break loop;
-                }
-            }
+        for(Point p : points){
+        	glVertex2f(p.getX(), p.getY());
+        }
+        if(close){
+        	glVertex2f(points[0].getX(), points[0].getY());
         }
         glEnd();
     }
+    
+    public static void drawPolygon(Shape shape) {
+    	glBegin(GL_LINES);
+    	if(shape.getPointCount() == 0){
+    		return;
+    	}
+		for(int i = 0;i<shape.getPoints().length;){
+			glVertex2f(shape.getPoints()[i],shape.getPoints()[++i]);
+			++i;
+		}
+		if(shape.closed()){
+			glVertex2f(shape.getPoints()[0],shape.getPoints()[1]);
+		}
+		glEnd();
+	}
 
     public static void setColour(ReadableColor c) {
         glColor4ub(c.getRedByte(), c.getGreenByte(), c.getBlueByte(), c.getAlphaByte());
     }
 
-    public static void drawTexture(double x, double y, double w, double h, int TexID) {
+    public static void drawTexture(float x, float y, float w, float h, int TexID) {
         glBindTexture(GL_TEXTURE_2D, TexID);
         setColour(ReadableColor.WHITE);
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0, 1);
-            glVertex2d(x, y);
+            glVertex2f(x, y);
             glTexCoord2f(0, 0);
-            glVertex2d(x, y + h);
+            glVertex2f(x, y + h);
             glTexCoord2f(1, 0);
-            glVertex2d(x + w, y + h);
+            glVertex2f(x + w, y + h);
             glTexCoord2f(1, 1);
-            glVertex2d(x + w, y);
+            glVertex2f(x + w, y);
         }
         glEnd();
     }
@@ -174,19 +194,19 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
      * @param h
      * @param tex
      */
-    public static void drawTexture(double x, double y, double w, double h, Texture tex) {
+    public static void drawTexture(float x, float y, float w, float h, Texture tex) {
         glBindTexture(GL_TEXTURE_2D, tex.getTexID());
         setColour(ReadableColor.WHITE);
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0, tex.getTop());
-            glVertex2d(x, y);
+            glVertex2f(x, y);
             glTexCoord2f(0, 0);
-            glVertex2d(x, y + h);
+            glVertex2f(x, y + h);
             glTexCoord2f(tex.getLeft(), 0);
-            glVertex2d(x + w, y + h);
+            glVertex2f(x + w, y + h);
             glTexCoord2f(tex.getLeft(), tex.getTop());
-            glVertex2d(x + w, y);
+            glVertex2f(x + w, y);
         }
         glEnd();
     }

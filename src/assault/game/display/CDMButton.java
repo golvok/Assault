@@ -31,7 +31,8 @@ public class CDMButton extends Button {
 	void setIndex(int index, int numColumns) {
 		if (this.index != index) {
 			this.index = index;
-			setBounds((index % numColumns) * CDMButton.BUTTON_WIDTH, ((int) Math.round(Math.floor(index / numColumns))) * CDMButton.BUTTON_WIDTH, CDMButton.BUTTON_WIDTH, CDMButton.BUTTON_HEIGHT);
+			setX((index % numColumns) * CDMButton.BUTTON_WIDTH);
+			setY((index / numColumns) * CDMButton.BUTTON_HEIGHT);
 		}
 	}
 

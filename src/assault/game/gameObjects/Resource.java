@@ -14,7 +14,7 @@ import assault.game.loading.resourceHolders.ResourceResourceHolder;
  */
 public class Resource extends Selectable {
 
-    public Resource(GameArea g, double x, double y, ResourceResourceHolder src) throws ResourceException {
+    public Resource(GameArea g, float x, float y, ResourceResourceHolder src) throws ResourceException {
         super(g, x, y, src, 1, null);
     }
 }

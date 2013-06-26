@@ -524,12 +524,14 @@ public class GameArea extends InputRegistarContainer {
 	@Override
 	public void accept(MouseEvent me) {
 //		System.out.println("GM_ACCEPT " + me);
+		boolean getAtTagOldState = false;
 		if(me.getNewState() == MouseEvent.BUTTON_RELEASED){
+			getAtTagOldState = QuadTreeNode.GET_AT_TAG.enabled;
 			QuadTreeNode.GET_AT_TAG.enabled = false;
 		}
 		List<AObject> aos = getObjectsAt(me.getX(), me.getY());		
 		if(me.getNewState() == MouseEvent.BUTTON_RELEASED){
-			QuadTreeNode.GET_AT_TAG.enabled = true;
+			QuadTreeNode.GET_AT_TAG.enabled = getAtTagOldState;
 		}
 		
 		if (aos.size() > 0){ 

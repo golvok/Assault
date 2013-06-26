@@ -16,7 +16,7 @@ public class TopGameContainer extends Container<Bounded> implements InputDistrib
 	private GameArea gameArea;
 	private StatusDisplayMenu sDisplayMenu;
 
-	public TopGameContainer(double x, double y, double w, double h, AssaultWindow window) {
+	public TopGameContainer(float x, float y, float w, float h, AssaultWindow window) {
 		super(x, y, w, h, 4);
 		this.window = window;
 	}

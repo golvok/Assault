@@ -2,6 +2,8 @@ package assault.game.util;
 
 import java.util.List;
 
+import org.newdawn.slick.geom.Shape;
+
 import assault.display.Bounded;
 import assault.util.Point;
 
@@ -37,7 +39,7 @@ public class DualObjectManager implements ObjectManager {
 	}
 
 	@Override
-	public boolean notifyOfImminentMovement(Bounded willMove, double newX, double newY) {
+	public boolean notifyOfImminentMovement(Bounded willMove, float newX, float newY) {
 		return compare(dom.notifyOfImminentMovement(willMove, newX, newY) ,sub.notifyOfImminentMovement(willMove, newX, newY) ,"notifyOfImminentMovement(xy)");
 	}
 
@@ -63,7 +65,7 @@ public class DualObjectManager implements ObjectManager {
 	}
 
 	@Override
-	public boolean canBeAtPixel(double x, double y, Bounded b) {
+	public boolean canBeAtPixel(float x, float y, Bounded b) {
 		return compare(dom.canBeAtPixel(x, y, b) ,sub.canBeAtPixel(x, y, b) ,"canBeAtPixel");
 	}
 
@@ -77,11 +79,20 @@ public class DualObjectManager implements ObjectManager {
 		return compare(dom.getPixelWidth() ,sub.getPixelWidth() ,"getPixelWidth");
 	}
 
+	@Override
+	public List<Bounded> getClippingWith(Bounded test) {
+		return compare(dom.getClippingWith(test), sub.getClippingWith(test), "getClippningWith(Bounded)");
+	}
+
+	@Override
+	public List<Bounded> getClippingWith(Shape test) {
+		return compare(dom.getClippingWith(test), sub.getClippingWith(test), "getClippingWith(Shape)");
+	}
+	
 	private <T> T compare(T doms, T subs,String thing){
 		if (!doms.equals(subs)){
 			System.out.println("The OMs disagree on "+thing+": sub ("+sub.getClass().getSimpleName()+") gave "+subs+" and dom gave "+doms);
 		}
 		return doms;
-	}
-	
+	}	
 }

@@ -4,6 +4,16 @@
  */
 package assault.game.display;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.lwjgl.util.ReadableColor;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
+
+import assault.display.Bounded_Impl;
 import assault.display.Button;
 import assault.display.Menu;
 import assault.game.gameObjects.AObject;
@@ -11,12 +21,7 @@ import assault.game.gameObjects.Controllable;
 import assault.game.util.commands.Command;
 import assault.game.util.commands.CreateCmd;
 import assault.game.util.commands.ShootCommand;
-import java.awt.Dimension;
-import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.lwjgl.util.ReadableColor;
+import assault.util.Point;
 
 /**
  *
@@ -24,7 +29,7 @@ import org.lwjgl.util.ReadableColor;
  */
 public class CommandDispatchMenu extends Menu {
 
-	private List<CommandButton> aCButtons = Collections.synchronizedList(new ArrayList<CommandButton>(10));
+	private List<CommandButton> commandButtons = Collections.synchronizedList(new ArrayList<CommandButton>(10));
 	private int numColumns;
 	private int numRows;
 
@@ -79,13 +84,13 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	public static CommandButton[] getUniqueCmdBtnSet(AObject[] aos) {
-		//TODO make this more effecient/go with a different model
+		//TODO make this more efficient/go with a different model
 		//(sub menus for each type maybe?)
 		CommandButton[] uniqueSet;
 		uniqueSet = new CommandButton[6];
 		CommandButton acb;
 		if (aos != null) {
-			int firstAUindex = -1;//must be initialized to a value BELOW 0
+			int firstAUindex = -1;//must be initialised to a value BELOW 0
 			boolean onlyOneAU = true;
 			//find AUs in aos, remembering the first one and breaking if a second is found
 			for (int m = 0; m < aos.length; m++) {
@@ -174,7 +179,7 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	protected void removeAllCmdBtns() {
-		ArrayList<CommandButton> tmp = new ArrayList<CommandButton>(aCButtons);
+		ArrayList<CommandButton> tmp = new ArrayList<CommandButton>(commandButtons);
 		for (CommandButton acb : tmp){
 			if (acb != null) {
 				acb.setEnabled(true);
@@ -184,7 +189,7 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	public void disableAllExceptEsc() {
-		for (CommandButton acb : aCButtons) {
+		for (CommandButton acb : commandButtons) {
 			if (acb != null) {
 				acb.setEnabled(false);
 			}
@@ -192,7 +197,7 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	void enableAll() {
-		for (CommandButton acb : aCButtons) {
+		for (CommandButton acb : commandButtons) {
 			if (acb != null) {
 				acb.setEnabled(true);
 			}
@@ -200,19 +205,16 @@ public class CommandDispatchMenu extends Menu {
 	}
 
 	public void enableAllExcept(CommandButton exemptBtn) {
-		for (CommandButton acb : aCButtons) {
+		for (CommandButton acb : commandButtons) {
 			if (acb != null && acb != exemptBtn) {
 				acb.setEnabled(true);
 			}
 		}
 	}
 
-	public Dimension refreshSizeAndNumRows() {
-		setNumRows(aCButtons.size() / numColumns);
-		int width = numColumns * CDMButton.BUTTON_WIDTH;
-		int height = numRows * CDMButton.BUTTON_HEIGHT;
-		setSize(width, height);
-		return new Dimension(width, height);
+	public Point refreshSizeAndNumRows() {
+		setNumRows(commandButtons.size() / numColumns);
+		return new Point(getBounds().getWidth(), getBounds().getHeight());
 	}
 
 	@Override
@@ -227,66 +229,68 @@ public class CommandDispatchMenu extends Menu {
 		for (int i = 1; i < numRows; i++) {
 			drawLine(0, i * CDMButton.BUTTON_HEIGHT, this.getWidth(), i * CDMButton.BUTTON_HEIGHT);
 		}
+		setColour(ReadableColor.RED);
+		drawPolygon(getBounds());
 	}
 
 	private void addButton(CommandButton acb) {
-		acb.setIndex(aCButtons.size(), numColumns);
-		aCButtons.add(acb);
+		acb.setIndex(commandButtons.size(), numColumns);
+		commandButtons.add(acb);
 		super.addButton(acb);
 		refreshSizeAndNumRows();
 	}
 
 	private void removeButton(CommandButton acb) {
-		aCButtons.remove(acb);
+		commandButtons.remove(acb);
 		super.removeButton(acb);
 		refreshSizeAndNumRows();
 	}
+	
+	private void refreshBounds() {
+		Shape newBounds;
+		if (commandButtons.size() > 0) {
 
-	@Override
-	public Polygon getBounds() {
-		int[] xs = new int[6];
-		int[] ys = new int[6];
+			CDMButton topRight = commandButtons.get(commandButtons.size() - 1);//farthest right in top row
 
-		if (aCButtons.size() > 0) {
-
-			CDMButton topRight = aCButtons.get(aCButtons.size() - 1);//farthest right in top row
-			CDMButton secondTopRight;//farthest right in top complete row
-
-			if (aCButtons.size() < numColumns || aCButtons.size() % numColumns == 0) {//case of complete top row or # buttons less than # of coloumns
-				secondTopRight = topRight;
+			if (commandButtons.size() < numColumns || commandButtons.size() % numColumns == 0) {//case of complete top row or # buttons less than # of coloumns
+				newBounds = new Rectangle(0, 0, topRight.getX() + topRight.getWidth(), topRight.getY() + topRight.getHeight());
 			} else {
-				secondTopRight = aCButtons.get(aCButtons.size() - (aCButtons.size() % numColumns) - 1);
+				CDMButton secondTopRight = commandButtons.get(commandButtons.size() - (commandButtons.size() % numColumns) - 1);
+				
+				Point[] points = new Point[6];
+				
+				points[0] = new Point(0,0);
+				
+				points[1] = new Point(0,topRight.getY() + topRight.getHeight());
+				
+				points[2] = new Point(topRight.getX() + topRight.getWidth(),points[1].getY());
+				
+				points[3] = new Point(points[2].getX(), topRight.getY());
+				
+				points[4] = new Point(secondTopRight.getX() + secondTopRight.getWidth(),points[3].getY());
+				
+				points[5] = new Point(points[4].getX(),0);
+				
+				newBounds = Bounded_Impl.PolygonFromPoints(points);
 			}
-
-			/*
-			 * ie:
-			 *
-			 * 1--2 | | +--3--+--4 | | | | 0--+--+--5
-			 */
-
-			//xs[0] = 0
-			//ys[0] = 0
-
-			//xs[1] = 0
-			ys[1] = (int)(topRight.getY() + topRight.getHeight());
-
-			xs[2] = (int)(topRight.getX() + topRight.getWidth());
-			ys[2] = (int)(topRight.getY() + topRight.getHeight());
-
-			xs[3] = (int)(topRight.getX() + topRight.getWidth());
-			ys[3] = (int)(topRight.getY());
-
-			xs[4] = (int)(secondTopRight.getX() + secondTopRight.getWidth());
-			ys[4] = (int)(secondTopRight.getY() + secondTopRight.getHeight());
-
-			xs[5] = (int)(secondTopRight.getX() + secondTopRight.getWidth());
-			//ys[5] = 0; 
+		}else{
+			newBounds = new Rectangle(0, 0, 0, 0);
 		}
-		return new Polygon(xs, ys, 6);
+		newBounds.setLocation(getX(),getY());
+		
+//		StringBuilder pointStringBuilder = new StringBuilder();
+//		pointStringBuilder.append("set CDM bounds to");
+//		for(Point p : Bounded_Impl.getAsPoints(newBounds)){
+//			pointStringBuilder.append(p);
+//			pointStringBuilder.append(',');
+//		}
+//		System.out.println(pointStringBuilder);
+
+		this.bounds = newBounds;
 	}
 
 	private void setNumRows(int i) {
 		numRows = i;
-		setSize(getWidth(), i * CDMButton.BUTTON_HEIGHT);
+		refreshBounds();
 	}
 }

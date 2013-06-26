@@ -26,7 +26,7 @@ public abstract class Controllable extends Selectable implements Relocatable {
     private boolean[][] onPath;
     private boolean[][] open;
 
-    public Controllable(GameArea g, double x, double y, ControllableResourceHolder src, int health, Player owner) throws ResourceException {
+    public Controllable(GameArea g, float x, float y, ControllableResourceHolder src, int health, Player owner) throws ResourceException {
         super(g, x, y, src, health, owner);
         mover = new Mover(this);
         noClip = src.noClip();

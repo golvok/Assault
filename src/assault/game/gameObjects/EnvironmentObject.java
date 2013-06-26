@@ -4,12 +4,14 @@
  */
 package assault.game.gameObjects;
 
+import java.awt.Image;
+
+import org.lwjgl.util.Color;
+import org.newdawn.slick.geom.Polygon;
+
+import assault.display.Bounded_Impl;
 import assault.game.display.GameArea;
 import assault.util.Point;
-import java.awt.Image;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import org.lwjgl.util.Color;
 
 /**
  *part of the terrain that can be interacted with (destroyed, created, selected ect.)
@@ -17,28 +19,18 @@ import org.lwjgl.util.Color;
  */
 public final class EnvironmentObject extends AObject{
 
-    private Polygon shape = null;
-
     public EnvironmentObject(GameArea g, int x, int y, Point[] shape, Image miniIcon) {
         super(g, x, y, miniIcon, null, null);
-        setLocation(x, y);
-        int[] xPoints = new int[shape.length];
-        int[] yPoints = new int[shape.length];
-        for (int i = 0; i < shape.length; i++) {
-            xPoints[i] = (int)shape[i].x;
-            yPoints[i] = (int)shape[i].y;
-        }
-        this.shape = new Polygon(xPoints, yPoints, xPoints.length);
-
-        Rectangle bounds = this.shape.getBounds();
-        setSize(bounds.width + 1, bounds.height + 1);
+        Polygon newBounds = Bounded_Impl.PolygonFromPoints(shape);
+        newBounds.setLocation(x, y);
+        this.bounds = newBounds;
     }
 
     @Override
     public void drawSelf() {
         super.drawSelf();
         setColour(Color.GREY);
-        drawPolygon(shape);
+        drawPolygon(Bounded_Impl.getAsPoints(getBounds()),true);
         //drawString("E", getWidth() / 2, getHeight() / 2);
         //System.out.println("EO_PAINT");
     }

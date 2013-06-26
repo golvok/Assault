@@ -1,112 +1,100 @@
  package assault.display;
 
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import java.lang.reflect.InvocationTargetException;
+
+import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Ellipse;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 
 import assault.util.Point;
 
 public class Bounded_Impl implements Bounded{
+	
+	protected Shape bounds;
+	protected boolean noClip = false;
 
-	protected double x;
-	protected double y;
-	protected double width;
-	protected double height;
-	protected boolean noClip;
-
-	public Bounded_Impl(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+	public Bounded_Impl(Bounded src) {
+		this(src.getBounds(),src.noClip());
     }
-
-	@Override
-	public double getWidth() {
-	    return width;
+	
+	public Bounded_Impl(Shape bounds, boolean noClip){
+		this(bounds);
+		this.noClip = noClip;
+	}
+	
+	public Bounded_Impl(Shape bounds){
+		Shape newBounds;
+		if (bounds instanceof Cloneable){
+			try {
+				this.bounds = (Shape)bounds.getClass().getMethod("clone").invoke(bounds);
+				return;
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException 
+					| NoSuchMethodException	| SecurityException e) {
+				//do nothing, and try the attempts below.
+			}
+		}
+		if(bounds instanceof Rectangle){
+			newBounds = new Rectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight()); 
+		} else if (bounds instanceof Circle){
+			newBounds = new Circle(bounds.getCenterX(), bounds.getCenterY(), ((Circle)bounds).radius, bounds.getPointCount());
+		} else if (bounds instanceof Ellipse){
+			newBounds = new Ellipse(bounds.getCenterX(), bounds.getCenterY(), ((Ellipse)bounds).getRadius1(),((Ellipse)bounds).getRadius2(),bounds.getPointCount());
+		} else if (bounds.getPointCount() < 3) {
+			throw new IllegalArgumentException("Not enough points (" + bounds.getPointCount() + ") to be a shape with area");
+		} else {
+			newBounds = new Polygon(bounds.getPoints());
+		}		
+		this.bounds = newBounds;
+	}
+	
+	public Bounded_Impl(float x, float y, float width, float height, boolean noClip){
+		this(x,y,width,height);
+		this.noClip = noClip;
+	}
+	
+	public Bounded_Impl(float x, float y, float width, float height){
+		this.bounds = new Rectangle(x, y, width, height);
 	}
 
 	@Override
-	public double getHeight() {
-	    return height;
+	public float getWidth() {
+	    return bounds.getWidth();
+	}
+
+	@Override
+	public float getHeight() {
+	    return bounds.getHeight();
 	}
 
 	@Override
 	public Point getLocation() {
-	    return new Point(x, y);
+	    return new Point(getX(), getY());
+	}
+	
+	public Point getCenter(){
+		return new Point(bounds.getCenterX(), bounds.getCenterY());
+	}
+	
+	@Override
+	public float getX() {
+	    return bounds.getX();
 	}
 
 	@Override
-	public Point getLocation(Point rv) {
-	    if (rv == null) {
-	        return new Point(x, y);
-	    } else {
-	        rv.setLocation(x, y);
-	        return rv;
-	    }
+	public void setX(float x) {
+	    bounds.setX(x);
 	}
 
 	@Override
-	public Shape getBounds() {
-	    return new Rectangle2D.Double(x, y, width, height);
+	public float getY() {
+	    return bounds.getY();
 	}
 
 	@Override
-	public Point getSize() {
-	    return new Point(width, height);
-	}
-
-	@Override
-	public Point getSize(Point rv) {
-	    if (rv == null) {
-	        return new Point(width, height);
-	    } else {
-	        rv.setLocation(width, height);
-	        return rv;
-	    }
-	}
-
-	@Override
-	public double getX() {
-	    return x;
-	}
-
-	@Override
-	public void setX(double x) {
-	    this.x = x;
-	}
-
-	@Override
-	public double getY() {
-	    return y;
-	}
-
-	@Override
-	public void setY(double y) {
-	    this.y = y;
-	}
-
-	@Override
-	public void setSize(Point d) {
-	    setSize(d.getX(), d.getY());
-	}
-
-	@Override
-	public void setSize(double width, double height) {
-	    this.width = width;
-	    this.height = height;
-	}
-
-	@Override
-	public void setBounds(Rectangle2D r) {
-	    setBounds(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-	}
-
-	@Override
-	public void setBounds(double x, double y, double width, double height) {
-	    this.x = x;
-	    this.y = y;
-	    this.width = width;
-	    this.height = height;
+	public void setY(float y) {
+	    bounds.setY(y);
 	}
 
 	@Override
@@ -115,9 +103,8 @@ public class Bounded_Impl implements Bounded{
 	}
 
 	@Override
-	public void setLocation(double x, double y) {
-	    this.x = x;
-	    this.y = y;
+	public void setLocation(float x, float y) {
+	    bounds.setLocation(x, y);
 	}
 	
 	@Override
@@ -127,10 +114,19 @@ public class Bounded_Impl implements Bounded{
 
 	@Override
 	public boolean clipsWith(Bounded test) {
-		if(noClip() || test.noClip()){
+		if(test.noClip()){
 			return false;
 		}else{
-			return getBounds().intersects(test.getX(),test.getY(),test.getWidth(),test.getHeight());
+			return clipsWith(test.getBounds());
+		}
+	}
+	
+	@Override
+	public boolean clipsWith(Shape test) {
+		if(noClip()){
+			return false;
+		}else{
+			return getBounds().intersects(test);
 		}
 	}
 	
@@ -142,5 +138,27 @@ public class Bounded_Impl implements Bounded{
 		}
 		return dims;
 	}
+
+	@Override
+	public Shape getBounds() {
+		return bounds;
+	}
 	
+	public static Point[] getAsPoints(Shape shape){
+		float[] points = shape.getPoints();
+		Point[] ret = new Point[points.length/2];
+		for(int i = 0;i < ret.length;i++){
+			ret[i] = new Point(points[i*2], points[i*2 + 1]);
+		}
+		return ret;
+	}	
+	
+	public static Polygon PolygonFromPoints(Point[] points){
+		float[] pointsForPolygon = new float[points.length*2];
+		for(int i = 0;i<points.length;++i){
+			pointsForPolygon[i*2] = points[i].x;
+			pointsForPolygon[i*2 + 1] = points[i].y;
+		}
+		return new Polygon(pointsForPolygon);
+	}
 }

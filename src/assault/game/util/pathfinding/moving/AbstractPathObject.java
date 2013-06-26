@@ -4,10 +4,19 @@
  */
 package assault.game.util.pathfinding.moving;
 
-import assault.game.util.pathfinding.RawPathObject;
-import assault.util.Point;
+import static assault.display.Bounded_Impl.PolygonFromPoints;
+import static assault.display.Bounded_Impl.getAsPoints;
+import static assault.util.Point.farthestFromLineWithSides;
+import static assault.util.Point.farthestPoint;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
+
+import assault.display.Bounded;
+import assault.display.Bounded_Impl;
+import assault.game.util.ObjectManager;
+import assault.game.util.pathfinding.RawPathObject;
+import assault.util.Point;
 
 /**
  * really just a wrapper around a deque of points with some useful utility
@@ -36,6 +45,60 @@ public class AbstractPathObject {
 		this(null);
 	}
 
+	public static boolean canMakeItToNextPointInStraightLine(AbstractPathObject pathObject, Bounded test, ObjectManager om){
+		if(test.noClip()){
+			return true;
+		}
+		Point nextPoint = pathObject.peek();
+		Bounded nextRegion = new Bounded_Impl(test);
+		nextRegion.setLocation(nextPoint);
+		Point currentCenter = test.getCenter();
+		Point nextCenter = nextRegion.getCenter();
+		Point[] nextRegionPoints = getAsPoints(nextRegion.getBounds());
+		Point[] currentPoints = getAsPoints(test.getBounds());
+		
+		Point farthestInNext = farthestPoint(currentCenter,nextRegionPoints);
+		Point farthestInCurrent = farthestPoint(nextCenter,currentPoints);
+		Point[] extremitiesOfNext = farthestFromLineWithSides(currentCenter, nextCenter, currentPoints);
+		Point[] extremitiesOfCurrent = farthestFromLineWithSides(currentCenter, nextCenter, nextRegionPoints);
+		
+		int nPoints = 6;
+		boolean addFarthestInCurrent = true;
+		if(farthestInCurrent == extremitiesOfCurrent[0] || farthestInCurrent == extremitiesOfCurrent[1]){
+			nPoints--;
+			addFarthestInCurrent = false;
+		}
+		boolean addFarthestInNext = true;
+		if(farthestInNext == extremitiesOfNext[0] || farthestInNext == extremitiesOfNext[1]){
+			nPoints--;
+			addFarthestInNext = false;
+		}
+		
+		Point[] futureRegion = new Point[nPoints];
+		
+		int nPointsAdded = 0;
+
+		futureRegion[nPointsAdded] = extremitiesOfCurrent[0];
+		futureRegion[nPointsAdded] = extremitiesOfNext[1];
+		nPointsAdded += 2;
+		
+		if (addFarthestInNext){
+			futureRegion[nPointsAdded] = farthestInNext;
+			nPointsAdded++;
+		}
+		
+		futureRegion[nPointsAdded] = extremitiesOfNext[0];
+		futureRegion[nPointsAdded] = extremitiesOfCurrent[1];
+		nPointsAdded += 2;
+
+		if (addFarthestInCurrent){
+			futureRegion[nPointsAdded] = farthestInCurrent;
+//			nPointsAdded++;
+		}
+		
+		return ObjectManager.Impl.ListOnlyContains(om.getClippingWith(PolygonFromPoints(futureRegion)),test);
+	}
+	
 	public final Point peek() {
 		return points.peek();
 	}

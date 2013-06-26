@@ -1,7 +1,8 @@
 package assault.input;
 
-import assault.display.Bounded_Impl;
-import java.awt.Shape;
+import org.newdawn.slick.geom.Shape;
+
+import assault.display.Bounded;
 
 /**
  *
@@ -22,16 +23,10 @@ public class MouseEvent extends ButtonInputEvent {
 		this.y = y;
 	}
 	
-	/**
-	 * @return the x
-	 */
 	public int getX() {
 		return x;
 	}
 
-	/**
-	 * @return the y
-	 */
 	public int getY() {
 		return y;
 	}
@@ -42,7 +37,7 @@ public class MouseEvent extends ButtonInputEvent {
 	 * @param ap
 	 * @return 
 	 */
-	public MouseEvent translate(Bounded_Impl ap) {
+	public MouseEvent translate(Bounded ap) {
 		return new MouseEvent((int)Math.round(getX() - ap.getX()), (int)Math.round(getY() - ap.getY()), getButton(), getNewState(), getModifiers());
 	}
 

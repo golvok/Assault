@@ -22,7 +22,7 @@ public interface Relocatable extends PathFindingBounded{
 
     boolean[][] getOnPath();
 
-    double getMovementSpeed();
+    float getMovementSpeed();
 
     void setLocation(Point p);
 

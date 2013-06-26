@@ -7,10 +7,10 @@ package assault.game.util.pathfinding;
  */
 public class AStarGridPoint extends PathFindingGridPoint {
 
-    private double h;
-    private double g;
+    private float h;
+    private float g;
 
-    public AStarGridPoint(int x, int y, double g, double h) {
+    public AStarGridPoint(int x, int y, float g, float h) {
         super(x, y, g + h);
         setH(h);
         setG(g);
@@ -20,19 +20,19 @@ public class AStarGridPoint extends PathFindingGridPoint {
         super(x, y);
     }
 
-    public final double getH() {
+    public final float getH() {
         return h;
     }
 
-    public final void setH(double h) {
+    public final void setH(float h) {
         this.h = h;
     }
 
-    public final double getG() {
+    public final float getG() {
         return g;
     }
 
-    public final void setG(double g) {
+    public final void setG(float g) {
         this.g = g;
     }
 

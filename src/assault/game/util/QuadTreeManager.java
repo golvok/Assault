@@ -2,6 +2,8 @@ package assault.game.util;
 
 import java.util.List;
 
+import org.newdawn.slick.geom.Shape;
+
 import assault.display.Bounded;
 import assault.display.Bounded_Impl;
 import assault.display.Container;
@@ -23,14 +25,14 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 
 	@Override
 	public boolean notifyOfImminentMovement(final Bounded willMove, Point newPt) {
-		// TODO make this do this properly
-		Bounded newRegion = new Bounded_Impl(newPt.x, newPt.y, willMove.getWidth(), willMove.getHeight()){
+		Bounded newRegion = new Bounded_Impl(willMove){
 			@Override
 			public String toString() {
-				return super.toString() + " (" + willMove + ')';
+				return "surrogate: " + super.toString() + " for: " + willMove;
 			}
 		};
-		List<Bounded> allthatClipWithNewRegion = rootNode.getAllClipping(newRegion); 
+		newRegion.setLocation(newPt);
+		List<Bounded> allthatClipWithNewRegion = getClippingWith(newRegion); 
 		if(allthatClipWithNewRegion.size() > 1 || !allthatClipWithNewRegion.get(0).equals(willMove)){
 			return false;
 		}
@@ -40,7 +42,7 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 	}
 
 	@Override
-	public boolean notifyOfImminentMovement(Bounded willMove, double newX, double newY) {
+	public boolean notifyOfImminentMovement(Bounded willMove, float newX, float newY) {
 		return notifyOfImminentMovement(willMove, new Point(newX,newY));
 	}
 
@@ -65,7 +67,17 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 	}
 
 	@Override
-	public boolean canBeAtPixel(double x, double y, Bounded b) {
+	public List<Bounded> getClippingWith(Bounded test) {
+		return ObjectManager.Impl.getClippingWithBounds(test, this);
+	}
+	
+	@Override
+	public List<Bounded> getClippingWith(Shape test) {
+		return rootNode.getClippingWith(test);
+	}
+	
+	@Override
+	public boolean canBeAtPixel(float x, float y, Bounded b) {
 		return rootNode.canBeAt((int)x, (int)y, b);
 	}
 

@@ -27,7 +27,7 @@ public class NormalTerrainGenerator extends TerrainGenerator {
 	}
 
 	@Override
-	public boolean generateInto(GameArea g, double ga_x, double ga_y, double ga_width, double ga_height, int seed) {		
+	public boolean generateInto(GameArea g, float ga_x, float ga_y, float ga_width, float ga_height, int seed) {		
 		GridManager gm = g.getGM();
 		int xInGrid = gm.convCoordToGrid(ga_x);
 		int yInGrid = gm.convCoordToGrid(ga_y);

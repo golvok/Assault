@@ -58,7 +58,7 @@ public class WeaponResourceHolder extends ControllableResourceHolder {
 	}
 
 	@Override
-	public Weapon createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
+	public Weapon createObject(GameArea g, float x, float y, Player owner) throws ResourceException {
 		return new Weapon(g, x, y, this, owner);
 	}
 

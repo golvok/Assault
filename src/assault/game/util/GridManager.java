@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.newdawn.slick.geom.Shape;
+
 import assault.display.Bounded;
 import assault.game.display.GameArea;
 import assault.game.util.terrain.TerrainGenerator;
@@ -148,7 +150,7 @@ public class GridManager implements ObjectManager {
 	 * @return (movementWasSuccessful)
 	 */
 	@Override
-	public boolean notifyOfImminentMovement(Bounded willMove, double newX, double newY) {
+	public boolean notifyOfImminentMovement(Bounded willMove, float newX, float newY) {
 		synchronized (editlock) {
 			//System.out.println("oldX = "+oldX);
 			//System.out.println("oldY = "+oldY);
@@ -312,16 +314,6 @@ public class GridManager implements ObjectManager {
 		}
 	}
 
-	/**
-	 * gets the list of GO's that could be at pixel (x,y) then
-	 * iterates over them, returning the first one that .bounds().contains(x,y)
-	 * null if no match found
-	 * 
-	 * @param x
-	 * @param y
-	 * @return
-	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
-	 */
 	@Override
 	public List<Bounded> getBoundedsAt(int x, int y) throws IndexOutOfBoundsException {
 		List<Bounded> ret = new ArrayList<>();
@@ -340,15 +332,33 @@ public class GridManager implements ObjectManager {
 			return ret;
 		}
 	}
-
-	/**
-	 * return the list of GO's that are in grid cell (x,y)
-	 * may be empty
-	 * 
-	 * @param x
-	 * @param y
-	 * @throws IndexOutOfBoundsException if it's well.. out of bounds...
-	 */
+	
+	@Override
+	public List<Bounded> getClippingWith(Bounded test) {
+		return ObjectManager.Impl.getClippingWithBounds(test, this);
+	}
+	
+	@Override
+	public List<Bounded> getClippingWith(Shape test) {
+		List<Bounded> found = new ArrayList<>();
+		Rectangle gridBox = getGridbox(test);
+		org.newdawn.slick.geom.Rectangle gridCellBounds = new org.newdawn.slick.geom.Rectangle(0,0,gridSize, gridSize);
+		for(int x = (int)gridBox.getMinX();x < gridBox.getMaxX();x++){
+			for(int y = (int)gridBox.getMinY();y < gridBox.getMaxY();y++){
+				GridCell<Bounded> gridCell = getGridCellAtGrid(x, y);
+				gridCellBounds.setLocation(x, y);
+				if(gridCellBounds.intersects(test)){
+					for(Bounded b: gridCell){
+						if(b.clipsWith(test) && !found.contains(b)){
+							found.add(b);
+						}
+					}
+				}
+			}
+		}
+		return found;
+	}	
+	
 	public GridCell<Bounded> getGridCellAtGrid(int x, int y) throws IndexOutOfBoundsException {
 		synchronized (editlock) {
 			try {
@@ -379,17 +389,17 @@ public class GridManager implements ObjectManager {
 	 * if go is null, returns false
 	 * @param x in the GA
 	 * @param y in the GA
-	 * @param go
+	 * @param test
 	 * @return 
 	 */
 	@Override
-	public boolean canBeAtPixel(double x, double y, Bounded go) {
-		if (go == null) {
-			return false;
+	public boolean canBeAtPixel(float x, float y, Bounded test) {
+		if (test.noClip()) {
+			return true;
 		}
 		synchronized (editlock) {
-			final int w = convDimToGrid(go.getWidth(), x);
-			final int h = convDimToGrid(go.getHeight(), y);
+			final int w = convDimToGrid(test.getWidth(), x);
+			final int h = convDimToGrid(test.getHeight(), y);
 			final int GridX = convCoordToGrid(x);
 			final int GridY = convCoordToGrid(y);
 			GridCell<Bounded> cell;
@@ -398,9 +408,8 @@ public class GridManager implements ObjectManager {
 					for (int j = GridY; j < GridY + h; j++) {
 						cell = getGridCellAtGrid(i, j);
 						if (!isCellEmpty(i, j)) {
-							for (Bounded goInCell : cell) {
-								//System.out.println((goInCell != go) + ", " + (goInCell.getBounds().intersects((Rectangle) go.getBounds())) + " "+ go.hashCode() +" " + x + ", " + y);
-								if (goInCell != null && goInCell != go && goInCell.getBounds().intersects(x, y, go.getWidth(), go.getHeight())) {
+							for (Bounded boundedInCell : cell) {
+								if (boundedInCell != null && boundedInCell != test && boundedInCell.clipsWith(test)) {
 									return false;
 								}
 							}
@@ -425,7 +434,7 @@ public class GridManager implements ObjectManager {
 	 * @param num
 	 * @return the grid normalized index equivalent of num
 	 */
-	public final int convCoordToGrid(double num) {
+	public final int convCoordToGrid(float num) {
 		if (num % gridSize == 0) {
 			return (int)(num / gridSize);
 		} else {
@@ -454,12 +463,12 @@ public class GridManager implements ObjectManager {
 	 * @param AMPcoord the corresponding coordinate singlet (w --> x and h --> y)
 	 * @return the converted dimension
 	 */
-	public final int convDimToGrid(double AMPdim, double AMPcoord) {
+	public final int convDimToGrid(float AMPdim, float AMPcoord) {
 		if (AMPcoord >= 0) {
 			if (AMPcoord % gridSize == 0 || (AMPcoord + AMPdim) % gridSize == 0) {
-				return (int) Math.ceil(((double) AMPdim) / ((double) gridSize));
+				return (int) Math.ceil(((float) AMPdim) / ((float) gridSize));
 			} else {
-				return (int) Math.ceil(((double) ((AMPcoord % gridSize) + AMPdim)) / (double) (gridSize));
+				return (int) Math.ceil(((float) ((AMPcoord % gridSize) + AMPdim)) / (float) (gridSize));
 			}
 		} else {
 			return 0;
@@ -479,11 +488,13 @@ public class GridManager implements ObjectManager {
 
 	/**
 	 * creates a rectangle that is the space in the grid that go occupies
-	 * @param go
-	 * @return
 	 */
-	public Rectangle getGridbox(Bounded go) {
-		return new Rectangle(convCoordToGrid(go.getX()), convCoordToGrid(go.getY()), convDimToGrid(go.getWidth(), go.getX()), convDimToGrid(go.getHeight(), go.getY()));
+	public Rectangle getGridbox(Bounded b) {
+		return getGridbox(b.getBounds());
+	}
+	
+	public Rectangle getGridbox(Shape s){
+		return new Rectangle(convCoordToGrid(s.getX()), convCoordToGrid(s.getY()), convDimToGrid(s.getWidth(), s.getX()), convDimToGrid(s.getHeight(), s.getY()));		
 	}
 
 	public int getGridSize() {

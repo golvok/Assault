@@ -25,7 +25,7 @@ public class Weapon extends Controllable{
 		setVisible(true);
 	}
 
-	public Weapon(GameArea g, double x, double y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
+	public Weapon(GameArea g, float x, float y, WeaponResourceHolder src, Player ownerPlayer) throws ResourceException {
 		super(g, x, y, src,1, ownerPlayer);
 //		System.out.println("creating weapon: " + this);
 		doNotPaintCross();
@@ -78,7 +78,7 @@ public class Weapon extends Controllable{
 	}
 
     @Override
-    public double getMovementSpeed() {
+    public float getMovementSpeed() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

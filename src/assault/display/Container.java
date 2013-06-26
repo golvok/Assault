@@ -12,7 +12,7 @@ public class Container<B extends Bounded> extends Paintable{
 
 	private final List<B> children;
 
-	public Container(double x, double y, double width, double height, ArrayList<B> startchildren) {
+	public Container(float x, float y, float width, float height, ArrayList<B> startchildren) {
 		this(x, y, width, height, startchildren != null ? startchildren.size() : 0);
 		addChildren(startchildren);
 	}
@@ -26,7 +26,7 @@ public class Container<B extends Bounded> extends Paintable{
 	 * @param startSize the initial size passed to the children
 	 * <code>List</code>
 	 */
-	public Container(double x, double y, double width, double height, int startSize) {
+	public Container(float x, float y, float width, float height, int startSize) {
 		super(x, y, width, height);
 		children = Collections.synchronizedList(new ArrayList<B>(startSize));
 	}

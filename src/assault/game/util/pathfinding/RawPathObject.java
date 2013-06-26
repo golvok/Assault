@@ -9,7 +9,7 @@ import assault.util.Point;
 
 /**
  *
- * @author matt
+ * @author Matthew Walker
  */
 public class RawPathObject {
 

@@ -77,7 +77,7 @@ public class DijkstraPathFinder /*extends RawPathFinder*/ {
 		openSet.add(start);
 		PathFindingGridPoint lowF;
 		//used for the creation of the neighbours
-		double neighNewF;
+		float neighNewF;
 		boolean newGIsBetter;
 		int nxOff;//offset
 		int nyOff;
@@ -171,11 +171,11 @@ public class DijkstraPathFinder /*extends RawPathFinder*/ {
 
 
 
-	private double fBetweenNeighs(PathFindingGridPoint srt, PathFindingGridPoint neigh) {
+	private float fBetweenNeighs(PathFindingGridPoint srt, PathFindingGridPoint neigh) {
 		if (srt.getX() == neigh.getX() || srt.getY() == neigh.getY()) {
 			return 1;
 		} else {
-			return 1.4142135623730952;//approx sqrt(2) + 0.0000000000000001
+			return (float)1.4142135623730952;//approx sqrt(2) + 0.0000000000000001
 		}
 	}
 }

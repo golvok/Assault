@@ -40,7 +40,7 @@ public class TerrainObjectResourceHolder extends SelectableResourceHolder {
 	}
 
 	@Override
-	public TerrainObject createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
+	public TerrainObject createObject(GameArea g, float x, float y, Player owner) throws ResourceException {
 		return new TerrainObject(g, x, y, this, owner);
 	}
 

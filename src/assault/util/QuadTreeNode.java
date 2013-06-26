@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.newdawn.slick.geom.Shape;
+
 import assault.display.Bounded;
 import assault.display.Container;
 import assault.util.IndentingDebugPrinter.IndentLevel;
@@ -121,10 +123,10 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 				branches = new ArrayList<QuadTreeNode<T>>(nSUB_TREES);
 				
 				//these HAVE to be correct with branchindex() !
-				branches.add(0,new QuadTreeNode<T>(   divX ,  divY , (int)x + (int)getWidth() - divX , (int)y + (int)getHeight() - divY));
-				branches.add(1,new QuadTreeNode<T>( (int)x ,  divY ,   divX - (int)x                 , (int)y + (int)getHeight() - divY));
-				branches.add(2,new QuadTreeNode<T>(   divX ,(int)y , (int)x + (int)getWidth() - divX ,   divY - (int)y                 ));
-				branches.add(3,new QuadTreeNode<T>( (int)x ,(int)y ,   divX - (int)x                 ,   divY - (int)y                 ));
+				branches.add(0,new QuadTreeNode<T>(   divX     ,   divY     , (int)getX() + (int)getWidth() - divX , (int)getY() + (int)getHeight() - divY));
+				branches.add(1,new QuadTreeNode<T>( (int)getX(),   divY     ,   divX - (int)getX()                 , (int)getY() + (int)getHeight() - divY));
+				branches.add(2,new QuadTreeNode<T>(   divX     , (int)getY(), (int)getX() + (int)getWidth() - divX ,   divY - (int)getY()                 ));
+				branches.add(3,new QuadTreeNode<T>( (int)getX(), (int)getY(),   divX - (int)getX()                 ,   divY - (int)getY()                 ));
 				
 				super.addChildren(branches);
 				
@@ -203,18 +205,18 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 		return ret;
 	}
 	
-	public List<T> getAllClipping(Bounded region){
+	public List<T> getClippingWith(Shape region){
 		List<T> ret = new ArrayList<>();
-		if(region.clipsWith(this)){
+		if(this.clipsWith(region)){
 			for(T obj : objects){
-				if (region.clipsWith(obj)){
+				if (obj.clipsWith(region)){
 					ret.add(obj);
 				}
 			}
 		}
 		if (branches != null){
 			for(QuadTreeNode<T> branch : branches){
-				ret.addAll(branch.getAllClipping(region));
+				ret.addAll(branch.getClippingWith(region));
 			}
 		}
 		return ret;
@@ -260,7 +262,7 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	}
 	
 	public static final <Q extends Bounded> boolean willFit(QuadTreeNode<Q> node, Bounded test){
-		return node.getBounds().contains(test.getX(),test.getY(),test.getWidth(),test.getHeight());
+		return node.getBounds().contains(test.getBounds());
 	}
 	
 	public static final <Q extends Bounded> boolean willFitInABranch(QuadTreeNode<Q> hasBranches, Q test){

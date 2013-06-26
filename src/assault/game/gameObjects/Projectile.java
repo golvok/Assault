@@ -19,15 +19,15 @@ import java.util.TimerTask;
 public class Projectile extends AObject{
 	private Point eP = new Point();
 	private int speed = 3;
-	private double dX = 0;//difference X, Y
-	private double dY = 0;
-	private double mX = 0;//Move X, Y
-	private double mY = 0;
-	private double X = 0;//where this should be if java used double percision. See Move()
-	private double Y = 0;
+	private float dX = 0;//difference X, Y
+	private float dY = 0;
+	private float mX = 0;//Move X, Y
+	private float mY = 0;
+	private float X = 0;//where this should be if java used float percision. See Move()
+	private float Y = 0;
 	private boolean isShot = false;
 	private Timer moverTimer = new Timer();
-	public Projectile(GameArea g,double sX, double sY, double eX, double eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
+	public Projectile(GameArea g,float sX, float sY, float eX, float eY, int size, Image miniIcon, Image naturalImage, Player ownerPlayer){
 		super(g,sX,sY,size,size,miniIcon,naturalImage,ownerPlayer);
 		X = sX;
 		Y = sY;
@@ -35,8 +35,8 @@ public class Projectile extends AObject{
 		doNotShowStatus();
 		eP.x = eX;
 		eP.y = eY;
-		dX = (double)(eX-sX);
-		dY = (double)(eY-sY);
+		dX = (float)(eX-sX);
+		dY = (float)(eY-sY);
 		double tan = 0;
 		double angle = 0;
 		if(dX == 0){
@@ -46,16 +46,16 @@ public class Projectile extends AObject{
 		}else{
 			int neg = 1;
 			if ((dX < 0 && dY>0)||(dX > 0 && dY < 0)){
-				tan = (((double)(eX-sX)/(double)(eY-sY)));
+				tan = (((float)(eX-sX)/(float)(eY-sY)));
 				neg = -1;
 			}else if((dX != 0 || dY != 0)){
-				tan = (((double)(eY-sY)/(double)(eX-sX)));
+				tan = (((float)(eY-sY)/(float)(eX-sX)));
 			}
 			angle = Math.atan(tan);
-			mX = ((Math.cos(angle)*speed)*(double)neg*Math.abs(dX)/dX);
-			mY = ((Math.sin(angle)*speed) *Math.abs(dY)/dY);
+			mX = (float)((Math.cos(angle)*speed)*(float)neg*Math.abs(dX)/dX);
+			mY = (float)((Math.sin(angle)*speed) *Math.abs(dY)/dY);
 			if (dX>0||dY>0){
-				double temp = mX;
+				float temp = mX;
 				mX = mY;
 				mY = temp;
 			}

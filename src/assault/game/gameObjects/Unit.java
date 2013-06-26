@@ -18,7 +18,7 @@ public class Unit extends Controllable {
 	private Point[] mountPoints;
 	private Weapon[] weapons;
 
-	public Unit(GameArea g, double x, double y, UnitResourceHolder src, Player owner) throws ResourceException {
+	public Unit(GameArea g, float x, float y, UnitResourceHolder src, Player owner) throws ResourceException {
 		super(g, x, y, src, 5, owner);
 		setCreatePoint(src.getCreatePoint());
 		setCmdBtnSet(src.getCmdBtns());
@@ -167,7 +167,7 @@ public class Unit extends Controllable {
 	 * @param x a relative x
 	 * @param y a relative y
 	 */
-	private void setCreatePoint(double x, double y) {
+	private void setCreatePoint(float x, float y) {
 		createPoint.x = x;
 		createPoint.y = y;
 	}
@@ -188,7 +188,7 @@ public class Unit extends Controllable {
 	}
 
     @Override
-    public double getMovementSpeed() {
+    public float getMovementSpeed() {
 		return getSrc().getSpeed("ground");
     }
 }

@@ -19,11 +19,11 @@ public class InputRegistarContainer extends Container<Bounded_Impl> implements I
 	private ArrayList<MouseListener> mouseListeners = new ArrayList<>();
 	private ArrayList<KeyboardListener> keyListeners = new ArrayList<>();
 
-	public InputRegistarContainer(double x, double y, double width, double height, ArrayList<Bounded_Impl> startchildren) {
+	public InputRegistarContainer(float x, float y, float width, float height, ArrayList<Bounded_Impl> startchildren) {
 		super(x, y, width, height, startchildren);
 	}
 
-	public InputRegistarContainer(double x, double y, double width, double height, int startSize) {
+	public InputRegistarContainer(float x, float y, float width, float height, int startSize) {
 		super(x, y, width, height, startSize);
 	}
 

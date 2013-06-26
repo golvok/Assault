@@ -36,8 +36,8 @@ public class ObjectResourceHolder extends XmlResource {
 
 	public static final String TYPE_NAME = "Object";
 	protected ModResourceHolder mod;
-	private double width;
-	private double height;
+	private float width;
+	private float height;
 	private int maxHealth;
 	private BufferedImage miniIcon;
 	private BufferedImage naturalImage;
@@ -59,8 +59,8 @@ public class ObjectResourceHolder extends XmlResource {
 			getRp().setStatusString("\nloading Object values in " + getBaseFile());
 
 			//simple values
-			width = getRootE().getChild("dims").getAttribute("width").getDoubleValue();
-			height = getRootE().getChild("dims").getAttribute("height").getDoubleValue();
+			width = getRootE().getChild("dims").getAttribute("width").getFloatValue();
+			height = getRootE().getChild("dims").getAttribute("height").getFloatValue();
 			maxHealth = getRootE().getChild("health").getAttribute("max").getIntValue();
 
 			//name
@@ -111,7 +111,7 @@ public class ObjectResourceHolder extends XmlResource {
 	public synchronized void parseReferencialXmlValues() throws ResourceException {
 	}
 
-	public AObject createObject(GameArea g, double x, double y, Player owner) throws ResourceException {
+	public AObject createObject(GameArea g, float x, float y, Player owner) throws ResourceException {
 		return new AObject(g, x, y, this, owner);
 	}
 
@@ -139,11 +139,11 @@ public class ObjectResourceHolder extends XmlResource {
 		return out;
 	}
 
-	public double getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	public double getWidth() {
+	public float getWidth() {
 		return width;
 	}
 

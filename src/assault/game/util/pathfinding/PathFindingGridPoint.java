@@ -9,9 +9,9 @@ public class PathFindingGridPoint {
 
 	private final int x;
 	private final int y;
-	private double f;
+	private float f;
 
-	public PathFindingGridPoint(int x, int y, double f) {
+	public PathFindingGridPoint(int x, int y, float f) {
 		this(x, y);
 		setF(f);
 	}
@@ -38,11 +38,11 @@ public class PathFindingGridPoint {
 		}
 	}
 
-	public final double getF() {
+	public final float getF() {
 		return f;
 	}
 
-	public final void setF(double f) {
+	public final void setF(float f) {
 		this.f = f;
 	}
 

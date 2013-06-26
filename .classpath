@@ -8,6 +8,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jdom-2.0.4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lwjgl-2.8.5"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/slick2D-build_264"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Slick"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
