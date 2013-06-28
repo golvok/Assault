@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 
+import assault.util.InclusiveRectangle;
 import assault.util.Point;
 
 public class Bounded_Impl implements Bounded{
@@ -55,7 +56,7 @@ public class Bounded_Impl implements Bounded{
 	}
 	
 	public Bounded_Impl(float x, float y, float width, float height){
-		this.bounds = new Rectangle(x, y, width, height);
+		this.bounds = new InclusiveRectangle(x, y, width, height);
 	}
 
 	@Override

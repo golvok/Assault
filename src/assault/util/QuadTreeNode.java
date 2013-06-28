@@ -56,6 +56,8 @@ public class QuadTreeNode<T extends Bounded> extends Container<QuadTreeNode<T>>{
 	private final void init(int x, int y, int w, int h, ArrayList<T> initial) {
 		divX = x + w/2;
 		divY = y + h/2;
+		branches = null;
+		objects.clear();
 		if (initial != null){
 			for (T obj : initial){
 				add(obj);

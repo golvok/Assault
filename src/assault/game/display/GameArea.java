@@ -212,7 +212,6 @@ public class GameArea extends InputRegistarContainer {
 			if (ao instanceof Selectable) {
 				((Selectable) ao).deselect();
 			}
-			getOM().remove(ao);
 			if (ao instanceof Unit) {
 				units.remove((Unit) ao);
 			}

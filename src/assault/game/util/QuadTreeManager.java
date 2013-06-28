@@ -54,6 +54,7 @@ public class QuadTreeManager extends Container<Bounded> implements ObjectManager
 	@Override
 	public void dispose() {
 		super.dispose();
+		removeAll();
 	}
 
 	@Override

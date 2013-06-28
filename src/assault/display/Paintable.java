@@ -82,7 +82,7 @@ public abstract class Paintable extends Bounded_Impl implements Disposable, Upda
                 getParent().removeChild(this);
             }
             disposed = true;
-            //System.out.println("AP_DISPOSE : "+this);
+//			System.out.println("P_DISPOSE : "+this);
         }
     }
 

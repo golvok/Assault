@@ -23,7 +23,7 @@ import assault.game.loading.resourceHolders.ResourceException;
  *
  * @author matt
  */
-public class AObject extends Container<Paintable> implements Bounded {
+public class AObject extends Container<Paintable> {
 
 	public final static int CROSS_SIZE = 4;
 	private Player owner;
