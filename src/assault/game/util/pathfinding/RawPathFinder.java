@@ -1,7 +1,7 @@
 package assault.game.util.pathfinding;
 
-import assault.game.util.GridManager;
-import assault.game.util.pathfinding.moving.AbstractPathObject;
+import assault.game.util.ObjectManager;
+import assault.game.util.pathfinding.moving.Relocatable;
 import assault.util.Ptr;
 
 /**
@@ -10,11 +10,12 @@ import assault.util.Ptr;
  */
 public abstract class RawPathFinder {
 
-    protected final GridManager gManager;
+    protected final ObjectManager oManager;
       
-    public RawPathFinder(GridManager gm) {
-        gManager = gm;
+    public RawPathFinder(ObjectManager om) {
+        oManager = om;
     }
-    public abstract RawPathObject findPath(PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo,boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled);
+    
+    public abstract RawPathObject findPathToNextPoint(Relocatable target, Ptr<Boolean> canceled);
 	
 }

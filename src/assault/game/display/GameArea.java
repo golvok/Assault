@@ -67,36 +67,6 @@ public class GameArea extends InputRegistarContainer {
 		super(5, 5, 790, 590, 32);//Hooray! Magic numbers!
 		aWindow = aw;
 		terrainGenerator = tg;
-		/*System.out.println("Creating movement thread");
-		movementThread = new Thread(new Runnable() {
-
-			private Unit[] unitArray = new Unit[0];
-
-			@Override
-			public void run() {
-				while (!stopMT) {
-					//System.out.println("MT_TICK");
-					synchronized (units) {
-						//System.out.println("MT_GOT_LOCK");
-						unitArray = units.toArray(unitArray);
-					}
-					//System.out.println("MT_RELINQUISH_LOCK");
-					for (int i = 0; i < unitArray.length; i++) {
-						if (unitArray[i] != null) {
-							unitArray[i].getMover().advanceTarget(?);
-						}
-					}
-					synchronized (Thread.currentThread()) {
-						try {
-							//System.out.println("MT_WAITING");
-							Thread.currentThread().wait(100);
-						} catch (InterruptedException ex) {
-						}
-					}
-				}
-				//movementThread = null;
-			}
-		});*/
 
 		System.out.println("Creating ObejectManager");
 		gManager = new TerrainGridManager(10, this, terrainGenerator);
@@ -137,7 +107,6 @@ public class GameArea extends InputRegistarContainer {
 	public boolean add(Paintable ap) {
 		return add(ap, true);
 	}
-	//private volatile boolean stopMT = false;
 
 	/**
 	 * add an APaintable to this GA. if (
@@ -152,10 +121,6 @@ public class GameArea extends InputRegistarContainer {
 	 * @return true if successful, false if not
 	 */
 	public boolean add(Paintable ap, boolean addToGM) {
-		/*if (!movementThread.isAlive()) {
-			System.out.println("starting movement thread");
-			movementThread.start();
-		}*/
 
 		if (ap != null) {
 			if (addToGM && ap instanceof AObject && !(ap instanceof Group)) {

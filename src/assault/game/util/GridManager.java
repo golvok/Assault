@@ -342,16 +342,12 @@ public class GridManager implements ObjectManager {
 	public List<Bounded> getClippingWith(Shape test) {
 		List<Bounded> found = new ArrayList<>();
 		Rectangle gridBox = getGridbox(test);
-		org.newdawn.slick.geom.Rectangle gridCellBounds = new org.newdawn.slick.geom.Rectangle(0,0,gridSize, gridSize);
 		for(int x = (int)gridBox.getMinX();x < gridBox.getMaxX();x++){
 			for(int y = (int)gridBox.getMinY();y < gridBox.getMaxY();y++){
 				GridCell<Bounded> gridCell = getGridCellAtGrid(x, y);
-				gridCellBounds.setLocation(x, y);
-				if(gridCellBounds.intersects(test)){
-					for(Bounded b: gridCell){
-						if(b.clipsWith(test) && !found.contains(b)){
-							found.add(b);
-						}
+				for(Bounded b: gridCell){
+					if(b.clipsWith(test) && !found.contains(b)){
+						found.add(b);
 					}
 				}
 			}

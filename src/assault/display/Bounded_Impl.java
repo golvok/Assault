@@ -36,7 +36,9 @@ public class Bounded_Impl implements Bounded{
 				//do nothing, and try the attempts below.
 			}
 		}
-		if(bounds instanceof Rectangle){
+		if (bounds instanceof InclusiveRectangle){
+			newBounds = new InclusiveRectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+		} else if (bounds instanceof Rectangle){
 			newBounds = new Rectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight()); 
 		} else if (bounds instanceof Circle){
 			newBounds = new Circle(bounds.getCenterX(), bounds.getCenterY(), ((Circle)bounds).radius, bounds.getPointCount());

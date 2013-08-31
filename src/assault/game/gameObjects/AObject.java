@@ -10,7 +10,6 @@ import org.lwjgl.util.Color;
 import org.lwjgl.util.ReadableColor;
 
 import assault.display.AssaultWindow;
-import assault.display.Bounded;
 import assault.display.Container;
 import assault.display.Paintable;
 import assault.game.Player;

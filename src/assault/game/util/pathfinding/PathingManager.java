@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import assault.game.util.GridManager;
-import assault.game.util.pathfinding.moving.AbstractPathObject;
+import assault.game.util.pathfinding.moving.Relocatable;
 import assault.util.Ptr;
 
 /**
@@ -18,21 +18,20 @@ public class PathingManager{
 	
 	private final static int N_THREADS = 4;//TODO make this configurable
 	
-	private ExecutorService threadPool;
-	private Map<PathFindingBounded, PathFindingRunnable> pfgo2Task;
+	private ExecutorService threadPool = java.util.concurrent.Executors.newFixedThreadPool(N_THREADS);
+	private Map<PathFindingBounded, PathFindingRunnable> pfgo2Task = Collections.synchronizedMap(new HashMap<PathFindingBounded, PathFindingRunnable>(N_THREADS));
 	private RawPathFinder rpf;
 	
 	public PathingManager(GridManager gm) {
-		threadPool = java.util.concurrent.Executors.newFixedThreadPool(N_THREADS);
-		pfgo2Task = Collections.synchronizedMap(new HashMap<PathFindingBounded, PathFindingRunnable>(N_THREADS));
 		rpf = new AStarPathFinder(gm);
 	}
 
-	public void findPath(final PathFindingBounded pfgo, final int destX, final int destY, final AbstractPathObject apoToaddTo, final boolean clearApo, final boolean clearImmediately) {
-		PathFindingRunnable pfr = new PathFindingRunnable(rpf, pfgo, destX, destY, apoToaddTo, clearApo, clearImmediately);
-		pfgo2Task.put(pfgo, pfr);
+	public void pathToNextPoint(Relocatable target){
+		PathFindingRunnable pfr = new PathFindingRunnable(target, rpf);
+		pfgo2Task.put(target, pfr);
 		threadPool.execute(pfr);
 	}
+	
 	public int cancel(PathFindingBounded pfgo){
 		PathFindingRunnable pfr = pfgo2Task.remove(pfgo);
 		if(pfr == null){
@@ -45,28 +44,22 @@ public class PathingManager{
 }
 
 class PathFindingRunnable implements Runnable{
-	private PathFindingBounded pfgo;
-	private int destX;
-	private int destY;
-	private AbstractPathObject apoToaddTo;
-	private boolean clearApo;
-	private boolean clearImmediately;
+	private Relocatable target;
 	private RawPathFinder rpf;
 	private Ptr<Boolean> canceled = new Ptr<>(false);
 	
-	public PathFindingRunnable(RawPathFinder rpf, PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately) {
+	public PathFindingRunnable(Relocatable target, RawPathFinder rpf) {
 		this.rpf = rpf;
-		this.pfgo = pfgo;
-		this.destX = destX;
-		this.destY = destY;
-		this.apoToaddTo = apoToaddTo;
-		this.clearApo = clearApo;
-		this.clearImmediately = clearImmediately;
+		this.target = target;
 	}
+	
 	@Override
 	public void run() {
 		if (!canceled.getVal()){
-			rpf.findPath(pfgo, destX, destY, apoToaddTo, clearApo, clearImmediately,canceled);
+			RawPathObject result = rpf.findPathToNextPoint(target, canceled);
+			if(!canceled.getVal() && result != null){
+				target.getPath().addPoints(result);
+			}
 			return;
 		}
 		System.out.println("a PathFindingRunnable was canceled before it started. probably bad.");
@@ -75,7 +68,5 @@ class PathFindingRunnable implements Runnable{
 	public void cancel(){
 		canceled.setVal(true);
 	}
-	
-	
 	
 }

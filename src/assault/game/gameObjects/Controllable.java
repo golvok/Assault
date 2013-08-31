@@ -6,6 +6,7 @@ import assault.game.display.GameArea;
 import assault.game.loading.resourceHolders.ControllableResourceHolder;
 import assault.game.loading.resourceHolders.ResourceException;
 import assault.game.util.pathfinding.PathingManager;
+import assault.game.util.pathfinding.moving.AbstractPathObject;
 import assault.game.util.pathfinding.moving.Mover;
 import assault.game.util.pathfinding.moving.Relocatable;
 import assault.util.Point;
@@ -18,7 +19,7 @@ public abstract class Controllable extends Selectable implements Relocatable {
 
     private Group aGroup = null;
     private CommandButton[] cmdBtnSet = new CommandButton[0];
-    private final Mover mover;
+    private AbstractPathObject path = new AbstractPathObject();
     
     //for pathfinding visualization
     private boolean[][] closed;
@@ -28,28 +29,28 @@ public abstract class Controllable extends Selectable implements Relocatable {
 
     public Controllable(GameArea g, float x, float y, ControllableResourceHolder src, int health, Player owner) throws ResourceException {
         super(g, x, y, src, health, owner);
-        mover = new Mover(this);
         noClip = src.noClip();
 		setCmdBtnSet(src.getCmdBtns());
     }
 
     @Override
     public void updateSelf(int delta) {
-        getMover().advanceTarget(delta);
+    	Mover.advance(this, delta);
         super.updateSelf(delta);
     }
 
 	@Override
 	public void setLocation(Point p) {
+		System.out.println(this + " Moving to: " + p);
 		super.setLocation(p);
 	}
 	
 	@Override
 	public boolean setLocation_safe(Point p) {
-		if (getGA().getOM().notifyOfImminentMovement(this, p)){
+		if (getGA().getOM().notifyOfImminentMovement(this, p)) {
 			setLocation(p);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -62,10 +63,6 @@ public abstract class Controllable extends Selectable implements Relocatable {
     public void changeGroup(Group ag) {
         registerGroup(ag);
         ag.addControllable(this);
-    }
-	
-    public Mover getMover() {
-        return mover;
     }
 
     @Override
@@ -92,6 +89,11 @@ public abstract class Controllable extends Selectable implements Relocatable {
         return onPath;
     }
 
+    @Override
+    public boolean canMakeItToPointInStraightLine(Point test) {
+    	return AbstractPathObject.canMakeItToPointInStraightLine(test, this, getGA().getOM());
+    }
+    
     /**
      * add this to
      * <code>ag</code>, while overwriting and removing it from the previous
@@ -156,6 +158,11 @@ public abstract class Controllable extends Selectable implements Relocatable {
 	@Override
 	public PathingManager getPathingManger() {
 		return getGA().getPM();
+	}
+	
+	@Override
+	public AbstractPathObject getPath() {
+		return path;
 	}
 
 }

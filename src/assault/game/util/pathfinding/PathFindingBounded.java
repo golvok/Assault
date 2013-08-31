@@ -5,7 +5,7 @@ import assault.display.Bounded;
 
 /**
  *
- * @author 088241930
+ * @author Matthew Walker
  */
 public abstract interface PathFindingBounded extends Bounded{
     

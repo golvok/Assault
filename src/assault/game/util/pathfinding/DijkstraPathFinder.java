@@ -8,7 +8,8 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * there are measures to stop errors from occuring in this otherwise unused class
+ * there are measures to stop compile errors from occuring in this otherwise unused class
+ * they need to be addressed if you intend to use it.
  * @author 088241930
  */
 public class DijkstraPathFinder /*extends RawPathFinder*/ {

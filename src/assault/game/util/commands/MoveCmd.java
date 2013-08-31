@@ -7,6 +7,7 @@ package assault.game.util.commands;
 import assault.game.gameObjects.AObject;
 import assault.game.gameObjects.Controllable;
 import assault.game.loading.ResourcePreloader;
+import assault.game.util.pathfinding.moving.Mover;
 import assault.util.Point;
 
 /**
@@ -24,7 +25,7 @@ public class MoveCmd extends Command implements MouseCommand {
         for (int i = 0; i < aos.length; i++) {
             if (aos[i] != null && aos[i] instanceof Controllable) {
                 //TODO add logic so that the keep their formation when more than one AU is used
-                ((Controllable) aos[i]).getMover().moveTo(x, y);
+                Mover.moveTo(((Controllable) aos[i]),x, y);
             }
         }
     }

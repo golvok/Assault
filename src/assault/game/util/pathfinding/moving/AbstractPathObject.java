@@ -12,6 +12,8 @@ import static assault.util.Point.farthestPoint;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import org.newdawn.slick.geom.Shape;
+
 import assault.display.Bounded;
 import assault.display.Bounded_Impl;
 import assault.game.util.ObjectManager;
@@ -46,30 +48,39 @@ public class AbstractPathObject {
 	}
 
 	public static boolean canMakeItToNextPointInStraightLine(AbstractPathObject pathObject, Bounded test, ObjectManager om){
+		return canMakeItToPointInStraightLine(pathObject.peek(), test, om);
+	}
+	
+	public static boolean canMakeItToPointInStraightLine(Point p, Bounded test, ObjectManager om){
 		if(test.noClip()){
 			return true;
+		}else{		
+			return ObjectManager.Impl.ListOnlyContains(om.getClippingWith(futureRegionToPoint(p, test, om)),test);
 		}
-		Point nextPoint = pathObject.peek();
+	}
+	
+	public static Shape futureRegionToPoint(Point nextPoint, Bounded test, ObjectManager om) {
+		//TODO optimise. maybe add some sort of cacheing mechanism, an extension to bounded maybe
 		Bounded nextRegion = new Bounded_Impl(test);
 		nextRegion.setLocation(nextPoint);
 		Point currentCenter = test.getCenter();
 		Point nextCenter = nextRegion.getCenter();
-		Point[] nextRegionPoints = getAsPoints(nextRegion.getBounds());
+		Point[] nextPoints = getAsPoints(nextRegion.getBounds());
 		Point[] currentPoints = getAsPoints(test.getBounds());
 		
-		Point farthestInNext = farthestPoint(currentCenter,nextRegionPoints);
+		Point farthestInNext = farthestPoint(currentCenter,nextPoints);
 		Point farthestInCurrent = farthestPoint(nextCenter,currentPoints);
-		Point[] extremitiesOfNext = farthestFromLineWithSides(currentCenter, nextCenter, currentPoints);
-		Point[] extremitiesOfCurrent = farthestFromLineWithSides(currentCenter, nextCenter, nextRegionPoints);
+		Point[] extremitiesOfNext = farthestFromLineWithSides(currentCenter, nextCenter, nextPoints);
+		Point[] extremitiesOfCurrent = farthestFromLineWithSides(currentCenter, nextCenter, currentPoints);
 		
 		int nPoints = 6;
 		boolean addFarthestInCurrent = true;
-		if(farthestInCurrent == extremitiesOfCurrent[0] || farthestInCurrent == extremitiesOfCurrent[1]){
+		if(farthestInCurrent.equals(extremitiesOfCurrent[0]) || farthestInCurrent.equals(extremitiesOfCurrent[1])){
 			nPoints--;
 			addFarthestInCurrent = false;
 		}
 		boolean addFarthestInNext = true;
-		if(farthestInNext == extremitiesOfNext[0] || farthestInNext == extremitiesOfNext[1]){
+		if(farthestInNext.equals(extremitiesOfNext[0]) || farthestInNext.equals(extremitiesOfNext[1])){
 			nPoints--;
 			addFarthestInNext = false;
 		}
@@ -79,7 +90,7 @@ public class AbstractPathObject {
 		int nPointsAdded = 0;
 
 		futureRegion[nPointsAdded] = extremitiesOfCurrent[0];
-		futureRegion[nPointsAdded] = extremitiesOfNext[1];
+		futureRegion[nPointsAdded+1] = extremitiesOfNext[0];
 		nPointsAdded += 2;
 		
 		if (addFarthestInNext){
@@ -87,8 +98,8 @@ public class AbstractPathObject {
 			nPointsAdded++;
 		}
 		
-		futureRegion[nPointsAdded] = extremitiesOfNext[0];
-		futureRegion[nPointsAdded] = extremitiesOfCurrent[1];
+		futureRegion[nPointsAdded] = extremitiesOfNext[1];
+		futureRegion[nPointsAdded+1] = extremitiesOfCurrent[1];
 		nPointsAdded += 2;
 
 		if (addFarthestInCurrent){
@@ -96,9 +107,9 @@ public class AbstractPathObject {
 //			nPointsAdded++;
 		}
 		
-		return ObjectManager.Impl.ListOnlyContains(om.getClippingWith(PolygonFromPoints(futureRegion)),test);
+		return PolygonFromPoints(futureRegion);
 	}
-	
+
 	public final Point peek() {
 		return points.peek();
 	}

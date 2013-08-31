@@ -1,12 +1,13 @@
 
 package assault.game.util.pathfinding;
 
-import assault.game.util.GridManager;
-import assault.game.util.pathfinding.moving.AbstractPathObject;
-import assault.util.Ptr;
-
 import java.util.Comparator;
 import java.util.PriorityQueue;
+
+import assault.game.util.GridManager;
+import assault.game.util.pathfinding.moving.Relocatable;
+import assault.util.Point;
+import assault.util.Ptr;
 
 /**
  *
@@ -22,12 +23,9 @@ public class AStarPathFinder extends RawPathFinder {
     }
 
     @Override
-    public RawPathObject findPath(PathFindingBounded pfgo, int destX, int destY, AbstractPathObject apoToaddTo, boolean clearApo, boolean clearImmediately, Ptr<Boolean> canceled) {
+    public RawPathObject findPathToNextPoint(Relocatable target, Ptr<Boolean> canceled) {
     	if(canceled.getVal()){
     		return null;
-    	}
-    	if (clearApo && clearImmediately && apoToaddTo != null){
-    		apoToaddTo.clear();
     	}
 //		synchronized (startedLock) {
 //			if (started || isCanceled()) {
@@ -37,22 +35,26 @@ public class AStarPathFinder extends RawPathFinder {
 //			started = true;
 //		}
 		
-        int sx = gManager.convCoordToGrid(pfgo.getX());//start X
-        int sy = gManager.convCoordToGrid(pfgo.getY());//start Y
-        destX = gManager.convCoordToGrid(destX);
-        destY = gManager.convCoordToGrid(destY);
-		
-        if (!gManager.canBeAtGrid(destX, destY, pfgo)) {
+        int sx = getOMasGM().convCoordToGrid(target.getX());//start X
+        int sy = getOMasGM().convCoordToGrid(target.getY());//start Y
+        int destX;
+        int destY;
+        {
+	        Point destPoint = target.getPath().peek();
+	        destX = getOMasGM().convCoordToGrid(destPoint.x);
+	        destY = getOMasGM().convCoordToGrid(destPoint.y);
+        }
+        if (!getOMasGM().canBeAtGrid(destX, destY, target)) {
             System.out.println("Cannot be at path's end so there is no path.");
             return null;
         }
 		
         System.out.println("Starting A* pathfinder....\nFrom : " + sx + "," + sy + "\nTo   : " + destX + "," + destY);
 		
-        pfgo.setExamined(new boolean[gManager.getGridWidth()][gManager.getGridHeight()]);
-        pfgo.setOnOpenSet(new boolean[gManager.getGridWidth()][gManager.getGridHeight()]);
-        pfgo.setOnPath(new boolean[gManager.getGridWidth()][gManager.getGridHeight()]);
-        pfgo.setClosedSet(new boolean[gManager.getGridWidth()][gManager.getGridHeight()]);
+        target.setExamined(new boolean[getOMasGM().getGridWidth()][getOMasGM().getGridHeight()]);
+        target.setOnOpenSet(new boolean[getOMasGM().getGridWidth()][getOMasGM().getGridHeight()]);
+        target.setOnPath(new boolean[getOMasGM().getGridWidth()][getOMasGM().getGridHeight()]);
+        target.setClosedSet(new boolean[getOMasGM().getGridWidth()][getOMasGM().getGridHeight()]);
 		
         //Some definitions:
         //h - the heuristic estimate of the distance from this point to the end
@@ -64,7 +66,7 @@ public class AStarPathFinder extends RawPathFinder {
         AStarGridPoint end = new AStarGridPoint(destX, destY);
         AStarGridPoint start = new AStarGridPoint(sx, sy, 0, h);//startx,starty, g(0 at this point), h
 		
-        AStarGridPoint[][] cameFrom = new AStarGridPoint[gManager.getGridWidth()][gManager.getGridHeight()];     //where GP(x,y) came from
+        AStarGridPoint[][] cameFrom = new AStarGridPoint[getOMasGM().getGridWidth()][getOMasGM().getGridHeight()];     //where GP(x,y) came from
         AStarGridPoint[] neighs = new AStarGridPoint[8];//neighbours (allways 8or less)
 		
         PriorityQueue<AStarGridPoint> openSet = new PriorityQueue<AStarGridPoint>(20, new Comparator<AStarGridPoint>() //nodes to be checked, ordered with lowest f value on top
@@ -108,20 +110,14 @@ public class AStarPathFinder extends RawPathFinder {
             	} catch (InterruptedException ex) {
             	}
             }*/
-            pfgo.getExamined()[lowF.getX()][lowF.getY()] = true;
+            target.getExamined()[lowF.getX()][lowF.getY()] = true;
             if (lowF.equals(end)) {//is this point the end? (.equals() has been overridden)
-            	RawPathObject rpo = new RawPathObject(start, end, cameFrom, gManager, pfgo.getOnPath());
+            	RawPathObject rpo = new RawPathObject(start, end, cameFrom, getOMasGM(), target.getOnPath());
                 System.out.println("Found a path!");
-                if (apoToaddTo != null){
-	                if (clearApo && !clearImmediately){
-	            		apoToaddTo.clear();
-	            	}
-	                apoToaddTo.addPoints(rpo);
-                }
                 return rpo;
             } else {
                 //.poll removes it from the openset
-                pfgo.getClosedSet()[lowF.getX()][lowF.getY()] = true;//add it to the closed set
+                target.getClosedSet()[lowF.getX()][lowF.getY()] = true;//add it to the closed set
                 for (int i = 0; i < 8; i++) {//change to 2 and 6 when using manhattan distance (also change calcH())
                     // 0 2 1
                     // 3   4
@@ -143,7 +139,7 @@ public class AStarPathFinder extends RawPathFinder {
                     nx = lowF.getX() + nxOff;
                     ny = lowF.getY() + nyOff;
                     //check if it is within the grid
-                    if (nx >= 0 && nx < gManager.getGridWidth() && ny >= 0 && ny < gManager.getGridHeight() && gManager.canBeAtGrid(nx, ny, pfgo)) {
+                    if (nx >= 0 && nx < getOMasGM().getGridWidth() && ny >= 0 && ny < getOMasGM().getGridHeight() && getOMasGM().canBeAtGrid(nx, ny, target)) {
                         neighs[i] = new AStarGridPoint(nx, ny);
                         //check if this point allready has an ASGP
                         if (openSet.contains(neighs[i])) {//.equals has been overridden.
@@ -161,7 +157,7 @@ public class AStarPathFinder extends RawPathFinder {
                 }
                 for (int i = 0; i < neighs.length; i++) {
                     AStarGridPoint neigh = neighs[i];
-                    if (neigh != null && !pfgo.getClosedSet()[neigh.getX()][neigh.getY()]) {
+                    if (neigh != null && !target.getClosedSet()[neigh.getX()][neigh.getY()]) {
                         neighNewG = gBetweenNeighs(lowF, neigh) + lowF.getG();
                         //System.out.println("new g = "+neighNewG + ", old g = " +lowF.g);
                         if (!openSet.contains(neigh)) {
@@ -184,20 +180,21 @@ public class AStarPathFinder extends RawPathFinder {
                             //to cause the priorityqueue to reorder it has allready been
                             //removed (see the else if statement above)
                             openSet.add(neigh);
-                            pfgo.getOnOpenSet()[neigh.getX()][neigh.getY()] = true;
+                            target.getOnOpenSet()[neigh.getX()][neigh.getY()] = true;
                         }
                     }
                 }
             }
         }
         System.out.println("couldn't find path. canceled = " + canceled.getVal());
-        if (clearApo){
-        	apoToaddTo.clear();
-        }
         return null;
     }
 
-    private float gBetweenNeighs(AStarGridPoint start, AStarGridPoint neigh) {
+    private GridManager getOMasGM() {
+		return (GridManager)oManager;
+	}
+
+	private float gBetweenNeighs(AStarGridPoint start, AStarGridPoint neigh) {
         if (start.getX() == neigh.getX() || start.getY() == neigh.getY()) {
             return 1;
         } else {

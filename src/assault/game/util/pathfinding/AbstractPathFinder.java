@@ -1,11 +1,11 @@
 package assault.game.util.pathfinding;
 
-import assault.game.util.GridManager;
+import assault.game.util.ObjectManager;
 
 public abstract class AbstractPathFinder extends RawPathFinder {
 
-	public AbstractPathFinder(GridManager gm) {
-		super(gm);
+	public AbstractPathFinder(ObjectManager om) {
+		super(om);
 	}
 
 }
